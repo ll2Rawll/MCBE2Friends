@@ -9,7 +9,7 @@ function syncThemeControl() {
   const label = light ? 'Switch to dark theme' : 'Switch to light theme';
   themeButton.setAttribute('aria-label', label);
   themeButton.title = label;
-  themeColor.content = light ? '#eef3ec' : '#0a100e';
+  themeColor.content = light ? '#e8ebdf' : '#161c1d';
 }
 
 themeButton.hidden = false;
