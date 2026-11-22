@@ -12,6 +12,12 @@ Extract the download for your computer.
 
 The app opens its controls in your default browser. These portable builds have no publisher signature or Apple notarization, so your operating system may ask you to approve the app.
 
+From version 1.2, GitHub also signs an attestation for each official release archive. With a current GitHub CLI you can verify the Windows ZIP using the command below. Substitute the filename of your download on macOS or Linux.
+
+```sh
+gh attestation verify Mcbe2Friends-Windows-x64.zip --repo ll2Rawll/MCBE2Friends --signer-workflow ll2Rawll/MCBE2Friends/.github/workflows/release-downloads.yml
+```
+
 ## Host a server on this PC
 
 Open **Premium** to check hardware support, activate a key, and install the official Bedrock server. The built-in panel manages normal worlds and add-ons. [Premium setup and management guide](https://github.com/ll2Rawll/MCBE2Friends/blob/main/docs/premium-hosting.md)
@@ -55,7 +61,7 @@ This version downloads checksum-verified MCXboxBroadcast build 165 and, when nee
 
 ## Build from source
 
-Use Go 1.24 or later. The launcher and its embedded web interface use the Go standard library. From the project directory, run:
+Use Go 1.27.4 or later. The launcher verifies Premium approvals with Sigstore's Go library. From the project directory, run
 
 ```sh
 go test ./...

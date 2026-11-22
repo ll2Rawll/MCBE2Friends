@@ -3,10 +3,8 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net"
 	"net/http"
-	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -25,18 +23,9 @@ func TestOfficialBedrockLifecycle(t *testing.T) {
 		t.Skip("no native Bedrock server")
 	}
 	h := newHosting(t.TempDir())
-	key := "M2F-CCCCCCCCCCCCCCCCCCCCCCCCCC"
-	registry := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/"+grantDigest(h.device, key)+".txt" {
-			http.NotFound(w, r)
-			return
-		}
-		fmt.Fprintln(w, grantMarker)
-	}))
-	defer registry.Close()
-	h.grants = registry.URL + "/"
-	if e := h.activate(context.Background(), key); e != nil {
-		t.Fatal(e)
+	fixtureRegistry(t, h)
+	if err := h.activate(context.Background(), approvalTestKey); err != nil {
+		t.Fatal(err)
 	}
 	listener, err := net.Listen("tcp4", "127.0.0.1:0")
 	if err != nil {

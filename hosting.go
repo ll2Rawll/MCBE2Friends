@@ -26,7 +26,11 @@ type Hosting struct {
 	root, server, device, grants   string
 	hw                             Hardware
 	mu, ops, licenseOp, inputMu    sync.Mutex
-	licensed, checking, closing    bool
+	checking, closing              bool
+	subject                        string
+	validUntil                     time.Time
+	renewal                        *time.Timer
+	expiry                         *time.Timer
 	licenseMessage, phase, message string
 	percent                        int
 	active                         *hostRun
@@ -55,6 +59,9 @@ type HostStatus struct {
 func newHosting(root string) *Hosting {
 	dir := filepath.Join(root, "hosting")
 	h := &Hosting{root: dir, server: filepath.Join(dir, "server"), grants: grantBase, phase: "offline", percent: -1, hw: hardware()}
+	if !h.hw.Supported {
+		return h
+	}
 	err := os.MkdirAll(dir, 0700)
 	if err == nil {
 		h.device, err = installationCode(dir)
@@ -71,7 +78,10 @@ func newHosting(root string) *Hosting {
 }
 func (h *Hosting) status() HostStatus {
 	h.mu.Lock()
-	s := HostStatus{Hardware: h.hw, Recommended: h.hw.defaults(), Device: h.device, Licensed: h.licensed, Checking: h.checking, LicenseMessage: h.licenseMessage, Phase: h.phase, Message: h.message, Percent: h.percent, Busy: h.active != nil, Version: bedrockVersion, Log: slices.Clone(h.logs)}
+	s := HostStatus{Hardware: h.hw, Recommended: h.hw.defaults(), Device: h.device, Licensed: h.validLicenseLocked(time.Now()), Checking: h.checking, LicenseMessage: h.licenseMessage, Phase: h.phase, Message: h.message, Percent: h.percent, Busy: h.active != nil, Version: bedrockVersion}
+	if s.Licensed {
+		s.Log = slices.Clone(h.logs)
+	}
 	h.mu.Unlock()
 	_, keyErr := os.Stat(filepath.Join(h.root, "premium-key.txt"))
 	s.SavedKey = keyErr == nil
@@ -87,7 +97,7 @@ func (h *Hosting) isBusy() bool { h.mu.Lock(); defer h.mu.Unlock(); return h.act
 func (h *Hosting) allowed(offline bool) error {
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	if !h.licensed {
+	if !h.validLicenseLocked(time.Now()) {
 		return errors.New("Activate Premium on this PC first.")
 	}
 	if h.closing {
@@ -136,6 +146,11 @@ func (h *Hosting) start(consent bool) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	run := &hostRun{cancel: cancel, done: make(chan struct{})}
 	h.mu.Lock()
+	if !h.validLicenseLocked(time.Now()) {
+		h.mu.Unlock()
+		cancel()
+		return errors.New("Recheck your Premium key before starting.")
+	}
 	h.active = run
 	h.phase = "starting"
 	h.message = "Preparing your server"
@@ -152,6 +167,12 @@ func (h *Hosting) stop(closing bool) <-chan struct{} {
 	defer h.mu.Unlock()
 	if closing {
 		h.closing = true
+		if h.renewal != nil {
+			h.renewal.Stop()
+		}
+		if h.expiry != nil {
+			h.expiry.Stop()
+		}
 	}
 	if h.active == nil {
 		done := make(chan struct{})

@@ -49,8 +49,8 @@ window.premiumPanel = (() => {
     el("device-code").value = host.device;
     el("host-locked").hidden = host.licensed || !hw.supported;
     el("host-unlocked").hidden = !host.licensed;
-    el("host-buy").hidden = !hw.supported;
-    el("activate-premium").hidden = !hw.supported;
+    el("host-buy").hidden = !hw.supported || !host.device;
+    el("activate-premium").hidden = !hw.supported || !host.device;
     el("retry-license").hidden =
       !hw.supported || !host.savedKey || !host.licenseMessage;
     el("host-phase").textContent = labels[host.phase] || "Server offline";
@@ -218,14 +218,11 @@ window.premiumPanel = (() => {
       const previous = host?.licenseMessage;
       const wasChecking = host?.checking;
       applyStatus(next);
-      if (
-        next.licenseMessage &&
-        !next.licensed &&
-        previous !== next.licenseMessage
-      )
+      if (next.licenseMessage && previous !== next.licenseMessage)
         feedback(next.licenseMessage, true);
       if (next.checking) feedback("Checking the saved key…");
-      if (next.licensed && (previous || wasChecking)) feedback("");
+      if (next.licensed && !next.licenseMessage && (previous || wasChecking)) feedback("");
+      if (!next.licensed) library = null;
       if (reload) await readFiles();
     } catch (e) {
       feedback(e.message, true);

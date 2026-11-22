@@ -4,10 +4,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"context"
-	"encoding/json"
 	"errors"
-	"net/http"
-	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
@@ -59,50 +56,6 @@ func TestHostingPresetsAndStandardProperties(t *testing.T) {
 	}
 }
 
-func TestHostingGrantUsesPCAndPrivateKey(t *testing.T) {
-	h := newHosting(t.TempDir())
-	key := "M2F-AAAAAAAAAAAAAAAAAAAAAAAAAA"
-	var got string
-	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		got = r.URL.Path
-		if got == "/"+grantDigest(h.device, key)+".txt" {
-			w.Write([]byte(grantMarker + "\n"))
-			return
-		}
-		http.NotFound(w, r)
-	}))
-	defer s.Close()
-	h.grants = s.URL + "/"
-	if e := h.allowed(true); e == nil {
-		t.Fatal("unlicensed operation accepted")
-	}
-	if e := h.activate(context.Background(), "M2F-BBBBBBBBBBBBBBBBBBBBBBBBBB"); e == nil {
-		t.Fatal("unapproved key accepted")
-	}
-	if e := h.activate(context.Background(), key); e != nil {
-		t.Fatal(e)
-	}
-	if strings.Contains(got, h.device) || strings.Contains(got, "AAAA") {
-		t.Fatal("private input appeared in registry request")
-	}
-	if e := verifyGrant(context.Background(), h.grants, "PC-BBBBBBBBBBBBBBBB", key); e == nil {
-		t.Fatal("key granted to different installation")
-	}
-	if e := h.allowed(true); e != nil {
-		t.Fatal(e)
-	}
-	b, _ := json.Marshal(h.status())
-	if bytes.Contains(b, []byte(cleanKey(key))) {
-		t.Fatal("key returned through launcher status")
-	}
-	h.mu.Lock()
-	h.active = &hostRun{}
-	h.mu.Unlock()
-	if h.edit(func() error { t.Fatal("modified active world"); return nil }) == nil {
-		t.Fatal("missing edit guard")
-	}
-}
-
 func testZip(t *testing.T, files map[string][]byte) []byte {
 	t.Helper()
 	var b bytes.Buffer
@@ -134,7 +87,6 @@ func TestHostingArchiveBoundsAndPackScope(t *testing.T) {
 		}
 	}
 	h := newHosting(t.TempDir())
-	h.licensed = true
 	if e := os.MkdirAll(h.server, 0700); e != nil {
 		t.Fatal(e)
 	}

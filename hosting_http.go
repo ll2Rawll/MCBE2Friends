@@ -77,7 +77,7 @@ func hostingHTTP(h *Hosting, w http.ResponseWriter, r *http.Request) {
 		reject(405, errors.New("Method not allowed."))
 		return
 	}
-	if action != "/activate" {
+	if action != "/activate" && action != "/stop" {
 		if err := h.allowed(false); err != nil {
 			reject(403, err)
 			return
