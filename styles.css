@@ -108,18 +108,18 @@ a:focus-visible, button:focus-visible, summary:focus-visible, video:focus-visibl
 h1 { color: #fff7da; font-size: clamp(1.7rem, 8.3vw, 5.4rem); font-size: clamp(1.7rem, 10cqi, 5.4rem); line-height: 1.21; text-shadow: 0 .038em #aeaa90, .038em .075em #717362, .075em .112em #272e28, .1em .14em #18211c; }
 .lede { max-width: 750px; margin-top: 24px; font-size: clamp(1rem, 1.55vw, 1.2rem); line-height: 1.65; text-wrap: balance; text-shadow: 2px 2px 0 #18221c, 0 1px 8px #101910; }
 .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 31px; }
-.game-button, .film-play {
+.game-button {
   display: inline-flex; justify-content: center; align-items: center; gap: 10px; min-height: 53px; padding: 10px 20px;
   border: 2px solid #19211a; font-size: .9375rem; line-height: 1.4;
   box-shadow: inset 2px 2px var(--button-light), inset -3px -4px var(--button-dark), 0 3px 0 #142016;
   background: linear-gradient(160deg, var(--button-top), var(--button-base) 70%); color: var(--button-text);
 }
 .primary { --button-top: #b0df7c; --button-base: #81bf50; --button-light: #d8f0b6; --button-dark: #56863b; --button-text: #1a301a; }
-.stone, .film-play { --button-top: #67716b; --button-base: #4a534e; --button-light: #9ba49a; --button-dark: #343e39; --button-text: #faf9e9; }
-.game-button:hover, .film-play:hover { filter: brightness(1.13); }
-.game-button:active, .film-play:active { transform: translateY(2px); box-shadow: inset 2px 2px var(--button-dark), inset -1px -1px var(--button-light); }
+.stone { --button-top: #67716b; --button-base: #4a534e; --button-light: #9ba49a; --button-dark: #343e39; --button-text: #faf9e9; }
+.game-button:hover { filter: brightness(1.13); }
+.game-button:active { transform: translateY(2px); box-shadow: inset 2px 2px var(--button-dark), inset -1px -1px var(--button-light); }
 .stone .icon { width: 15px; height: 15px; }
-.hero a:focus-visible, .rail button:focus-visible, .film-play:focus-visible { outline-color: #e1ffaf; }
+.hero a:focus-visible, .rail button:focus-visible { outline-color: #e1ffaf; }
 .other-platforms, .panel-link, .footer-link, .release { display: inline-flex; align-items: center; gap: 7px; }
 .other-platforms { padding: 7px; margin-top: 9px; font-size: .84375rem; color: #f0f1df; text-shadow: 1px 2px #17211a; }
 .other-platforms:hover, .release:hover { text-decoration: underline; text-underline-offset: 4px; }
@@ -145,13 +145,12 @@ h1 { color: #fff7da; font-size: clamp(1.7rem, 8.3vw, 5.4rem); font-size: clamp(1
 .redstone { --cell: 6; } .emerald { --cell: 7; } .windows { --cell: 8; } .mac { --cell: 9; } .penguin { --cell: 10; } .chip { --cell: 11; }
 .ground { height: 21px; background: #694932 url("assets/ui/ground.png") repeat-x; background-size: 48px 20px; image-rendering: pixelated; border-bottom: 2px solid #2e2a22; }
 
-.workbench { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .85fr); align-items: stretch; gap: 22px; padding-block: clamp(36px, 4.3vw, 66px) 26px; }
 .panel, .downloads { min-width: 0; border: 3px solid var(--rim); background: var(--panel); box-shadow: inset 2px 2px var(--lip), inset -2px -2px rgb(0 0 0 / 20%), 4px 5px 0 rgb(0 0 0 / 15%); }
 .panel-header, .chest-lid { display: flex; align-items: center; gap: 13px; }
 .panel-header { min-height: 64px; padding: 9px 19px; background: var(--head); border-bottom: 3px solid var(--rim); box-shadow: inset 2px 2px var(--lip), inset 0 -2px rgb(0 0 0 / 12%); }
 .panel-header h2, .chest-lid h2 { font-size: clamp(1rem, 1.7vw, 1.44rem); line-height: 1.4; }
 .panel-header .item { --item-size: 36px; }
-.recipe-panel { display: flex; flex-direction: column; }
+.recipe-panel { display: flex; flex-direction: column; margin-block: clamp(36px, 4.3vw, 66px) 22px; }
 .recipe { list-style: none; padding: 0 24px; }
 .recipe li { display: grid; grid-template-columns: 51px minmax(0,1fr); align-items: start; gap: 16px; padding: 21px 0; }
 .recipe li + li { border-top: 2px solid var(--rule); }
@@ -164,21 +163,7 @@ h1 { color: #fff7da; font-size: clamp(1.7rem, 8.3vw, 5.4rem); font-size: clamp(1
 .panel-link { align-self: start; margin: auto 24px 0; padding: 2px 0 20px; font-size: .84375rem; color: var(--accent); }
 .panel-link .icon, .footer-link .icon, .release .icon { width: 15px; height: 15px; }
 
-.film-panel { display: flex; flex-direction: column; }
-.film-icon { width: 29px; height: 29px; color: var(--muted); flex: none; }
 .time { margin-left: auto; padding: 2px 5px; background: var(--inset); color: var(--muted); border: 1px solid var(--rule); font-size: .8125rem; }
-.film-stage {
-  position: relative; isolation: isolate; flex: 1; display: grid; place-items: center; padding: 25px 18px;
-  background: #252b25 url("assets/gallery/grove-landscape.webp") 23% 60% / cover;
-}
-.film-stage::before { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(120deg, rgb(17 25 22 / 76%), rgb(23 26 25 / 65%)); }
-.film-frame { position: relative; width: min(100%, 229px); aspect-ratio: 9 / 16; background: #0c1010; outline: 2px solid #bac4a9; box-shadow: 0 0 0 5px #242e27, 5px 7px 0 rgb(8 13 10 / 43%); }
-.film-frame video { display: block; width: 100%; height: 100%; object-fit: contain; }
-.film-frame video::cue { font-family: var(--pixel-font); }
-.film-play { position: absolute; inset: 0; margin: auto; padding: 0; width: 52px; height: 49px; min-height: 0; }
-.film-play .icon { width: 20px; height: 20px; }
-.film-guide-link { display: flex; justify-content: center; align-items: center; gap: 12px; min-height: 48px; padding: 10px 15px; color: var(--accent); background: var(--inset); border-top: 2px solid var(--rim); font-size: .83rem; }
-.film-guide-link:hover, .film-chapters a:hover { text-decoration: underline; }
 .walkthrough { margin-bottom: 22px; }
 .walkthrough > summary { list-style: none; }
 .walkthrough > summary::-webkit-details-marker { display: none; }
@@ -190,6 +175,7 @@ h1 { color: #fff7da; font-size: clamp(1.7rem, 8.3vw, 5.4rem); font-size: clamp(1
 .walkthrough video::cue { font-family: var(--pixel-font); }
 .film-chapters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 5px; padding-top: 14px; }
 .film-chapters a { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 11px; background: var(--inset); border: 1px solid var(--rule); font-size: .8125rem; }
+.film-chapters a:hover { text-decoration: underline; }
 .film-chapters a span { color: var(--muted); }
 .film-chapters a[aria-current="time"] { border-color: var(--accent); color: var(--accent); }
 
@@ -222,9 +208,12 @@ h1 { color: #fff7da; font-size: clamp(1.7rem, 8.3vw, 5.4rem); font-size: clamp(1
 .site-footer .brand, .footer-link { font-size: .8125rem; }
 .footer-link { color: var(--muted); min-height: 38px; }
 
+@media (min-width: 901px) {
+  .recipe { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .recipe li + li { border-top: 0; }
+}
 @media (max-width: 900px) {
   .wrap { width: calc(100% - 44px); }
-  .workbench { grid-template-columns: minmax(0,1.16fr) minmax(0,.85fr); gap: 14px; }
   .panel-header { padding-inline: 12px; gap: 9px; }
   .recipe { padding-inline: 16px; }
   .recipe li { grid-template-columns: 43px minmax(0,1fr); gap: 12px; }
@@ -248,12 +237,10 @@ h1 { color: #fff7da; font-size: clamp(1.7rem, 8.3vw, 5.4rem); font-size: clamp(1
   .hero[data-scene="friends"] #cover-image { object-position: 70% 50%; }
   .lede { margin-top: 17px; max-width: 465px; }
   .hero-actions { margin-top: 22px; }
-  .workbench { grid-template-columns: minmax(0,1fr); gap: 20px; padding: 29px 0 20px; }
+  .recipe-panel { margin-block: 29px 20px; }
   .panel-header { min-height: 58px; padding-inline: 15px; }
   .recipe li { padding-block: 17px; }
   .panel-link { margin-inline: 16px; }
-  .film-stage { padding-block: 25px; }
-  .film-frame { width: min(78%, 235px); }
   .chest-lid { padding-inline: 13px; gap: 8px; }
   .inventory { padding: 21px 12px 14px; }
 }
@@ -286,7 +273,7 @@ h1 { color: #fff7da; font-size: clamp(1.7rem, 8.3vw, 5.4rem); font-size: clamp(1
   .chest-lid h2 { font-size: .9375rem; }
 }
 @media (forced-colors: active) {
-  .game-button, .rail button, .film-play, .platform, .icon-control { border: 2px solid ButtonText; }
+  .game-button, .rail button, .platform, .icon-control { border: 2px solid ButtonText; }
   .rail [aria-pressed="true"] { outline: 3px solid Highlight; }
   h1 { text-shadow: none; }
 }

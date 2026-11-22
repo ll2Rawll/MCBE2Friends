@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#161c1d" id="theme-color">
-  <meta name="description" content="Bring your Bedrock server to Minecraft’s Friends tab. Watch the 20-second trailer or follow the customer walkthrough for broadcasting, Premium hosting, add-ons, and world backups.">
+  <meta name="description" content="Bring your Bedrock server to Minecraft’s Friends tab. Follow the customer walkthrough for broadcasting, Premium hosting, add-ons, and world backups.">
   <link rel="canonical" href="https://ll2rawll.github.io/MCBE2Friends/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Mcbe2Friends">
@@ -17,7 +17,7 @@
   <link rel="apple-touch-icon" href="assets/app-icon.png">
   <link rel="preload" href="assets/fonts/minecraft-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/minecraft-bold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=premium">
+  <link rel="stylesheet" href="styles.css?v=walkthrough">
   <script>
     try {
       if (localStorage.getItem('mcbe2friends-theme') === 'light') {
@@ -26,7 +26,7 @@
       }
     } catch {}
   </script>
-  <script src="site.js?v=world" defer></script>
+  <script src="site.js?v=walkthrough" defer></script>
 </head>
 <body>
   <svg xmlns="http://www.w3.org/2000/svg" class="symbols" aria-hidden="true">
@@ -45,7 +45,7 @@
     <div class="nav-inner wrap">
       <a class="brand" href="#top"><img src="assets/ui/grass-block.webp" alt="" width="35" height="37"><span>Mcbe2Friends</span></a>
       <nav aria-label="Main navigation" class="desktop-nav">
-        <a href="#setup">Setup</a><a href="#trailer">Trailer</a><a href="#premium">Premium</a><a href="#downloads">Downloads</a>
+        <a href="#setup">Setup</a><a href="#walkthrough">Walkthrough</a><a href="#premium">Premium</a><a href="#downloads">Downloads</a>
       </nav>
       <div class="header-tools">
         <a href="https://github.com/ll2Rawll/MCBE2Friends" class="icon-control" aria-label="View Mcbe2Friends on GitHub" title="View on GitHub"><img class="github-mark" src="assets/github.png" width="20" height="20" alt=""></a>
@@ -55,7 +55,7 @@
         <details class="mobile-menu">
           <summary class="icon-control" aria-label="Navigation menu"><svg class="icon open-menu" aria-hidden="true"><use href="#i-menu"/></svg><svg class="icon close-menu" aria-hidden="true"><use href="#i-close"/></svg></summary>
           <nav class="menu-panel" aria-label="Mobile navigation">
-            <a href="#setup">Setup</a><a href="#trailer">Watch the trailer</a><a href="#premium">Premium</a><a href="#downloads">Downloads</a>
+            <a href="#setup">Setup</a><a href="#walkthrough">Customer walkthrough</a><a href="#premium">Premium</a><a href="#downloads">Downloads</a>
           </nav>
         </details>
       </div>
@@ -72,7 +72,7 @@
           <p class="lede">Bring your Bedrock server to Minecraft’s <strong>Friends</strong> tab with MCXboxBroadcast.</p>
           <div class="hero-actions">
             <a class="game-button primary" href="https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.2.0/Mcbe2Friends-Windows-x64.zip"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Download for Windows</a>
-            <a class="game-button stone" href="#trailer" id="watch-trailer"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg>Watch trailer</a>
+            <a class="game-button stone" href="#walkthrough" id="watch-walkthrough"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg>Watch walkthrough</a>
           </div>
           <a class="other-platforms" href="#downloads">macOS and Linux downloads <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </div>
@@ -91,34 +91,17 @@
       <div class="ground" aria-hidden="true"></div>
     </section>
 
-    <div class="workbench wrap">
-      <section class="panel recipe-panel" id="setup" aria-labelledby="setup-title">
-        <div class="panel-header"><span class="item table" aria-hidden="true"></span><h2 id="setup-title">Craft your broadcast</h2></div>
-        <ol class="recipe" aria-label="Set up Mcbe2Friends">
-          <li><span class="recipe-slot" aria-hidden="true"><span class="item chest"></span><span class="count">1</span></span><div><h3>Open the launcher</h3><p>Download Mcbe2Friends for your computer, extract the archive, and open the app.</p></div></li>
-          <li><span class="recipe-slot" aria-hidden="true"><span class="item redstone"></span><span class="count">2</span></span><div><h3>Connect your server</h3><p>Enter your Bedrock address and port. Choose <strong>Connect &amp; start</strong>, then use the code to sign in with Xbox.</p></div></li>
-          <li><span class="recipe-slot" aria-hidden="true"><span class="item emerald"></span><span class="count">3</span></span><div><h3>Meet in the Friends tab</h3><p>When <strong>Broadcast live</strong> appears, have friends add your Xbox gamertag. Once accepted, they can join from <strong>Play → Friends</strong>.</p></div></li>
-        </ol>
-        <a class="panel-link" href="https://github.com/ll2Rawll/MCBE2Friends/blob/main/docs/guide.md">Full setup guide <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
-      </section>
+    <section class="panel recipe-panel wrap" id="setup" aria-labelledby="setup-title">
+      <div class="panel-header"><span class="item table" aria-hidden="true"></span><h2 id="setup-title">Craft your broadcast</h2></div>
+      <ol class="recipe" aria-label="Set up Mcbe2Friends">
+        <li><span class="recipe-slot" aria-hidden="true"><span class="item chest"></span><span class="count">1</span></span><div><h3>Open the launcher</h3><p>Download Mcbe2Friends for your computer, extract the archive, and open the app.</p></div></li>
+        <li><span class="recipe-slot" aria-hidden="true"><span class="item redstone"></span><span class="count">2</span></span><div><h3>Connect your server</h3><p>Enter your Bedrock address and port. Choose <strong>Connect &amp; start</strong>, then use the code to sign in with Xbox.</p></div></li>
+        <li><span class="recipe-slot" aria-hidden="true"><span class="item emerald"></span><span class="count">3</span></span><div><h3>Meet in the Friends tab</h3><p>When <strong>Broadcast live</strong> appears, have friends add your Xbox gamertag. Once accepted, they can join from <strong>Play → Friends</strong>.</p></div></li>
+      </ol>
+      <a class="panel-link" href="https://github.com/ll2Rawll/MCBE2Friends/blob/main/docs/guide.md">Full setup guide <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
+    </section>
 
-      <section class="panel film-panel" id="trailer" aria-labelledby="trailer-title">
-        <div class="panel-header"><svg class="film-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M1 4h22v16H1zm3 2v2h2V6zm5 0v2h2V6zm5 0v2h2V6zm5 0v2h2V6zM4 16v2h2v-2zm5 0v2h2v-2zm5 0v2h2v-2zm5 0v2h2v-2zM9 9v6l6-3z"/></svg><h2 id="trailer-title">Setup trailer</h2><span class="time">0:20</span></div>
-        <div class="film-stage">
-          <div class="film-frame">
-            <video id="setup-film" width="1080" height="1920" controls playsinline preload="none" poster="assets/media/trailer-poster.webp" tabindex="0" aria-label="Mcbe2Friends setup trailer, 20 seconds">
-              <source src="assets/media/mcbe2friends-trailer.mp4" type="video/mp4">
-              <track kind="captions" src="assets/media/setup.en.vtt" srclang="en" label="English">
-              <a href="assets/media/mcbe2friends-trailer.mp4">Open the setup trailer</a>
-            </video>
-            <button class="film-play" type="button" aria-label="Play the setup trailer" hidden><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></button>
-          </div>
-        </div>
-        <a class="film-guide-link" id="watch-walkthrough" href="#walkthrough">Watch the full walkthrough <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      </section>
-    </div>
-
-    <details class="panel wrap walkthrough" id="walkthrough">
+    <details class="panel wrap walkthrough" id="walkthrough" open>
       <summary class="panel-header">
         <span class="item chest" aria-hidden="true"></span><strong>Customer walkthrough</strong><span class="time">2:57</span>
         <svg class="icon disclosure-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>

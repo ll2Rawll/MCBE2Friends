@@ -77,30 +77,6 @@ for (const [index, button] of scenes.entries()) {
   });
 }
 
-const film = document.getElementById('setup-film');
-const filmButton = document.querySelector('.film-play');
-const watchLink = document.getElementById('watch-trailer');
-
-function playFilm() {
-  if (film.ended) film.currentTime = 0;
-  film.play().catch(() => {
-    filmButton.hidden = true;
-  });
-}
-
-filmButton.hidden = false;
-filmButton.addEventListener('click', () => {
-  film.focus({ preventScroll: true });
-  playFilm();
-});
-watchLink.addEventListener('click', (event) => {
-  if (event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
-    playFilm();
-  }
-});
-film.addEventListener('play', () => { filmButton.hidden = true; });
-film.addEventListener('ended', () => { filmButton.hidden = false; });
-
 const walkthrough = document.getElementById('walkthrough');
 const guideFilm = document.getElementById('guide-film');
 const chapterLinks = Array.from(walkthrough.querySelectorAll('.film-chapters a'));
@@ -144,16 +120,18 @@ guideFilm.addEventListener('timeupdate', () => {
 function normalClick(event) {
   return event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey;
 }
-document.getElementById('watch-walkthrough').addEventListener('click', event => {
-  if (normalClick(event)) playGuide();
-});
+for (const link of document.querySelectorAll('a[href="#walkthrough"]')) {
+  link.addEventListener('click', event => {
+    if (!normalClick(event)) return;
+    if (link.id === 'watch-walkthrough') playGuide();
+    else walkthrough.open = true;
+  });
+}
 chapterLinks.forEach((link, index) => link.addEventListener('click', event => {
   if (!normalClick(event)) return;
   event.preventDefault();
   playGuide(chapterTimes[index]);
 }));
-film.addEventListener('play', () => guideFilm.pause());
-guideFilm.addEventListener('play', () => film.pause());
 walkthrough.addEventListener('toggle', () => {
   if (!walkthrough.open) guideFilm.pause();
 });
