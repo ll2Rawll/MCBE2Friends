@@ -1,0 +1,192 @@
+WEBVTT
+
+00:00:00.650 --> 00:00:05.450
+On the Mcbe2Friends project page, choose
+the download for your computer.
+
+00:00:05.620 --> 00:00:09.020
+Extract the archive and open the
+launcher. On Windows,
+
+00:00:09.020 --> 00:00:12.596
+open Mcbe2Friends.exe. The controls open
+in your browser.
+
+00:00:13.443 --> 00:00:16.921
+Already have a running server? Enter its
+Bedrock address and port.
+
+00:00:17.091 --> 00:00:20.675
+The usual port is 19132. Choose
+Continue.
+
+00:00:21.527 --> 00:00:25.431
+Use a dedicated Microsoft account with
+an Xbox gamertag.
+
+00:00:25.601 --> 00:00:28.657
+Choose whether to accept friend requests
+automatically,
+
+00:00:28.657 --> 00:00:30.315
+then select Connect & start.
+
+00:00:31.152 --> 00:00:34.658
+The launcher sets up Java if needed.
+When a code appears,
+
+00:00:34.658 --> 00:00:36.613
+choose Open Microsoft sign-in.
+
+00:00:36.783 --> 00:00:40.260
+Enter your own code on Microsoft’s page
+and finish signing in.
+
+00:00:41.110 --> 00:00:45.931
+Wait for Broadcast live, then give
+friends the broadcaster’s Xbox gamertag.
+
+00:00:46.101 --> 00:00:50.180
+Once their requests are accepted, they
+open Minecraft Bedrock, choose Play,
+
+00:00:50.180 --> 00:00:52.349
+then Friends, and select your session.
+
+00:00:53.193 --> 00:00:57.673
+Keep the PC awake. Closing the browser
+tab leaves the broadcast running.
+
+00:00:57.843 --> 00:01:00.416
+Use Stop broadcast to end it. Next time,
+
+00:01:00.416 --> 00:01:02.814
+Start broadcast reuses your settings.
+
+00:01:03.652 --> 00:01:06.809
+To host a new world on your own PC, open
+Premium.
+
+00:01:06.979 --> 00:01:11.053
+Check your hardware and recommended
+settings.
+
+00:01:11.053 --> 00:01:15.043
+Hosting supports Windows x64 and Ubuntu
+x64.
+
+00:01:15.902 --> 00:01:18.811
+Copy your PC code, choose Get Premium on
+Discord,
+
+00:01:18.811 --> 00:01:20.787
+and send the code to the seller.
+
+00:01:20.957 --> 00:01:25.339
+After the one-time $15 purchase, paste
+the key you receive and choose
+
+00:01:25.339 --> 00:01:26.120
+Activate.
+
+00:01:26.943 --> 00:01:29.495
+Review the Minecraft terms, check the
+box,
+
+00:01:29.495 --> 00:01:31.658
+then select Install & start server.
+
+00:01:31.828 --> 00:01:35.433
+The launcher applies the PC preset. Wait
+for Server running.
+
+00:01:36.277 --> 00:01:40.589
+Under Players & Friends tab, enter a
+friend’s Xbox gamertag and choose
+
+00:01:40.589 --> 00:01:42.570
+Allow. Repeat for each player.
+
+00:01:42.740 --> 00:01:46.707
+Players on your network can also join
+using the local address and server
+
+00:01:46.707 --> 00:01:47.177
+port.
+
+00:01:48.027 --> 00:01:53.494
+For internet play, forward the server
+port for both TCP and UDP to the host
+
+00:01:53.494 --> 00:01:53.979
+PC.
+
+00:01:54.149 --> 00:01:56.420
+Enter an address your friends can reach,
+
+00:01:56.420 --> 00:01:59.311
+then choose Friends setup and follow the
+Xbox steps.
+
+00:02:00.152 --> 00:02:02.840
+While the server is running, open Server
+console.
+
+00:02:03.010 --> 00:02:05.356
+Send the list command to see who is
+online.
+
+00:02:06.193 --> 00:02:09.073
+Choose Stop server to save the world
+before editing.
+
+00:02:09.243 --> 00:02:12.360
+Open Server settings & worlds. Choose a
+world,
+
+00:02:12.360 --> 00:02:16.411
+adjust the player slots or use PC
+recommendations, then save.
+
+00:02:17.235 --> 00:02:21.084
+Under Add-ons, choose your .mcaddon or
+.mcpack file and click Import
+
+00:02:21.084 --> 00:02:21.672
+add-on.
+
+00:02:21.842 --> 00:02:26.024
+Enable each required resource and
+behavior pack for the selected world.
+
+00:02:26.860 --> 00:02:30.519
+Under World imports & backups, choose
+Back up selected world.
+
+00:02:30.519 --> 00:02:32.940
+Open backups to find the .mcworld file.
+
+00:02:33.110 --> 00:02:37.663
+If the old world folder still exists,
+use Open server folder. In worlds,
+
+00:02:37.663 --> 00:02:40.299
+rename the old folder to keep your copy.
+
+00:02:40.759 --> 00:02:44.495
+Choose the .mcworld, enter the original
+world name for the new folder,
+
+00:02:44.495 --> 00:02:45.858
+and click Import world.
+
+00:02:46.693 --> 00:02:50.853
+Select the restored world in settings,
+save, and start the server again.
+
+00:02:51.023 --> 00:02:53.567
+With the host PC awake and the broadcast
+live,
+
+00:02:53.567 --> 00:02:55.653
+your friends can get back to playing.

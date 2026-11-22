@@ -100,3 +100,60 @@ watchLink.addEventListener('click', (event) => {
 });
 film.addEventListener('play', () => { filmButton.hidden = true; });
 film.addEventListener('ended', () => { filmButton.hidden = false; });
+
+const walkthrough = document.getElementById('walkthrough');
+const guideFilm = document.getElementById('guide-film');
+const chapterLinks = Array.from(walkthrough.querySelectorAll('.film-chapters a'));
+const chapterTimes = chapterLinks.map(link => Number(link.hash.slice(3)));
+let pendingChapter;
+
+function openLinkedWalkthrough() {
+  if (location.hash === '#walkthrough') walkthrough.open = true;
+}
+openLinkedWalkthrough();
+window.addEventListener('hashchange', openLinkedWalkthrough);
+
+function playGuide(time) {
+  walkthrough.open = true;
+  if (time !== undefined) {
+    if (guideFilm.readyState >= HTMLMediaElement.HAVE_METADATA) guideFilm.currentTime = time;
+    else pendingChapter = time;
+  } else if (guideFilm.ended) {
+    guideFilm.currentTime = 0;
+  }
+  guideFilm.play().catch(() => {
+    // Browsers that require another gesture keep their native play control.
+  });
+}
+guideFilm.addEventListener('loadedmetadata', () => {
+  if (pendingChapter !== undefined) {
+    guideFilm.currentTime = pendingChapter;
+    pendingChapter = undefined;
+  }
+});
+guideFilm.addEventListener('timeupdate', () => {
+  let current = 0;
+  for (let index = 1; index < chapterTimes.length; index++) {
+    if (guideFilm.currentTime >= chapterTimes[index]) current = index;
+  }
+  chapterLinks.forEach((link, index) => {
+    if (index === current) link.setAttribute('aria-current', 'time');
+    else link.removeAttribute('aria-current');
+  });
+});
+function normalClick(event) {
+  return event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey;
+}
+document.getElementById('watch-walkthrough').addEventListener('click', event => {
+  if (normalClick(event)) playGuide();
+});
+chapterLinks.forEach((link, index) => link.addEventListener('click', event => {
+  if (!normalClick(event)) return;
+  event.preventDefault();
+  playGuide(chapterTimes[index]);
+}));
+film.addEventListener('play', () => guideFilm.pause());
+guideFilm.addEventListener('play', () => film.pause());
+walkthrough.addEventListener('toggle', () => {
+  if (!walkthrough.open) guideFilm.pause();
+});

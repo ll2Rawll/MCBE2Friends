@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#161c1d" id="theme-color">
-  <meta name="description" content="Bring your Bedrock server to Minecraft’s Friends tab. Download Mcbe2Friends for Windows, macOS, or Linux and watch the 20-second setup trailer.">
+  <meta name="description" content="Bring your Bedrock server to Minecraft’s Friends tab. Watch the 20-second trailer or follow the customer walkthrough for broadcasting, Premium hosting, add-ons, and world backups.">
   <link rel="canonical" href="https://ll2rawll.github.io/MCBE2Friends/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Mcbe2Friends">
-  <meta property="og:description" content="Bring your Bedrock server to Minecraft’s Friends tab. Get the launcher and watch the setup trailer.">
+  <meta property="og:description" content="Watch how to broadcast a Bedrock server, activate Premium hosting, and manage a world with Mcbe2Friends.">
   <meta property="og:url" content="https://ll2rawll.github.io/MCBE2Friends/">
   <meta property="og:image" content="https://ll2rawll.github.io/MCBE2Friends/assets/gallery/grove-landscape.webp">
   <meta property="og:image:alt" content="A lantern-lit cottage beside a mountain lake in a Minecraft cherry grove.">
@@ -114,8 +114,32 @@
             <button class="film-play" type="button" aria-label="Play the setup trailer" hidden><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></button>
           </div>
         </div>
+        <a class="film-guide-link" id="watch-walkthrough" href="#walkthrough">Watch the full walkthrough <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </section>
     </div>
+
+    <details class="panel wrap walkthrough" id="walkthrough">
+      <summary class="panel-header">
+        <span class="item chest" aria-hidden="true"></span><strong>Customer walkthrough</strong><span class="time">2:57</span>
+        <svg class="icon disclosure-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </summary>
+      <div class="walkthrough-body">
+        <video id="guide-film" width="1600" height="900" controls playsinline preload="none" poster="assets/media/walkthrough-poster.webp" tabindex="0" aria-label="Narrated Mcbe2Friends customer walkthrough">
+          <source src="assets/media/mcbe2friends-walkthrough.mp4" type="video/mp4">
+          <track kind="captions" src="assets/media/walkthrough.en.vtt" srclang="en" label="English">
+          <track kind="chapters" src="assets/media/walkthrough.chapters.vtt" srclang="en" label="Chapters">
+          <a href="assets/media/mcbe2friends-walkthrough.mp4">Open the customer walkthrough</a>
+        </video>
+        <nav class="film-chapters" aria-label="Walkthrough chapters">
+          <a href="assets/media/mcbe2friends-walkthrough.mp4#t=0"><span>0:00</span> Download</a>
+          <a href="assets/media/mcbe2friends-walkthrough.mp4#t=13.083"><span>0:13</span> Broadcast &amp; join</a>
+          <a href="assets/media/mcbe2friends-walkthrough.mp4#t=63.292"><span>1:03</span> Premium hosting</a>
+          <a href="assets/media/mcbe2friends-walkthrough.mp4#t=95.917"><span>1:36</span> Friends &amp; console</a>
+          <a href="assets/media/mcbe2friends-walkthrough.mp4#t=125.833"><span>2:06</span> Worlds &amp; add-ons</a>
+          <a href="assets/media/mcbe2friends-walkthrough.mp4#t=146.500"><span>2:27</span> Backups &amp; restore</a>
+        </nav>
+      </div>
+    </details>
 
     <section class="panel premium-offer wrap" id="premium" aria-labelledby="premium-title">
       <div class="panel-header"><span class="item emerald" aria-hidden="true"></span><h2 id="premium-title">Premium self-hosting</h2></div>
