@@ -12,6 +12,10 @@ Extract the download for your computer.
 
 The app opens its controls in your default browser. These portable builds have no publisher signature or Apple notarization, so your operating system may ask you to approve the app.
 
+## Host a server on this PC
+
+Open **Premium** to check hardware support, activate a key, and install the official Bedrock server. The built-in panel manages normal worlds and add-ons. [Premium setup and management guide](https://github.com/ll2Rawll/MCBE2Friends/blob/main/docs/premium-hosting.md)
+
 ## Start your first broadcast
 
 1. Enter the server’s join address and Bedrock port. The default port is **19132**. You can paste an address with its port, such as `play.example.net:19132`. Choose **Continue**.

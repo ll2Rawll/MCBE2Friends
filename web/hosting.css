@@ -1,0 +1,236 @@
+.host-panel {
+  overflow: hidden;
+}
+.host-cover {
+  min-height: 100px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: end;
+  color: #fff7de;
+  background:
+    linear-gradient(90deg, #192e29ed, #162c2766 63%, #11262020),
+    url("/assets/cherry-grove.webp") 50% 54% / cover;
+  border-bottom: 1px solid #c8d1bc;
+}
+.host-kicker {
+  display: block;
+  color: #d0efb7;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+.host-cover h2 {
+  color: inherit;
+  text-shadow: 0 2px 8px #0e221e;
+}
+.host-content {
+  padding: 19px 24px 23px;
+}
+.host-content h3 {
+  margin: 16px 0 4px;
+  font-family: var(--display);
+  font-size: 21px;
+  line-height: 1.2;
+}
+.host-content p {
+  margin: 6px 0 11px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.host-content .host-spec {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+.host-content #host-capability {
+  font-size: 13px;
+}
+.host-content label {
+  display: block;
+  font-size: 13px;
+  font-weight: 650;
+  margin: 10px 0 4px;
+}
+.host-content .host-inline,
+.host-action-row,
+.host-heading {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.host-inline input {
+  flex: 1;
+  min-width: 0;
+}
+.host-inline button {
+  flex: none;
+}
+.host-action-row {
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+.host-buy {
+  width: 100%;
+  text-decoration: none;
+  margin: 2px 0 9px;
+}
+.host-feedback {
+  white-space: pre-line;
+  padding: 9px 11px;
+  background: #e3f6e2;
+  border-left: 3px solid #458562;
+  color: #18492f;
+}
+.host-feedback.error {
+  background: #fff0e6;
+  border-color: #b85433;
+  color: #702a1b;
+}
+.host-heading {
+  justify-content: space-between;
+}
+.host-heading h3 {
+  margin-top: 6px;
+}
+#host-version {
+  font-size: 12px;
+  color: var(--muted);
+}
+#host-progress {
+  width: 100%;
+  accent-color: #297653;
+}
+.host-content .host-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.host-check input {
+  margin: 4px 0 0;
+  accent-color: #237053;
+}
+.host-check a {
+  color: #195b45;
+  text-decoration: underline;
+}
+.host-drawer {
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+.host-drawer summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: #214a39;
+}
+.host-drawer p {
+  font-size: 14px;
+}
+.host-drawer fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.host-drawer input[type="number"],
+.host-drawer select {
+  width: 100%;
+  padding: 7px 9px;
+  min-height: 40px;
+  border: 1px solid #819c8c;
+  border-radius: 9px;
+  background: #f4faf1c7;
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+.host-drawer input[type="file"] {
+  width: 100%;
+  margin: 4px 0 8px;
+  font-size: 13px;
+}
+.host-drawer input[type="file"]::file-selector-button {
+  font: inherit;
+  padding: 6px 9px;
+  margin-right: 7px;
+}
+.host-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 9px;
+}
+.host-grid label {
+  min-width: 0;
+}
+.host-grid label input,
+.host-grid label select {
+  margin-top: 4px;
+}
+.host-content input#device-code {
+  font: 600 14px/1.4 monospace;
+  letter-spacing: 0.02em;
+}
+.host-list,
+.host-backups {
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.host-list li {
+  padding-block: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.host-list li button {
+  margin: 6px 6px 0 0;
+}
+.host-backups li {
+  margin: 3px 0;
+}
+#host-log {
+  background: #152820;
+  color: #d8f4df;
+  border-radius: 12px;
+  padding: 10px;
+  font: 12px/1.55 monospace;
+  max-height: 225px;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .host-content {
+    padding: 15px 18px 18px;
+  }
+  .dock {
+    width: max-content;
+    max-width: calc(100% - 14px);
+  }
+  .dock .nav-link {
+    gap: 4px;
+    padding-inline: 9px;
+  }
+}
+@media (max-width: 410px) {
+  .dock .nav-link {
+    flex-direction: column;
+    gap: 2px;
+    min-height: 40px;
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+  .dock .nav-link .ico {
+    width: 16px;
+    height: 16px;
+  }
+  .host-content {
+    padding-inline: 13px;
+  }
+  #host-player-form .host-inline {
+    flex-wrap: wrap;
+  }
+  #host-player-form input {
+    flex-basis: 100%;
+  }
+}

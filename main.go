@@ -152,10 +152,12 @@ func serve(dataPath string, noBrowser bool) error {
 	}
 	// Do not release the instance lock while Java is still writing its cache.
 	done := l.stop(true)
+	hostDone := l.host.stop(true)
 	shutdown, stop := context.WithTimeout(context.Background(), 3*time.Second)
 	defer stop()
 	server.Shutdown(shutdown)
 	<-done
+	<-hostDone
 	return result
 }
 

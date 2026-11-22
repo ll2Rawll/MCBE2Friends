@@ -143,7 +143,7 @@ function renderHeader() {
     view === "activity"
       ? "Follow setup and connection updates from your launcher."
       : "Bring your Bedrock server to the Friends tab in Minecraft.";
-  for (const name of ["launcher", "activity"]) {
+  for (const name of ["launcher", "activity", "hosting"]) {
     const element = $("#" + name + "-nav");
     element.classList.toggle("active", view === name);
     if (view === name) element.setAttribute("aria-current", "page");
@@ -152,6 +152,18 @@ function renderHeader() {
   $("#launcher-page").hidden =
     view !== "launcher" || closed || (!state && !connected);
   $("#activity-page").hidden = view !== "activity" || closed || !state;
+  $("#hosting-page").hidden = view !== "hosting" || closed || !state;
+  if (view === "hosting") {
+    $("#page-title").textContent = "Your Bedrock server";
+    $("#hero-description").textContent =
+      "Host a world on your PC and manage it from your launcher.";
+    if (connected && !closed) {
+      $("#status-label").textContent =
+        window.premiumPanel?.label() || "Local hosting";
+      $("#hero-status").className =
+        "status-chip" + (window.premiumPanel?.live() ? " live" : "");
+    }
+  }
   $(".quit").hidden = !connected || closed;
 }
 
@@ -369,6 +381,7 @@ function render() {
   renderProgress();
   renderWork();
   if (view === "activity") renderEvents();
+  if (view === "hosting" && connected) window.premiumPanel?.tick();
 }
 
 function accept(snapshot) {
@@ -405,7 +418,10 @@ async function refresh() {
 async function poll() {
   await refresh();
   if (!closed && token)
-    setTimeout(poll, document.hidden || !state?.running ? 2000 : 750);
+    setTimeout(
+      poll,
+      document.hidden || (!state?.running && !state?.hostBusy) ? 2000 : 750,
+    );
 }
 
 function changeView(name) {
@@ -505,6 +521,7 @@ document.addEventListener("click", async (event) => {
   switch (action) {
     case "launcher":
     case "activity":
+    case "hosting":
       changeView(action);
       break;
     case "guide":
@@ -562,10 +579,10 @@ document.addEventListener("click", async (event) => {
       );
       break;
     case "quit":
-      if (state?.running)
+      if (state?.running || state?.hostBusy || window.premiumPanel?.busy())
         openConfirm(
           "Quit the launcher?",
-          "This also stops the current broadcast or sign-in. You can start it again by reopening Mcbe2Friends.",
+          "This saves and stops any hosted world and ends the current broadcast or sign-in.",
           "Quit launcher",
           "quit",
         );

@@ -38,6 +38,7 @@ type State struct {
 	ServerWarning string   `json:"serverWarning,omitempty"`
 	Events        []Event  `json:"events"`
 	Build         string   `json:"build"`
+	HostBusy      bool     `json:"hostBusy"`
 }
 
 type attempt struct {
@@ -47,6 +48,7 @@ type attempt struct {
 }
 
 type Launcher struct {
+	host    *Hosting
 	root    string
 	mu      sync.Mutex
 	state   State
@@ -59,7 +61,7 @@ func newLauncher(root string) (*Launcher, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not read your saved server details: %w", err)
 	}
-	l := &Launcher{root: root, state: State{Settings: settings, Phase: "offline", Percent: -1, Build: buildNumber}}
+	l := &Launcher{root: root, host: newHosting(root), state: State{Settings: settings, Phase: "offline", Percent: -1, Build: buildNumber}}
 	if l.accountSaved() {
 		if b, err := os.ReadFile(filepath.Join(root, "gamertag.txt")); err == nil {
 			l.state.Gamertag = string(b)
@@ -81,6 +83,7 @@ func (l *Launcher) snapshot() State {
 	s.Events = append([]Event{}, s.Events...)
 	s.Running = l.active != nil
 	s.AccountSaved = l.accountSaved()
+	s.HostBusy = l.host.isBusy()
 	return s
 }
 

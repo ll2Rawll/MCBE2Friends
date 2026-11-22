@@ -89,8 +89,8 @@ def mac_release(go, stage, out):
         "CFBundleIconFile": NAME + ".icns",
         "CFBundlePackageType": "APPL",
         "CFBundleInfoDictionaryVersion": "6.0",
-        "CFBundleShortVersionString": "1.0.0",
-        "CFBundleVersion": "1",
+        "CFBundleShortVersionString": "1.1.0",
+        "CFBundleVersion": "2",
         "LSUIElement": True,
     }))
     output = out / (NAME + "-macOS.zip")

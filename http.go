@@ -50,6 +50,10 @@ func handler(l *Launcher, i Instance, quit func()) http.Handler {
 			reject(403, "Open this action in the local launcher.")
 			return
 		}
+		if r.URL.Path == "/api/hosting" || strings.HasPrefix(r.URL.Path, "/api/hosting/") {
+			hostingHTTP(l.host, w, r)
+			return
+		}
 		if r.Method == "GET" && r.URL.Path == "/api/state" {
 			writeJSON(w, 200, l.snapshot())
 			return

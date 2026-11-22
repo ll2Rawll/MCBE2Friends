@@ -12,7 +12,9 @@
     <link rel="apple-touch-icon" href="/assets/app-icon.png" />
     <link rel="preload" as="image" href="/assets/cherry-grove.webp" />
     <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/hosting.css" />
     <script src="/app.js" defer></script>
+    <script src="/hosting.js" defer></script>
   </head>
   <body>
     <svg xmlns="http://www.w3.org/2000/svg" class="symbols" aria-hidden="true">
@@ -256,6 +258,326 @@
           </section>
         </div>
         <section
+          class="panel host-panel"
+          id="hosting-page"
+          aria-labelledby="hosting-title"
+          hidden
+        >
+          <header class="host-cover">
+            <div>
+              <span class="host-kicker">Premium</span>
+              <h2 id="hosting-title">Bedrock hosting</h2>
+            </div>
+          </header>
+          <div class="host-content">
+            <p id="host-pc" class="host-spec">Checking this PC…</p>
+            <p id="host-capability" class="lead"></p>
+            <p
+              id="host-feedback"
+              class="host-feedback"
+              role="status"
+              hidden
+            ></p>
+            <div id="host-locked">
+              <h3>Host on your own PC</h3>
+              <p>
+                Premium is a one-time $15 USD unlock for this installation. It
+                installs the official Bedrock server and keeps your worlds and
+                add-ons in normal server folders.
+              </p>
+              <label for="device-code">Your PC code</label>
+              <div class="host-inline">
+                <input
+                  id="device-code"
+                  type="text"
+                  readonly
+                  spellcheck="false"
+                /><button type="button" class="secondary" id="copy-device">
+                  Copy
+                </button>
+              </div>
+              <p class="hint">
+                Send this code to the seller on Discord. After payment, paste
+                the key they send back.
+              </p>
+              <a
+                id="host-buy"
+                class="primary host-buy"
+                href="https://discord.gg/X5adbkPq"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Get Premium on Discord · $15
+                <svg class="ico"><use href="#external" /></svg
+              ></a>
+              <form id="activate-premium">
+                <label for="premium-key">Activation key</label>
+                <div class="host-inline">
+                  <input
+                    id="premium-key"
+                    type="text"
+                    placeholder="M2F-…"
+                    autocomplete="off"
+                    spellcheck="false"
+                  /><button class="secondary" type="submit">Activate</button>
+                </div>
+              </form>
+              <button type="button" class="text-btn" id="retry-license" hidden>
+                Recheck saved key
+              </button>
+            </div>
+            <div id="host-unlocked" hidden>
+              <div class="host-heading">
+                <h3 id="host-phase">Server offline</h3>
+                <span id="host-version"></span>
+              </div>
+              <p id="host-message" class="lead" role="status"></p>
+              <progress id="host-progress" max="100" hidden></progress>
+              <label id="host-terms-row" class="host-check"
+                ><input type="checkbox" id="host-terms" /><span
+                  >I agree to the
+                  <a
+                    href="https://www.minecraft.net/eula"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Minecraft EULA</a
+                  >
+                  and
+                  <a
+                    href="https://privacy.microsoft.com/privacystatement"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Microsoft Privacy Statement</a
+                  >
+                  for this server download.</span
+                ></label
+              >
+              <div class="host-action-row">
+                <button type="button" id="host-start" class="primary">
+                  Install &amp; start server</button
+                ><button type="button" id="host-stop" class="secondary" hidden>
+                  Stop server</button
+                ><button type="button" id="host-folder" class="text-btn">
+                  Open server folder
+                </button>
+              </div>
+              <p class="hint" id="host-local"></p>
+              <details class="host-drawer" id="host-player-panel">
+                <summary>Players &amp; Friends tab</summary>
+                <p id="host-allowlist"></p>
+                <form id="host-player-form">
+                  <label for="host-gamertag">Xbox gamertag</label>
+                  <div class="host-inline">
+                    <input
+                      id="host-gamertag"
+                      type="text"
+                      maxlength="64"
+                      placeholder="Player gamertag"
+                      required
+                    /><button class="secondary" name="operation" value="add">
+                      Allow</button
+                    ><button class="text-btn" name="operation" value="remove">
+                      Remove
+                    </button>
+                  </div>
+                </form>
+                <p class="hint">
+                  Start the server to change the allowlist. Each invited player
+                  needs a Microsoft account.
+                </p>
+                <label for="host-public">Address your friends can reach</label>
+                <div class="host-inline">
+                  <input
+                    id="host-public"
+                    type="text"
+                    placeholder="play.example.net"
+                    autocomplete="off"
+                    spellcheck="false"
+                  /><button type="button" class="secondary" id="host-broadcast">
+                    Friends setup
+                  </button>
+                </div>
+                <p class="hint">
+                  The local address works on your network. For internet play,
+                  forward the server’s TCP and UDP port and use a reachable
+                  public address.
+                </p>
+              </details>
+              <details class="host-drawer">
+                <summary>Server settings &amp; worlds</summary>
+                <p>
+                  Stop the server to change settings. Choose an existing world
+                  or type a new name to generate one on the next start.
+                </p>
+                <form id="host-settings">
+                  <fieldset id="host-config-fields">
+                    <div class="host-grid">
+                      <label
+                        >Server name<input
+                          type="text"
+                          name="name"
+                          maxlength="64"
+                          required
+                      /></label>
+                      <label
+                        >World name<input
+                          type="text"
+                          name="world"
+                          list="host-world-names"
+                          maxlength="60"
+                          required /><datalist id="host-world-names"></datalist
+                      ></label>
+                      <label
+                        >Port<input
+                          type="number"
+                          name="port"
+                          min="1"
+                          max="65535"
+                          required
+                      /></label>
+                      <label
+                        >Player slots<input
+                          type="number"
+                          name="players"
+                          min="1"
+                          max="1000"
+                          required
+                      /></label>
+                      <label
+                        >View distance<input
+                          type="number"
+                          name="view"
+                          min="5"
+                          max="96"
+                          required
+                      /></label>
+                      <label
+                        >Tick distance<input
+                          type="number"
+                          name="tick"
+                          min="4"
+                          max="12"
+                          required
+                      /></label>
+                      <label
+                        >Max threads<input
+                          type="number"
+                          name="threads"
+                          min="0"
+                          max="256"
+                          required
+                      /></label>
+                      <label
+                        >Game mode<select name="mode">
+                          <option value="survival">Survival</option>
+                          <option value="creative">Creative</option>
+                          <option value="adventure">Adventure</option>
+                        </select></label
+                      >
+                      <label
+                        >Difficulty<select name="difficulty">
+                          <option value="peaceful">Peaceful</option>
+                          <option value="easy">Easy</option>
+                          <option value="normal">Normal</option>
+                          <option value="hard">Hard</option>
+                        </select></label
+                      >
+                    </div>
+                    <label class="host-check"
+                      ><input name="allowList" type="checkbox" />Require the
+                      player allowlist</label
+                    >
+                    <label class="host-check"
+                      ><input name="cheats" type="checkbox" />Allow
+                      cheats</label
+                    >
+                    <div class="host-action-row">
+                      <button class="secondary" type="submit">
+                        Save settings</button
+                      ><button class="text-btn" type="button" id="host-preset">
+                        Use PC recommendations
+                      </button>
+                    </div>
+                  </fieldset>
+                </form>
+                <button type="button" id="host-refresh" class="text-btn">
+                  Reload from server files
+                </button>
+              </details>
+              <details class="host-drawer">
+                <summary>Add-ons</summary>
+                <p id="pack-help">
+                  Import a pack, then enable it for the selected world. Paired
+                  resource and behavior packs both need enabling.
+                </p>
+                <form id="host-pack-import">
+                  <label for="pack-file">Bedrock add-on · up to 128 MiB</label
+                  ><input
+                    type="file"
+                    id="pack-file"
+                    accept=".mcpack,.mcaddon,.zip"
+                    required
+                  /><button class="secondary" type="submit">
+                    Import add-on
+                  </button>
+                </form>
+                <ul class="host-list" id="host-packs"></ul>
+              </details>
+              <details class="host-drawer">
+                <summary>World imports &amp; backups</summary>
+                <p>
+                  Back up a stopped world as a .mcworld file. Import a backup
+                  under a new name to restore it.
+                </p>
+                <form id="host-world-import">
+                  <label for="world-file">World file · up to 512 MiB</label
+                  ><input
+                    id="world-file"
+                    type="file"
+                    accept=".mcworld,.zip"
+                    required
+                  /><label for="world-import-name">New world folder name</label
+                  ><input
+                    type="text"
+                    id="world-import-name"
+                    maxlength="60"
+                    placeholder="Uses the filename if left empty"
+                  /><button class="secondary" type="submit">
+                    Import world
+                  </button>
+                </form>
+                <div class="host-action-row">
+                  <button type="button" class="secondary" id="host-backup">
+                    Back up selected world</button
+                  ><button
+                    type="button"
+                    class="text-btn"
+                    id="host-backup-folder"
+                  >
+                    Open backups
+                  </button>
+                </div>
+                <ul id="host-backups" class="host-backups"></ul>
+              </details>
+              <details class="host-drawer">
+                <summary>Server console</summary>
+                <pre id="host-log" aria-label="Bedrock server output"></pre>
+                <form id="host-command">
+                  <label for="host-command-text">Bedrock command</label>
+                  <div class="host-inline">
+                    <input
+                      type="text"
+                      id="host-command-text"
+                      maxlength="500"
+                      placeholder="list"
+                      required
+                    /><button class="secondary" type="submit">Send</button>
+                  </div>
+                </form>
+              </details>
+            </div>
+          </div>
+        </section>
+        <section
           id="activity-page"
           class="panel"
           aria-labelledby="events-heading"
@@ -296,6 +618,14 @@
           aria-current="page"
         >
           <svg class="ico"><use href="#radio" /></svg>Launcher
+        </button>
+        <button
+          type="button"
+          class="nav-link"
+          data-action="hosting"
+          id="hosting-nav"
+        >
+          <svg class="ico"><use href="#server" /></svg>Premium
         </button>
         <button
           type="button"

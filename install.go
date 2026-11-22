@@ -58,7 +58,7 @@ func download(ctx context.Context, url, dest string, a asset, report func(int)) 
 	if err != nil {
 		return err
 	}
-	req.Header.Set("User-Agent", "Mcbe2Friends/1.0")
+	req.Header.Set("User-Agent", "Mcbe2Friends/1.1")
 	client := &http.Client{Timeout: 10 * time.Minute}
 	resp, err := client.Do(req)
 	if err != nil {
