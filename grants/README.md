@@ -1,1 +1,1 @@
-The seller tool generates the filename and the single line of text for each approval. Write access to this branch is required. Never commit buyer keys or PC codes.
+For help purchasing or activating Premium, contact the project owner. [Discord](https://discord.gg/X5adbkPq)
