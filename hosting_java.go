@@ -178,13 +178,18 @@ func (h *Hosting) runJava(ctx context.Context, run *hostRun, j *javaState, dir s
 	run.cancel()
 	close(run.done)
 }
-func javaListenHost(dir string) (string, error) {
+func javaListenHost(dir string, c JavaConfig) (string, error) {
 	p, err := readJavaProperties(dir)
 	if err != nil {
 		return "", err
 	}
 	if !strings.EqualFold(p.GetString("online-mode", "true"), "true") || !strings.EqualFold(p.GetString("enable-status", "true"), "true") {
 		return "", errors.New("Set online-mode and enable-status to true in server.properties before starting.")
+	}
+	if c.Geyser && p.GetBool("enforce-secure-profile", true) {
+		if err = c.write(dir); err != nil {
+			return "", err
+		}
 	}
 	host := p.GetString("server-ip", "")
 	if host != "" && net.ParseIP(host) == nil {
@@ -222,7 +227,7 @@ func javaPortsFree(ctx context.Context, host string, c JavaConfig) error {
 var consoleEscape = regexp.MustCompile("\x1b\\[[0-9;?]*[A-Za-z]")
 
 func (h *Hosting) launchJava(ctx context.Context, j *javaState, dir string, c JavaConfig, java string) error {
-	host, err := javaListenHost(dir)
+	host, err := javaListenHost(dir, c)
 	if err != nil {
 		return err
 	}

@@ -134,6 +134,22 @@ func TestJavaStandardFilesAndArchives(t *testing.T) {
 	if !bytes.Contains(raw, []byte("Keep this setting")) {
 		t.Fatal("lost Java property comment")
 	}
+	c.Geyser = true
+	if err = c.write(dir); err != nil {
+		t.Fatal(err)
+	}
+	props, _ = readJavaProperties(dir)
+	if props.GetBool("enforce-secure-profile", true) || !props.GetBool("online-mode", false) {
+		t.Fatal("cross-play account or chat policy was incorrect")
+	}
+	c.Geyser = false
+	if err = c.write(dir); err != nil {
+		t.Fatal(err)
+	}
+	props, _ = readJavaProperties(dir)
+	if !props.GetBool("enforce-secure-profile", false) {
+		t.Fatal("Java-only chat policy was not restored")
+	}
 	path := filepath.Join(dir, "plugins", "Geyser-Spigot", "config.yml")
 	if err = os.MkdirAll(filepath.Dir(path), 0700); err != nil {
 		t.Fatal(err)

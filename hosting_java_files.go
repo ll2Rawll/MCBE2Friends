@@ -123,6 +123,10 @@ func importJavaPlugin(dir, source string, c JavaConfig) error {
 			return errors.New("This plugin already exists. Remove the old JAR before importing its replacement.")
 		}
 	}
+	// Windows requires the ZIP reader to release the JAR before the move.
+	if err = z.Close(); err != nil {
+		return err
+	}
 	return os.Rename(source, dst)
 }
 func changeJavaPlugin(dir, file, action string, c JavaConfig) error {

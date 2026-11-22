@@ -138,6 +138,19 @@ func (c JavaConfig) write(dir string) error {
 		"max-players": strconv.Itoa(c.Players), "view-distance": strconv.Itoa(c.View), "simulation-distance": strconv.Itoa(c.Simulation),
 		"online-mode": "true", "enable-status": "true",
 	}
+	// Bedrock clients cannot send Java-signed chat. Remember the owner's
+	// Java-only policy and restore it when they switch cross-play off.
+	const previous = "mcbe2friends-java-secure-profile"
+	saved, recorded := p.Get(previous)
+	if c.Geyser {
+		if !recorded {
+			values[previous] = p.GetString("enforce-secure-profile", "true")
+		}
+		values["enforce-secure-profile"] = "false"
+	} else if recorded {
+		values["enforce-secure-profile"] = saved
+		p.Delete(previous)
+	}
 	for _, k := range sortedKeys(values) {
 		if _, _, err = p.Set(k, values[k]); err != nil {
 			return err
