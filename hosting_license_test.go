@@ -92,6 +92,25 @@ func TestSignedPurchase(t *testing.T) {
 	}
 }
 
+func TestRegistryReadsFreshStatus(t *testing.T) {
+	requests := make(chan string, 2)
+	registry := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests <- r.URL.Query().Get("check")
+		if r.Header.Get("Cache-Control") != "no-cache" {
+			t.Error("approval check allowed a cached response")
+		}
+	}))
+	defer registry.Close()
+	for range 2 {
+		if _, err := registryFile(t.Context(), registry.URL+"/approval", 128, "missing"); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if first, second := <-requests, <-requests; first == "" || second == "" || first == second {
+		t.Fatal("consecutive checks could reuse an old approval or withdrawal")
+	}
+}
+
 func TestExpiredPurchaseAndProtectedRoutes(t *testing.T) {
 	h := newHosting(t.TempDir())
 	fixtureRegistry(t, h)

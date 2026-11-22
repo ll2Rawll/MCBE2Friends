@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -35,7 +35,8 @@ func grantDigest(device, key string) string {
 }
 
 func registryFile(ctx context.Context, location string, limit int64, missing string) ([]byte, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, location+"?check="+fmt.Sprint(time.Now().Unix()/30), nil)
+	// A newly approved or revoked purchase must not reuse an earlier CDN response.
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, location+"?check="+rand.Text(), nil)
 	if err != nil {
 		return nil, err
 	}

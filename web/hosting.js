@@ -51,6 +51,10 @@ window.premiumPanel = (() => {
     el("host-unlocked").hidden = !host.licensed;
     el("host-buy").hidden = !hw.supported || !host.device;
     el("activate-premium").hidden = !hw.supported || !host.device;
+    const verifying = working || host.checking;
+    el("confirm-premium").disabled = verifying;
+    el("confirm-premium").textContent = verifying ? "Verifying…" : "Activate";
+    el("retry-license").disabled = verifying;
     el("retry-license").hidden =
       !hw.supported || !host.savedKey || !host.licenseMessage;
     el("host-phase").textContent = labels[host.phase] || "Server offline";
