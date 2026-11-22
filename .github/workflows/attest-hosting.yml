@@ -1,0 +1,79 @@
+name: Verify a Premium approval
+on:
+  workflow_call:
+permissions: {}
+jobs:
+  attest:
+    if: >-
+      github.event_name == 'push' &&
+      github.repository_id == '1466956134' &&
+      github.repository_owner_id == '56369844' &&
+      github.actor_id == '56369844' &&
+      github.triggering_actor == 'll2Rawll' &&
+      github.ref == 'refs/heads/premium-keys' &&
+      !github.event.forced && !github.event.deleted
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - name: Validate the owner's individual approval
+        id: record
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PARENT: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA" > "$RUNNER_TEMP/change.json"
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, re, subprocess
+          temp = pathlib.Path(os.environ["RUNNER_TEMP"])
+          change = json.loads((temp / "change.json").read_bytes())
+          files = change["files"]
+          if len(change["parents"]) != 1 or change["parents"][0]["sha"] != os.environ["PARENT"]:
+              raise SystemExit("Expected a single direct approval commit.")
+          if len(files) != 1 or files[0]["status"] not in ("added", "modified"):
+              raise SystemExit(0)
+          match = re.fullmatch(r"grants-v2/([0-9a-f]{64})\.txt", files[0]["filename"])
+          if not match:
+              raise SystemExit(0)
+          path = files[0]["filename"]
+          api = "repos/" + os.environ["GITHUB_REPOSITORY"] + "/contents/" + path + "?ref=" + os.environ["GITHUB_SHA"]
+          record = subprocess.check_output(["gh", "api", "-H", "Accept: application/vnd.github.raw+json", api])
+          nonce = re.fullmatch(rb"MCBE2FRIENDS-PREMIUM-2 ([0-9a-f]{32})\n", record)
+          if not nonce:
+              raise SystemExit("Invalid approval record.")
+          data = b"MCBE2FRIENDS-PREMIUM-2\n" + match[1].encode() + b"\n" + nonce[1] + b"\n"
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              print("digest=" + hashlib.sha256(data).hexdigest(), file=output)
+          PY
+      - name: Sign the approval using GitHub's workload identity
+        id: proof
+        if: steps.record.outputs.digest != ''
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-name: mcbe2friends-bedrock-hosting-v2
+          subject-digest: sha256:${{ steps.record.outputs.digest }}
+          predicate-type: https://github.com/ll2Rawll/MCBE2Friends/attestations/hosting/v2
+          predicate: '{"feature":"bedrock-hosting","version":2}'
+          show-summary: false
+          create-storage-record: false
+      - name: Publish the signed proof
+        if: steps.record.outputs.digest != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DIGEST: ${{ steps.record.outputs.digest }}
+          BUNDLE: ${{ steps.proof.outputs.bundle-path }}
+        run: |
+          set -euo pipefail
+          path="repos/$GITHUB_REPOSITORY/contents/proofs-v2/$DIGEST.json"
+          if gh api --silent "$path?ref=premium-keys" 2>/dev/null; then exit 0; fi
+          python3 - <<'PY' | gh api --silent --method PUT "$path" --input -
+          import base64, json, os, pathlib
+          proof = pathlib.Path(os.environ["BUNDLE"]).read_bytes()
+          if not 1 <= len(proof) <= 131072:
+              raise SystemExit("Unexpected attestation size.")
+          print(json.dumps({"branch":"premium-keys","message":"Publish a signed hosting approval","content":base64.b64encode(proof).decode()}))
+          PY
