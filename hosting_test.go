@@ -86,7 +86,7 @@ func TestHostingArchiveBoundsAndPackScope(t *testing.T) {
 			t.Fatal("unbounded archive accepted")
 		}
 	}
-	h := newHosting(t.TempDir())
+	h := testHosting(t)
 	if e := os.MkdirAll(h.server, 0700); e != nil {
 		t.Fatal(e)
 	}
@@ -129,4 +129,13 @@ func TestHostingArchiveBoundsAndPackScope(t *testing.T) {
 	if _, e := os.Stat(filepath.Join(h.server, "behavior_packs", "m2f-"+id)); !errors.Is(e, os.ErrNotExist) {
 		t.Fatal("pack still present")
 	}
+}
+
+func testHosting(t *testing.T) *Hosting {
+	t.Helper()
+	l, err := newLauncher(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	return l.host
 }

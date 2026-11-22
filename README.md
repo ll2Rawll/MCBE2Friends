@@ -11,7 +11,7 @@ Put your Bedrock or Geyser server in Minecraft’s **Friends** tab. Mcbe2Friends
 
 ## Download
 
-[Windows x64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.2.0/Mcbe2Friends-Windows-x64.zip) · [macOS, Intel and Apple silicon](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.2.0/Mcbe2Friends-macOS.zip) · [Linux x64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.2.0/Mcbe2Friends-Linux-x64.tar.gz) · [Linux ARM64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.2.0/Mcbe2Friends-Linux-ARM64.tar.gz)
+[Windows x64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.3.0/Mcbe2Friends-Windows-x64.zip) · [macOS, Intel and Apple silicon](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.3.0/Mcbe2Friends-macOS.zip) · [Linux x64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.3.0/Mcbe2Friends-Linux-x64.tar.gz) · [Linux ARM64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.3.0/Mcbe2Friends-Linux-ARM64.tar.gz)
 
 ## Premium self-hosting
 
@@ -25,6 +25,6 @@ Open **Premium** in the launcher to check your PC. A one-time **$15 USD** key un
 2. Choose **Connect & start**. Enter the code on Microsoft’s sign-in page using the Xbox account your friends will add.
 3. When you see **Broadcast live**, have your friends add that gamertag. Once their requests are accepted, they can join from **Play → Friends** in Minecraft Bedrock.
 
-Keep the server running and the launcher computer awake while friends play. You can close the browser tab.
+Close the launcher while friends play. Keep the PC awake. After a restart, each service you left on resumes at your next sign-in. **Stop broadcast** and **Stop server** turn them off independently. [Set up unattended startup before sign-in](docs/guide.md#unattended-startup)
 
 [Setup and troubleshooting guide](docs/guide.md) · [MCXboxBroadcast project](https://github.com/MCXboxBroadcast/Broadcaster)

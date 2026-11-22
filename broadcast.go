@@ -26,34 +26,38 @@ type Event struct {
 }
 
 type State struct {
-	Settings      Settings `json:"settings"`
-	Phase         string   `json:"phase"`
-	Message       string   `json:"message"`
-	Percent       int      `json:"percent"`
-	Running       bool     `json:"running"`
-	AccountSaved  bool     `json:"accountSaved"`
-	Gamertag      string   `json:"gamertag"`
-	Code          string   `json:"code,omitempty"`
-	SignInURL     string   `json:"signInURL,omitempty"`
-	ServerWarning string   `json:"serverWarning,omitempty"`
-	Events        []Event  `json:"events"`
-	Build         string   `json:"build"`
-	HostBusy      bool     `json:"hostBusy"`
+	Settings      Settings         `json:"settings"`
+	Phase         string           `json:"phase"`
+	Message       string           `json:"message"`
+	Percent       int              `json:"percent"`
+	Running       bool             `json:"running"`
+	AccountSaved  bool             `json:"accountSaved"`
+	Gamertag      string           `json:"gamertag"`
+	Code          string           `json:"code,omitempty"`
+	SignInURL     string           `json:"signInURL,omitempty"`
+	ServerWarning string           `json:"serverWarning,omitempty"`
+	Events        []Event          `json:"events"`
+	Build         string           `json:"build"`
+	Background    backgroundStatus `json:"background"`
+	HostBusy      bool             `json:"hostBusy"`
 }
 
 type attempt struct {
-	cancel  context.CancelFunc
-	done    chan struct{}
-	failure string
+	cancel      context.CancelFunc
+	done        chan struct{}
+	failure     string
+	needsSignIn bool
 }
 
 type Launcher struct {
-	host    *Hosting
-	root    string
-	mu      sync.Mutex
-	state   State
-	active  *attempt
-	closing bool
+	host          *Hosting
+	background    *background
+	cancelRestore context.CancelFunc
+	root          string
+	mu            sync.Mutex
+	state         State
+	active        *attempt
+	closing       bool
 }
 
 func newLauncher(root string) (*Launcher, error) {
@@ -61,7 +65,11 @@ func newLauncher(root string) (*Launcher, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not read your saved server details: %w", err)
 	}
-	l := &Launcher{root: root, host: newHosting(root), state: State{Settings: settings, Phase: "offline", Percent: -1, Build: buildNumber}}
+	bg, err := readBackground(root)
+	if err != nil {
+		return nil, err
+	}
+	l := &Launcher{root: root, background: bg, host: newHosting(root, bg), state: State{Settings: settings, Phase: "offline", Percent: -1, Build: buildNumber}}
 	if l.accountSaved() {
 		if b, err := os.ReadFile(filepath.Join(root, "gamertag.txt")); err == nil {
 			l.state.Gamertag = string(b)
@@ -80,6 +88,7 @@ func (l *Launcher) snapshot() State {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	s := l.state
+	s.Background = l.background.status()
 	s.Events = append([]Event{}, s.Events...)
 	s.Running = l.active != nil
 	s.AccountSaved = l.accountSaved()
@@ -125,6 +134,12 @@ func (l *Launcher) forgetAccount() error {
 	if l.active != nil || l.closing {
 		return errors.New("Stop the broadcast before disconnecting the account.")
 	}
+	if err := l.background.set(broadcastService, false); err != nil {
+		return err
+	}
+	if l.cancelRestore != nil {
+		l.cancelRestore()
+	}
 	for _, path := range []string{filepath.Join(l.root, "broadcast", "cache", "cache.json"), filepath.Join(l.root, "gamertag.txt")} {
 		if err := os.Remove(path); err != nil && !errors.Is(err, os.ErrNotExist) {
 			return err
@@ -137,13 +152,27 @@ func (l *Launcher) forgetAccount() error {
 }
 
 func (l *Launcher) start() error {
+	_, err := l.beginBroadcast(nil)
+	return err
+}
+
+func (l *Launcher) beginBroadcast(restore context.Context) (*attempt, error) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
+	if restore != nil && restore.Err() != nil {
+		return nil, restore.Err()
+	}
 	if l.active != nil || l.closing {
-		return errors.New("The launcher is already working on a broadcast.")
+		return nil, errors.New("The launcher is already working on a broadcast.")
 	}
 	if _, err := l.state.Settings.normalized(); err != nil {
-		return err
+		return nil, err
+	}
+	if err := l.background.set(broadcastService, true); err != nil {
+		return nil, err
+	}
+	if restore == nil && l.cancelRestore != nil {
+		l.cancelRestore()
 	}
 	ctx, cancel := context.WithCancel(context.Background())
 	a := &attempt{cancel: cancel, done: make(chan struct{})}
@@ -152,24 +181,29 @@ func (l *Launcher) start() error {
 	l.state.Code, l.state.SignInURL, l.state.ServerWarning = "", "", ""
 	l.event("info", "Broadcast setup started.")
 	go l.run(ctx, a, l.state.Settings)
-	return nil
+	return a, nil
 }
 
-func (l *Launcher) stop(quitting bool) <-chan struct{} {
+func (l *Launcher) stop(quitting bool) (<-chan struct{}, error) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	if quitting {
 		l.closing = true
+	} else if err := l.background.set(broadcastService, false); err != nil {
+		return nil, err
+	}
+	if l.cancelRestore != nil {
+		l.cancelRestore()
 	}
 	if l.active == nil {
 		done := make(chan struct{})
 		close(done)
-		return done
+		return done, nil
 	}
 	l.state.Phase, l.state.Message = "stopping", "Stopping the broadcaster"
 	l.state.Code, l.state.SignInURL = "", ""
 	l.active.cancel()
-	return l.active.done
+	return l.active.done, nil
 }
 
 func (l *Launcher) progress(a *attempt, text string, percent int) {
@@ -297,6 +331,13 @@ func (l *Launcher) execute(ctx context.Context, a *attempt, s Settings) error {
 	if err := cmd.Start(); err != nil {
 		return fmt.Errorf("Java could not start the broadcaster: %w", err)
 	}
+	releaseProcess, err := bindChildLifetime(cmd.Process)
+	if err != nil {
+		_ = cmd.Process.Kill()
+		_ = cmd.Wait()
+		return fmt.Errorf("could not attach the broadcaster to its background worker: %w", err)
+	}
+	defer releaseProcess()
 	scanner := bufio.NewScanner(out)
 	scanner.Buffer(make([]byte, 16*1024), 2*1024*1024)
 	for scanner.Scan() {
@@ -353,9 +394,11 @@ func (l *Launcher) handleLine(a *attempt, line string) {
 			fail("Microsoft returned an unfamiliar sign-in page. Check the MCXboxBroadcast release before trying again.")
 			return
 		}
+		a.needsSignIn = true
 		s.Phase, s.Message, s.Code, s.SignInURL, s.Gamertag = "signin", "Waiting for Microsoft sign-in", m[2], m[1], ""
 		l.event("info", "Microsoft sign-in code received.")
 	case accountLine.MatchString(line):
+		a.needsSignIn = false
 		s.Gamertag = accountLine.FindStringSubmatch(line)[1]
 		s.Code, s.SignInURL, s.Phase, s.Message = "", "", "connecting", "Creating the Xbox session"
 		if err := atomicWrite(filepath.Join(l.root, "gamertag.txt"), []byte(s.Gamertag)); err != nil {

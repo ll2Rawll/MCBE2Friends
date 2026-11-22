@@ -77,12 +77,19 @@ func (s Settings) normalized() (Settings, error) {
 }
 
 func atomicWrite(path string, contents []byte) error {
+	return atomicWriteMode(path, contents, 0600)
+}
+
+func atomicWriteMode(path string, contents []byte, mode os.FileMode) error {
 	file, err := os.CreateTemp(filepath.Dir(path), ".saving-*")
 	if err != nil {
 		return err
 	}
 	defer os.Remove(file.Name())
-	if _, err = file.Write(contents); err == nil {
+	if err = file.Chmod(mode); err == nil {
+		_, err = file.Write(contents)
+	}
+	if err == nil {
 		err = file.Sync()
 	}
 	closeErr := file.Close()
@@ -92,7 +99,7 @@ func atomicWrite(path string, contents []byte) error {
 	if closeErr != nil {
 		return closeErr
 	}
-	return os.Rename(file.Name(), path)
+	return commitFile(file.Name(), path)
 }
 
 func readSettings(root string) (Settings, error) {

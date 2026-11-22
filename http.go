@@ -81,15 +81,20 @@ func handler(l *Launcher, i Instance, quit func()) http.Handler {
 				return
 			}
 			err = l.save(s)
+		case "/api/startup/retry":
+			l.background.retryRegistration()
 		case "/api/start":
 			err = l.start()
 		case "/api/stop":
-			l.stop(false)
+			_, err = l.stop(false)
 		case "/api/forget":
 			err = l.forgetAccount()
 		case "/api/quit":
-			writeJSON(w, 200, map[string]bool{"quitting": true})
-			quit()
+			exit := l.closeControls()
+			writeJSON(w, 200, map[string]bool{"quitting": exit})
+			if exit {
+				quit()
+			}
 			return
 		default:
 			reject(404, "Unknown launcher action.")

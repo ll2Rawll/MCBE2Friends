@@ -21,7 +21,7 @@ func TestBedrockProcessLifetime(t *testing.T) {
 	if err := cmd.Start(); err != nil {
 		t.Fatal(err)
 	}
-	release, err := bindBedrockLifetime(cmd.Process)
+	release, err := bindChildLifetime(cmd.Process)
 	if err != nil {
 		cancel()
 		_ = cmd.Wait()

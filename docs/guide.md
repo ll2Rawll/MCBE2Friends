@@ -12,7 +12,7 @@ Extract the download for your computer.
 
 The app opens its controls in your default browser. These portable builds have no publisher signature or Apple notarization, so your operating system may ask you to approve the app.
 
-From version 1.2, GitHub signs the official release archives. To verify your download with the GitHub CLI, save the release’s signature file in the same folder and run the command below. Substitute your archive’s filename on macOS or Linux. [Download the signature file for 1.2.0](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.2.0/Mcbe2Friends-attestation.json)
+From version 1.2, GitHub signs the official release archives. To verify your download with the GitHub CLI, save the release’s signature file in the same folder and run the command below. Substitute your archive’s filename on macOS or Linux. [Download the signature file for 1.3.0](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.3.0/Mcbe2Friends-attestation.json)
 
 ```sh
 gh attestation verify Mcbe2Friends-Windows-x64.zip --bundle Mcbe2Friends-attestation.json --repo ll2Rawll/MCBE2Friends --signer-workflow ll2Rawll/MCBE2Friends/.github/workflows/release-downloads.yml --deny-self-hosted-runners
@@ -29,9 +29,31 @@ Open **Premium** to check hardware support, activate a key, and install the offi
 3. On first use the launcher checks for Java 21 and downloads the components it needs. Open the Microsoft sign-in page, enter the code shown in the launcher, and complete sign-in there.
 4. Wait for **Broadcast live**. Have friends add the displayed gamertag on Xbox. Once their requests are accepted, they can open **Minecraft Bedrock → Play → Friends** and select the session.
 
-A live status confirms that Xbox created the session. Joining from another Bedrock client also checks that the server can receive players. Keep your server and the launcher running, with the computer awake. Closing the browser tab leaves the broadcast running. Open Mcbe2Friends again to bring the controls back.
+A live status confirms that Xbox created the session. Joining from another Bedrock client also checks that the server can receive players.
 
-**Stop broadcast** ends the session. **Quit launcher** also closes the app. On your next launch, select **Start broadcast** to reuse the saved settings. To change Xbox accounts, stop the broadcast and select **Disconnect account**.
+## Closing and restarting
+
+Once you turn on the broadcast or your Premium server, choose **Close launcher** or close the browser tab. Keep the PC awake and connected while friends play. Open Mcbe2Friends again to manage the same session.
+
+After a reboot or power interruption, Mcbe2Friends resumes each service you left on when you next sign in to the same computer account. The controls stay closed. Bedrock opens the saved world after checking your Premium key. If Microsoft needs a fresh sign-in, reopen the launcher for the device code.
+
+**Stop broadcast** and **Stop server** turn off that service and its automatic restart. The server console’s `stop` command does the same for Bedrock. To cancel a pending restart while offline, use **Cancel broadcast restart** or **Cancel server restart**. To switch Xbox accounts, stop the broadcast and choose **Disconnect account**.
+
+When upgrading from 1.2, choose **Quit launcher** in the old version once, open 1.3, and start the services you want to keep on.
+
+## Unattended startup
+
+To bring a host back **before anyone signs in**, start the service in Mcbe2Friends once, then use the one-time option for that computer. The worker runs under your own operating-system account.
+
+- **Windows 10 or 11** — open **Task Scheduler** as an administrator and choose **Import Task**. Open `%LOCALAPPDATA%\Mcbe2Friends\background\start-before-sign-in.xml`, name the task **Mcbe2Friends**, and save it. It runs at system startup with your account’s normal permissions. You can remove it from Task Scheduler.
+- **Linux with systemd** — run `loginctl enable-linger "$USER"` from your hosting account. Allow the system permission prompt if shown. This allows that account’s user services to run at boot and after logout. Mcbe2Friends has already installed its user service. To reverse the account-level change, use `loginctl disable-linger "$USER"`.
+- **macOS** — for unattended broadcasting, run the command below in Terminal after starting the broadcast once. It installs the generated launch daemon for your account. Remove `/Library/LaunchDaemons/app.mcbe2friends.boot.plist` to disable it at the next boot. A Mac with FileVault requires its startup disk to be unlocked before macOS can run the daemon.
+
+```sh
+sudo install -o root -g wheel -m 644 "$HOME/Library/Application Support/Mcbe2Friends/background/start-before-sign-in.plist" /Library/LaunchDaemons/app.mcbe2friends.boot.plist
+```
+
+These paths assume the default data folder. If you use `-data-dir`, look in that folder’s `background` directory. Other Linux service managers can invoke `Mcbe2Friends -resume -data-dir "/path/to/profile"` at boot as the hosting user. When both services are off, a startup invocation exits immediately.
 
 ## If setup gets stuck
 

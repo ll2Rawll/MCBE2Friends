@@ -6,6 +6,8 @@ import (
 	"os/exec"
 	"syscall"
 	"unsafe"
+
+	"golang.org/x/sys/windows"
 )
 
 func privateFiles() {}
@@ -33,4 +35,20 @@ func showMessage(message string) {
 	title, _ := syscall.UTF16PtrFromString("Mcbe2Friends")
 	body, _ := syscall.UTF16PtrFromString(message)
 	syscall.NewLazyDLL("user32.dll").NewProc("MessageBoxW").Call(0, uintptr(unsafe.Pointer(body)), uintptr(unsafe.Pointer(title)), 0)
+}
+
+func detachWorker(cmd *exec.Cmd) {
+	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true, CreationFlags: windows.DETACHED_PROCESS | windows.CREATE_NEW_PROCESS_GROUP}
+}
+
+func commitFile(temporary, target string) error {
+	from, err := windows.UTF16PtrFromString(temporary)
+	if err != nil {
+		return err
+	}
+	to, err := windows.UTF16PtrFromString(target)
+	if err != nil {
+		return err
+	}
+	return windows.MoveFileEx(from, to, windows.MOVEFILE_REPLACE_EXISTING|windows.MOVEFILE_WRITE_THROUGH)
 }

@@ -105,8 +105,8 @@ window.premiumPanel = (() => {
           host.lan +
           " on port " +
           port +
-          ". Keep this PC awake."
-        : "Keep this PC awake while friends play. Closing the browser leaves the server running.";
+          ". You can close the launcher. Keep this PC awake."
+        : "You can close the launcher while friends play. The server resumes at your next sign-in until you choose Stop server.";
     const lines = (host.log || []).join("\n");
     if (lines !== lastLog || !el("host-log").textContent) {
       const box = el("host-log"),

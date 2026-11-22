@@ -4,6 +4,12 @@ on:
   push:
     paths:
       - "hosting*.go"
+      - "background*.go"
+      - "startup*.go"
+      - "session_windows.go"
+      - "broadcast.go"
+      - "main.go"
+      - "os_*.go"
       - "go.mod"
       - "go.sum"
       - "licensing/**"
@@ -16,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2022, ubuntu-24.04]
+        os: [windows-2022, ubuntu-24.04, macos-15]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 13
     steps:
@@ -30,6 +36,7 @@ jobs:
       - name: Test the launcher and file management
         run: go test ./...
       - name: Start and restart the official native Bedrock server
+        if: runner.os != 'macOS'
         env:
           MCBE2FRIENDS_TEST_BEDROCK: "1"
         run: go test -v -count=1 -timeout 7m -run TestOfficialBedrockLifecycle .

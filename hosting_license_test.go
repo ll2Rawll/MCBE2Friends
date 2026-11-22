@@ -46,13 +46,13 @@ func fixtureRegistry(t *testing.T, h *Hosting) *atomic.Int32 {
 		}
 	}))
 	t.Cleanup(registry.Close)
-	t.Cleanup(func() { <-h.stop(true) })
+	t.Cleanup(func() { done, _ := h.stop(true); <-done })
 	h.grants = registry.URL + "/"
 	return status
 }
 
 func TestSignedPurchase(t *testing.T) {
-	h := newHosting(t.TempDir())
+	h := testHosting(t)
 	code := fixtureRegistry(t, h)
 	if h.allowed(true) == nil {
 		t.Fatal("unexpected access before activation")
@@ -112,7 +112,7 @@ func TestRegistryReadsFreshStatus(t *testing.T) {
 }
 
 func TestExpiredPurchaseAndProtectedRoutes(t *testing.T) {
-	h := newHosting(t.TempDir())
+	h := testHosting(t)
 	fixtureRegistry(t, h)
 	if err := h.activate(t.Context(), approvalTestKey); err != nil {
 		t.Fatal(err)

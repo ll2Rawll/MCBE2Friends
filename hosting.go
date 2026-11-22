@@ -24,6 +24,8 @@ type hostRun struct {
 }
 type Hosting struct {
 	root, server, device, grants   string
+	background                     *background
+	cancelRestore                  context.CancelFunc
 	hw                             Hardware
 	mu, ops, licenseOp, inputMu    sync.Mutex
 	checking, closing              bool
@@ -56,9 +58,9 @@ type HostStatus struct {
 	Log            []string   `json:"log"`
 }
 
-func newHosting(root string) *Hosting {
+func newHosting(root string, bg *background) *Hosting {
 	dir := filepath.Join(root, "hosting")
-	h := &Hosting{root: dir, server: filepath.Join(dir, "server"), grants: grantBase, phase: "offline", percent: -1, hw: hardware()}
+	h := &Hosting{background: bg, root: dir, server: filepath.Join(dir, "server"), grants: grantBase, phase: "offline", percent: -1, hw: hardware()}
 	if !h.hw.Supported {
 		return h
 	}
@@ -69,10 +71,6 @@ func newHosting(root string) *Hosting {
 	if err != nil {
 		h.licenseMessage = "Could not prepare the Premium folder: " + err.Error()
 		return h
-	}
-	if _, err := os.Stat(filepath.Join(dir, "premium-key.txt")); err == nil {
-		h.checking = true
-		go func() { _ = h.activate(context.Background(), ""); h.mu.Lock(); h.checking = false; h.mu.Unlock() }()
 	}
 	return h
 }
@@ -123,7 +121,9 @@ func (h *Hosting) progress(phase, msg string, p int) {
 		h.phase, h.message, h.percent = phase, msg, p
 	}
 }
-func (h *Hosting) start(consent bool) error {
+func (h *Hosting) start(consent bool) error { return h.beginServer(consent, nil) }
+
+func (h *Hosting) beginServer(consent bool, restore context.Context) error {
 	h.ops.Lock()
 	defer h.ops.Unlock()
 	if err := h.allowed(true); err != nil {
@@ -143,14 +143,24 @@ func (h *Hosting) start(consent bool) error {
 			return err
 		}
 	}
-	ctx, cancel := context.WithCancel(context.Background())
-	run := &hostRun{cancel: cancel, done: make(chan struct{})}
 	h.mu.Lock()
+	if h.closing || (restore != nil && restore.Err() != nil) {
+		h.mu.Unlock()
+		return errors.New("Server startup was cancelled.")
+	}
 	if !h.validLicenseLocked(time.Now()) {
 		h.mu.Unlock()
-		cancel()
 		return errors.New("Recheck your Premium key before starting.")
 	}
+	if err := h.background.set(bedrockService, true); err != nil {
+		h.mu.Unlock()
+		return err
+	}
+	if restore == nil && h.cancelRestore != nil {
+		h.cancelRestore()
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	run := &hostRun{cancel: cancel, done: make(chan struct{})}
 	h.active = run
 	h.phase = "starting"
 	h.message = "Preparing your server"
@@ -160,7 +170,7 @@ func (h *Hosting) start(consent bool) error {
 	go h.run(ctx, run)
 	return nil
 }
-func (h *Hosting) stop(closing bool) <-chan struct{} {
+func (h *Hosting) stop(closing bool) (<-chan struct{}, error) {
 	h.ops.Lock()
 	defer h.ops.Unlock()
 	h.mu.Lock()
@@ -173,16 +183,21 @@ func (h *Hosting) stop(closing bool) <-chan struct{} {
 		if h.expiry != nil {
 			h.expiry.Stop()
 		}
+	} else if err := h.background.set(bedrockService, false); err != nil {
+		return nil, err
+	}
+	if h.cancelRestore != nil {
+		h.cancelRestore()
 	}
 	if h.active == nil {
 		done := make(chan struct{})
 		close(done)
-		return done
+		return done, nil
 	}
 	h.phase = "stopping"
 	h.message = "Saving the world and stopping"
 	h.active.cancel()
-	return h.active.done
+	return h.active.done, nil
 }
 func (h *Hosting) run(ctx context.Context, run *hostRun) {
 	err := h.install(ctx)
@@ -261,7 +276,7 @@ func (h *Hosting) launchServer(ctx context.Context) error {
 		writer.Close()
 		return fmt.Errorf("Bedrock could not start. Check the operating system and its runtime libraries: %w", err)
 	}
-	releaseProcess, err := bindBedrockLifetime(cmd.Process)
+	releaseProcess, err := bindChildLifetime(cmd.Process)
 	if err != nil {
 		reader.Close()
 		writer.Close()
@@ -306,8 +321,8 @@ func (h *Hosting) command(line string) error {
 		return errors.New("Enter one Bedrock console command of up to 500 characters.")
 	}
 	if strings.EqualFold(line, "stop") {
-		h.stop(false)
-		return nil
+		_, err := h.stop(false)
+		return err
 	}
 	h.inputMu.Lock()
 	defer h.inputMu.Unlock()

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"syscall"
 )
@@ -34,3 +35,25 @@ func showMessage(message string) {
 		exec.Command("zenity", "--info", "--title=Mcbe2Friends", "--no-markup", "--text="+message).Run()
 	}
 }
+
+func detachWorker(cmd *exec.Cmd) { cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true} }
+
+// Persist the directory entry as well as the file when committing a user's choice.
+func commitFile(temporary, target string) error {
+	if err := os.Rename(temporary, target); err != nil {
+		return err
+	}
+	dir, err := os.Open(filepath.Dir(target))
+	if err != nil {
+		return err
+	}
+	defer dir.Close()
+	err = dir.Sync()
+	if errors.Is(err, syscall.EINVAL) || errors.Is(err, syscall.ENOTSUP) {
+		return nil
+	}
+	return err
+}
+
+// Unix session managers request shutdown with SIGTERM.
+func watchSessionEnd(cancel func()) func() { return func() {} }

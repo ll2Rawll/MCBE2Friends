@@ -165,6 +165,15 @@ function renderHeader() {
     }
   }
   $(".quit").hidden = !connected || closed;
+  const background = connected && !closed ? state?.background : null;
+  const warning = background?.warning || "";
+  $("#startup-warning").hidden = !warning;
+  $("#startup-warning-text").textContent = warning;
+  const broadcastPending = background?.broadcast && !state.running;
+  const serverPending = background?.server && !state.hostBusy;
+  $("#pending-restart").hidden = !broadcastPending && !serverPending;
+  $("#cancel-broadcast-restart").hidden = !broadcastPending;
+  $("#cancel-server-restart").hidden = !serverPending;
 }
 
 function renderProgress() {
@@ -277,7 +286,7 @@ function liveCard() {
         ? ""
         : `<ol class="join-steps"><li>Have friends add <strong>${escapeHTML(name)}</strong> on Xbox.</li><li>${state.settings.autoFriend ? "Wait for the friend request to be accepted." : "Accept their requests on the broadcasting account."}</li><li>In Minecraft Bedrock, open <strong>Play → Friends</strong> and select the session.</li></ol>`) +
       (state.serverWarning ? notice("warn", state.serverWarning) : ""),
-    `<span class="local-note">${icon("monitor")}Keep this computer awake</span>` +
+    `<span class="local-note">${icon("monitor")}Runs in the background. Keep this PC awake.</span>` +
       secondary("stop", icon("stop") + " Stop broadcast"),
   );
 }
@@ -495,12 +504,14 @@ function openConfirm(title, body, label, action) {
 }
 
 async function quit() {
-  await api("quit", "POST");
+  const result = await api("quit", "POST");
   closed = true;
   connected = false;
   renderHeader();
   $("#connection-notice").textContent =
-    "Mcbe2Friends is closed. You can close this tab and reopen the app whenever you want to broadcast.";
+    result.quitting
+      ? "You can close this tab. Open Mcbe2Friends whenever you’re ready to play."
+      : "You can close this tab. Reopen Mcbe2Friends to manage your background services.";
   $("#connection-notice").className = "notice";
   $("#connection-notice").hidden = false;
 }
@@ -578,15 +589,17 @@ document.addEventListener("click", async (event) => {
         "forget",
       );
       break;
+    case "retry-startup":
+      await perform(async () => accept(await api("startup/retry", "POST")));
+      break;
+    case "cancel-server-restart":
+      await perform(async () => {
+        await api("hosting/stop", "POST");
+        accept(await api("state"));
+      });
+      break;
     case "quit":
-      if (state?.running || state?.hostBusy || window.premiumPanel?.busy())
-        openConfirm(
-          "Quit the launcher?",
-          "This saves and stops any hosted world and ends the current broadcast or sign-in.",
-          "Quit launcher",
-          "quit",
-        );
-      else await perform(quit);
+      await perform(quit);
       break;
   }
 });
@@ -625,7 +638,6 @@ guide.addEventListener("close", resetSheet);
 
 $("#confirm-action").addEventListener("click", async () => {
   $("#confirm-dialog").close();
-  if (confirmedAction === "quit") await perform(quit);
   if (confirmedAction === "forget")
     await perform(async () => {
       accept(await api("forget", "POST"));

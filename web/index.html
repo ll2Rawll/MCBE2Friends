@@ -150,6 +150,15 @@
           role="alert"
           hidden
         ></div>
+        <div class="notice warn" id="startup-warning" hidden>
+          <span id="startup-warning-text" role="status"></span>
+          <button class="text-btn" type="button" data-action="retry-startup">Retry startup</button>
+        </div>
+        <div class="notice" id="pending-restart" hidden>
+          <span>Automatic restart is enabled.</span>
+          <button class="text-btn" type="button" id="cancel-broadcast-restart" data-action="stop" hidden>Cancel broadcast restart</button>
+          <button class="text-btn" type="button" id="cancel-server-restart" data-action="cancel-server-restart" hidden>Cancel server restart</button>
+        </div>
         <div class="panel" id="launcher-page">
           <section class="progress-panel" aria-label="Setup progress">
             <span class="sr-only" id="step-count">0 of 3 steps complete</span>
@@ -646,7 +655,7 @@
         </button>
       </nav>
       <button type="button" class="plain quit" data-action="quit">
-        <svg class="ico"><use href="#power" /></svg>Quit launcher
+        <svg class="ico"><use href="#power" /></svg>Close launcher
       </button>
     </footer>
     <dialog id="guide-dialog" aria-labelledby="guide-title" closedby="any">
@@ -723,10 +732,13 @@
         <details>
           <summary>Does the launcher need to stay open?</summary>
           <p>
-            Keep the computer awake and the launcher running. You can close this
-            browser tab and reopen Mcbe2Friends to return.
-            <strong>Stop broadcast</strong> takes the session offline.
-            <strong>Quit launcher</strong> stops the session and exits the app.
+            Keep this computer awake. You can close the tab or choose
+            <strong>Close launcher</strong> while friends play. Reopen Mcbe2Friends
+            to manage the same broadcast and server. After a restart, each service
+            you left on resumes when you sign in to this computer.
+            <strong>Stop broadcast</strong> and <strong>Stop server</strong> turn
+            off each service and its automatic restart independently.
+            <a href="https://github.com/ll2Rawll/MCBE2Friends/blob/main/docs/guide.md#unattended-startup" target="_blank" rel="noopener noreferrer">Start before signing in</a>.
           </p>
         </details>
       </div>

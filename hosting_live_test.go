@@ -22,8 +22,17 @@ func TestOfficialBedrockLifecycle(t *testing.T) {
 	if runtime.GOARCH != "amd64" || runtime.GOOS != "windows" && runtime.GOOS != "linux" {
 		t.Skip("no native Bedrock server")
 	}
-	h := newHosting(t.TempDir())
-	fixtureRegistry(t, h)
+	root := t.TempDir()
+	load := func() *Launcher {
+		worker, err := newLauncher(root)
+		if err != nil {
+			t.Fatal(err)
+		}
+		fixtureRegistry(t, worker.host)
+		return worker
+	}
+	l := load()
+	h := l.host
 	if err := h.activate(context.Background(), approvalTestKey); err != nil {
 		t.Fatal(err)
 	}
@@ -39,10 +48,14 @@ func TestOfficialBedrockLifecycle(t *testing.T) {
 	if err = h.saveConfig(c); err != nil {
 		t.Fatal(err)
 	}
-	defer func() { <-h.stop(true) }()
+	if err := h.start(true); err != nil {
+		t.Fatal(err)
+	}
 	for launch := 0; launch < 2; launch++ {
-		if e := h.start(launch == 0); e != nil {
-			t.Fatal(e)
+		if launch == 1 {
+			l = load()
+			h = l.host
+			l.recoverServices(t.Context())
 		}
 		end := time.Now().Add(3 * time.Minute)
 		for h.status().Phase != "running" {
@@ -69,13 +82,27 @@ func TestOfficialBedrockLifecycle(t *testing.T) {
 		if err := h.command("list"); err != nil {
 			t.Fatal(err)
 		}
+		if l.closeControls() || !h.isBusy() {
+			t.Fatal("closing controls stopped the running world")
+		}
+		// OS shutdown keeps intent. A player stopping the recovered server clears it.
+		done, err := h.stop(launch == 0)
+		if err != nil {
+			t.Fatal(err)
+		}
 		select {
-		case <-h.stop(false):
+		case <-done:
 		case <-time.After(30 * time.Second):
 			t.Fatal("Bedrock did not stop")
 		}
 		if _, e := os.Stat(filepath.Join(h.server, "worlds", c.World, "level.dat")); e != nil {
 			t.Fatal(e)
 		}
+	}
+	if err := serve(root, false, true); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(filepath.Join(root, "launcher.json")); !os.IsNotExist(err) {
+		t.Fatal("server restarted after explicit stop")
 	}
 }

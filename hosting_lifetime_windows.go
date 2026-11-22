@@ -8,8 +8,8 @@ import (
 )
 
 // Windows closes the launcher's last job handle if it exits unexpectedly.
-// Keep the job private to Bedrock so a browser opened by the launcher is independent.
-func bindBedrockLifetime(process *os.Process) (func(), error) {
+// Each managed child gets its own job. Browsers opened by the launcher are independent.
+func bindChildLifetime(process *os.Process) (func(), error) {
 	job, err := windows.CreateJobObject(nil, nil)
 	if err != nil {
 		return nil, err

@@ -65,61 +65,99 @@ func present(i Instance, noBrowser bool) error {
 	return nil
 }
 
-func reopen(path string, noBrowser bool) error {
-	// The first process may still be writing the discovery file.
-	client := &http.Client{Timeout: 400 * time.Millisecond, Transport: &http.Transport{}}
+func liveInstance(client *http.Client, discovery string) (Instance, bool) {
+	var i Instance
+	b, err := os.ReadFile(discovery)
+	if err != nil || json.Unmarshal(b, &i) != nil || i.Port < 1 || i.Port > 65535 || len(i.Token) < 26 {
+		return i, false
+	}
+	req, _ := http.NewRequest(http.MethodGet, i.origin()+"/api/state", nil)
+	req.Header.Set("Authorization", "Bearer "+i.Token)
+	resp, err := client.Do(req)
+	if err != nil {
+		return i, false
+	}
+	defer resp.Body.Close()
+	_, _ = io.Copy(io.Discard, resp.Body)
+	return i, resp.StatusCode == http.StatusOK
+}
+
+func openControls(root string, noBrowser bool, startWorker bool) error {
+	client := &http.Client{Timeout: 450 * time.Millisecond, Transport: &http.Transport{}}
 	defer client.CloseIdleConnections()
-	for tries := 0; tries < 25; tries++ {
-		b, err := os.ReadFile(path)
-		var i Instance
-		if err == nil && json.Unmarshal(b, &i) == nil && i.Port > 0 && i.Port <= 65535 && len(i.Token) >= 26 {
-			req, _ := http.NewRequest(http.MethodGet, i.origin()+"/api/state", nil)
-			req.Header.Set("Authorization", "Bearer "+i.Token)
-			if resp, err := client.Do(req); err == nil {
-				io.Copy(io.Discard, resp.Body)
-				resp.Body.Close()
-				if resp.StatusCode == http.StatusOK {
-					return present(i, noBrowser)
-				}
-			}
+	discovery := filepath.Join(root, "launcher.json")
+	if i, ok := liveInstance(client, discovery); ok {
+		return present(i, noBrowser)
+	}
+	if startWorker {
+		binary, err := os.Executable()
+		if err != nil {
+			return err
+		}
+		cmd := exec.Command(binary, "-background", "-data-dir", root)
+		cmd.Dir = root
+		detachWorker(cmd)
+		if err = cmd.Start(); err != nil {
+			return err
+		}
+		_ = cmd.Process.Release()
+	}
+	for deadline := time.Now().Add(8 * time.Second); time.Now().Before(deadline); {
+		if i, ok := liveInstance(client, discovery); ok {
+			return present(i, noBrowser)
 		}
 		time.Sleep(100 * time.Millisecond)
 	}
-	return errors.New("The launcher is already open but did not respond. Close it and open Mcbe2Friends again.")
+	return errors.New("The background launcher did not respond. Run Mcbe2Friends with -no-browser to see the startup error.")
 }
 
-func serve(dataPath string, noBrowser bool) error {
-	base, err := os.UserConfigDir()
-	if err != nil && dataPath == "" {
-		return err
-	}
-	if runtime.GOOS == "windows" && os.Getenv("LOCALAPPDATA") != "" {
-		base = os.Getenv("LOCALAPPDATA")
-	}
+func profileRoot(dataPath string) (string, error) {
 	if dataPath == "" {
+		base, err := os.UserConfigDir()
+		if err != nil {
+			return "", err
+		}
+		if runtime.GOOS == "windows" && os.Getenv("LOCALAPPDATA") != "" {
+			base = os.Getenv("LOCALAPPDATA")
+		}
 		dataPath = filepath.Join(base, "Mcbe2Friends")
 	}
 	root, err := filepath.Abs(dataPath)
 	if err != nil {
-		return err
+		return "", err
 	}
-	privateFiles()
-	if err = os.MkdirAll(root, 0700); err != nil {
-		return err
-	}
+	return root, os.MkdirAll(root, 0700)
+}
+
+func serve(root string, printURL, resumeOnly bool) error {
 	discovery := filepath.Join(root, "launcher.json")
 	lock, err := lockInstance(filepath.Join(root, "launcher.lock"))
 	if errors.Is(err, errInUse) {
-		return reopen(discovery, noBrowser)
+		if printURL {
+			return openControls(root, true, false)
+		}
+		return nil
 	}
 	if err != nil {
 		return err
 	}
 	defer lock.Close()
-
+	if resumeOnly {
+		bg, err := readBackground(root)
+		if err != nil {
+			return err
+		}
+		if !bg.want.any() {
+			return nil
+		}
+	}
 	l, err := newLauncher(root)
 	if err != nil {
 		return err
+	}
+	l.background.register = func(enable bool) error { return registerStartup(root, enable) }
+	if l.background.want.any() {
+		l.background.retryRegistration()
 	}
 	listener, err := net.Listen("tcp4", "127.0.0.1:0")
 	if err != nil {
@@ -135,12 +173,14 @@ func serve(dataPath string, noBrowser bool) error {
 
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
+	finishSession := watchSessionEnd(cancel)
+	defer finishSession()
 	server := &http.Server{Handler: handler(l, i, cancel), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 10 * time.Second, WriteTimeout: 20 * time.Second, IdleTimeout: 60 * time.Second}
 	served := make(chan error, 1)
+	l.recoverServices(ctx)
 	go func() { served <- server.Serve(listener) }()
-	if err := present(i, noBrowser); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		showMessage(err.Error())
+	if printURL {
+		fmt.Println(i.launchURL())
 	}
 	var result error
 	select {
@@ -151,8 +191,9 @@ func serve(dataPath string, noBrowser bool) error {
 		}
 	}
 	// Do not release the instance lock while Java is still writing its cache.
-	done := l.stop(true)
-	hostDone := l.host.stop(true)
+	cancel()
+	done, _ := l.stop(true)
+	hostDone, _ := l.host.stop(true)
 	shutdown, stop := context.WithTimeout(context.Background(), 3*time.Second)
 	defer stop()
 	server.Shutdown(shutdown)
@@ -161,34 +202,24 @@ func serve(dataPath string, noBrowser bool) error {
 	return result
 }
 
-// Finder reopens an existing GUI process instead of launching it again.
-// Let the app bundle hand off to a background host so double-clicking the
-// app always brings up a fresh browser tab, even after the old tab closed.
-func launch(path string, noBrowser bool) error {
-	if runtime.GOOS == "darwin" && !noBrowser && os.Getenv("MCBE2FRIENDS_APP_HOST") == "" {
-		binary, err := os.Executable()
-		if err != nil {
-			return err
-		}
-		if filepath.Base(filepath.Dir(binary)) == "MacOS" && filepath.Base(filepath.Dir(filepath.Dir(binary))) == "Contents" {
-			cmd := exec.Command(binary, os.Args[1:]...)
-			cmd.Env = append(os.Environ(), "MCBE2FRIENDS_APP_HOST=1")
-			if err := cmd.Start(); err != nil {
-				return err
-			}
-			return cmd.Process.Release()
-		}
-	}
-	return serve(path, noBrowser)
-}
-
 func main() {
-	noBrowser := flag.Bool("no-browser", false, "print the local launcher URL instead of opening a browser")
+	noBrowser := flag.Bool("no-browser", false, "serve in the foreground and print the local controls URL")
+	worker := flag.Bool("background", false, "run the background worker without opening the controls")
+	resume := flag.Bool("resume", false, "restore previously enabled services without opening the controls")
 	dir := flag.String("data-dir", "", "use a separate settings and runtime directory")
 	flag.Parse()
-	if err := launch(*dir, *noBrowser); err != nil {
+	privateFiles()
+	root, err := profileRoot(*dir)
+	if err == nil {
+		if *worker || *resume || *noBrowser {
+			err = serve(root, *noBrowser && !*worker && !*resume, *resume)
+		} else {
+			err = openControls(root, false, true)
+		}
+	}
+	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
-		if !*noBrowser {
+		if !*worker && !*resume && !*noBrowser {
 			showMessage(err.Error())
 		}
 		os.Exit(1)

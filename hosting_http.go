@@ -100,7 +100,7 @@ func hostingHTTP(h *Hosting, w http.ResponseWriter, r *http.Request) {
 			err = h.start(p.AcceptTerms)
 		}
 	case "/stop":
-		h.stop(false)
+		_, err = h.stop(false)
 	case "/settings":
 		var c HostConfig
 		if err = hostJSON(w, r, &c); err == nil {

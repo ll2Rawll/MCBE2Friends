@@ -712,7 +712,9 @@ input::placeholder {
   background: #ffebe2f5;
   border-color: #ca9f9082;
 }
-#connection-notice {
+#connection-notice,
+#startup-warning,
+#pending-restart {
   margin-bottom: 12px;
 }
 .notice .ico {
