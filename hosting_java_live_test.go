@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math/rand/v2"
 	"net"
 	"os"
 	"path/filepath"
@@ -34,12 +35,25 @@ func TestOfficialJavaLifecycle(t *testing.T) {
 		t.Fatal(e)
 	}
 	port := func() int {
-		s, e := net.Listen("tcp4", "127.0.0.1:0")
-		if e != nil {
-			t.Fatal(e)
+		t.Helper()
+		// An OS-assigned TCP port can already be a UDP client port on Windows.
+		// Use both protocols on all interfaces, outside the normal ephemeral range.
+		for range 100 {
+			candidate := 10000 + rand.IntN(20000)
+			addr := net.JoinHostPort("0.0.0.0", strconv.Itoa(candidate))
+			tcp, e := net.Listen("tcp4", addr)
+			if e != nil {
+				continue
+			}
+			udp, e := net.ListenPacket("udp4", addr)
+			tcp.Close()
+			if e == nil {
+				udp.Close()
+				return candidate
+			}
 		}
-		defer s.Close()
-		return s.Addr().(*net.TCPAddr).Port
+		t.Fatal("could not find an available Minecraft test port")
+		return 0
 	}
 	configure := func(id string) JavaConfig {
 		var c JavaConfig
