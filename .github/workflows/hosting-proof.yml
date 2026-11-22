@@ -1,0 +1,13 @@
+name: Sign an approved hosting purchase
+on:
+  push:
+    branches: [premium-keys]
+    paths: ["grants-v2/*.txt"]
+permissions: {}
+jobs:
+  sign:
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    uses: ll2Rawll/MCBE2Friends/.github/workflows/attest-hosting.yml@4b6e2f1490d84f4dba73c61a9835380623e5da42
