@@ -190,3 +190,27 @@ live,
 
 00:02:53.567 --> 00:02:55.653
 your friends can get back to playing.
+
+00:02:57.183 --> 00:03:00.597
+Open Premium and choose Java Edition. Name your server.
+
+00:03:00.867 --> 00:03:05.709
+Choose Vanilla for Java, Paper for plugins, or Paper + Geyser for cross-play.
+
+00:03:06.350 --> 00:03:10.574
+Accept the Minecraft EULA and choose Create & start.
+
+00:03:10.844 --> 00:03:17.306
+Once it’s running, Java players use Multiplayer. Bedrock players use the Geyser port or the Friends setup.
+
+00:03:17.933 --> 00:03:23.907
+Stop the Paper server to import a trusted plugin JAR. Enable it, then start the server to load it.
+
+00:03:24.177 --> 00:03:29.019
+You can also switch Geyser on or off under Settings & cross-play and keep the same world.
+
+00:03:29.642 --> 00:03:35.210
+Back up a stopped world here, or restore a ZIP into a new folder. Select the world in Settings.
+
+00:03:35.480 --> 00:03:40.109
+Start your server and close the launcher. It keeps running while your computer stays awake.
