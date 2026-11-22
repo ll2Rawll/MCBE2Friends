@@ -11,7 +11,7 @@ Put your Bedrock or Geyser server in Minecraft’s **Friends** tab. Mcbe2Friends
 
 ## Download
 
-[Windows x64](https://raw.githubusercontent.com/ll2Rawll/MCBE2Friends/main/downloads/Mcbe2Friends-Windows-x64.zip) · [macOS, Intel and Apple silicon](https://raw.githubusercontent.com/ll2Rawll/MCBE2Friends/main/downloads/Mcbe2Friends-macOS.zip) · [Linux x64](https://raw.githubusercontent.com/ll2Rawll/MCBE2Friends/main/downloads/Mcbe2Friends-Linux-x64.tar.gz) · [Linux ARM64](https://raw.githubusercontent.com/ll2Rawll/MCBE2Friends/main/downloads/Mcbe2Friends-Linux-ARM64.tar.gz)
+[Windows x64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.2.0/Mcbe2Friends-Windows-x64.zip) · [macOS, Intel and Apple silicon](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.2.0/Mcbe2Friends-macOS.zip) · [Linux x64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.2.0/Mcbe2Friends-Linux-x64.tar.gz) · [Linux ARM64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.2.0/Mcbe2Friends-Linux-ARM64.tar.gz)
 
 ## Premium self-hosting
 

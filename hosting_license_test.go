@@ -16,7 +16,7 @@ import (
 
 const approvalTestPC = "PC2-AAAAAAAAAAAAAAAAAAAAAAAAAA"
 const approvalTestKey = "M2F2-AAAAAAAAAAAAAAAAAAAAAAAAAA"
-const approvalTestNonce = "59358a55cc517ede48b2eafd89c332f1"
+const approvalTestNonce = "934de5f0931f1186b73a7febde4fee8a"
 
 // This synthetic identity's approval was removed from the live registry.
 // Use its genuine, archived signature only with an isolated test registry.
@@ -116,6 +116,15 @@ func TestExpiredPurchaseAndProtectedRoutes(t *testing.T) {
 }
 
 func TestProofAndDeviceBinding(t *testing.T) {
+	record := grantMarker + " " + approvalTestNonce
+	for _, ending := range []string{"", "\n", "\r\n"} {
+		if !grantRecord.MatchString(record + ending) {
+			t.Fatal("single-line approval rejected")
+		}
+	}
+	if grantRecord.MatchString(record + "\n" + record) {
+		t.Fatal("multiple records accepted")
+	}
 	subject := grantDigest(approvalTestPC, approvalTestKey)
 	expected := approvalDigest(subject, approvalTestNonce)
 	proof, err := os.ReadFile("testdata/hosting-attestation.json")

@@ -20,7 +20,7 @@ const grantBase = "https://raw.githubusercontent.com/ll2Rawll/MCBE2Friends/premi
 const renewalInterval = 5 * time.Minute
 const licenseWindow = 30 * time.Minute
 
-var grantRecord = regexp.MustCompile("^MCBE2FRIENDS-PREMIUM-2 ([0-9a-f]{32})\n$")
+var grantRecord = regexp.MustCompile("^MCBE2FRIENDS-PREMIUM-2 ([0-9a-f]{32})(?:\r?\n)?$")
 var registryUnavailable = errors.New("The Premium registry is unavailable. Connect to the internet and try again.")
 var registryClient = &http.Client{Timeout: 8 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error {
 	return http.ErrUseLastResponse

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build the portable Mcbe2Friends downloads with Go and Python."""
 import argparse
+from collections import defaultdict
 import os
 from pathlib import Path
 import plistlib
@@ -61,22 +62,44 @@ def put_zip(archive, source, name, executable=False):
     archive.writestr(info, source.read_bytes())
 
 
-def notices():
-    return sorted((PACKAGE / "licenses").glob("*.txt"))
+def collect_notices(go, stage):
+    """Collect each linked module's original license and attribution once."""
+    modules = set()
+    template = "{{with .Module}}{{if not .Main}}{{.Path}}\t{{.Version}}\t{{.Dir}}{{end}}{{end}}"
+    targets = (("windows", "amd64"), ("darwin", "amd64"), ("darwin", "arm64"),
+               ("linux", "amd64"), ("linux", "arm64"))
+    for system, arch in targets:
+        env = dict(os.environ, CGO_ENABLED="0", GOOS=system, GOARCH=arch)
+        result = subprocess.check_output([go, "list", "-deps", "-f", template, "."],
+                                         cwd=ROOT, env=env, text=True)
+        modules.update(line for line in result.splitlines() if line)
+    texts = defaultdict(list)
+    for module in sorted(modules):
+        name, version, directory = module.split("\t")
+        files = sorted(p for p in Path(directory).iterdir()
+                       if p.is_file() and p.name.upper().startswith(("LICENSE", "LICENCE", "NOTICE", "COPYING")))
+        if not files:
+            raise ValueError("Missing license for " + name)
+        for file in files:
+            texts[file.read_text(encoding="utf-8").strip()].append(f"{name} {version} ({file.name})")
+    output = stage / "Go-dependencies.txt"
+    output.write_text("\n\n".join("\n".join(names) + "\n\n" + body for body, names in texts.items()) + "\n",
+                      encoding="utf-8")
+    return [*sorted((PACKAGE / "licenses").glob("*.txt")), output]
 
 
-def windows_release(go, stage, out):
+def windows_release(go, stage, out, notices):
     binary = build(go, stage, "windows", "amd64")
     output = out / (NAME + "-Windows-x64.zip")
     with zipfile.ZipFile(output, "w") as archive:
         put_zip(archive, binary, NAME + ".exe", True)
         put_zip(archive, GUIDE, "README.md")
-        for notice in notices():
+        for notice in notices:
             put_zip(archive, notice, "licenses/" + notice.name)
     print(output.name, flush=True)
 
 
-def mac_release(go, stage, out):
+def mac_release(go, stage, out, notices):
     slices = [build(go, stage, "darwin", arch) for arch in ("amd64", "arm64")]
     binary = stage / "mac-universal"
     mac_universal(slices, binary)
@@ -100,12 +123,12 @@ def mac_release(go, stage, out):
         put_zip(archive, plist, contents + "Info.plist")
         put_zip(archive, PACKAGE / (NAME + ".icns"), contents + "Resources/" + NAME + ".icns")
         put_zip(archive, GUIDE, "README.md")
-        for notice in notices():
+        for notice in notices:
             put_zip(archive, notice, contents + "Resources/licenses/" + notice.name)
     print(output.name, flush=True)
 
 
-def linux_release(go, stage, out, arch):
+def linux_release(go, stage, out, arch, notices):
     binary = build(go, stage, "linux", arch)
     label = "x64" if arch == "amd64" else "ARM64"
     output = out / (NAME + "-Linux-" + label + ".tar.gz")
@@ -119,7 +142,7 @@ def linux_release(go, stage, out, arch):
                 archive.addfile(info, file)
         add(binary, NAME, 0o755)
         add(GUIDE, "README.md", 0o644)
-        for notice in notices():
+        for notice in notices:
             add(notice, "licenses/" + notice.name, 0o644)
     print(output.name, flush=True)
 
@@ -144,10 +167,11 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as temporary:
         stage = Path(temporary)
-        windows_release(args.go, stage, out)
-        mac_release(args.go, stage, out)
+        notices = collect_notices(args.go, stage)
+        windows_release(args.go, stage, out, notices)
+        mac_release(args.go, stage, out, notices)
         for arch in ("amd64", "arm64"):
-            linux_release(args.go, stage, out, arch)
+            linux_release(args.go, stage, out, arch, notices)
         source_release(out)
 
 

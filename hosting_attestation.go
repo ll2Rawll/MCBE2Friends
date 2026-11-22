@@ -12,7 +12,7 @@ import (
 	"github.com/sigstore/sigstore-go/pkg/verify"
 )
 
-const approvalWorkflow = "4b6e2f1490d84f4dba73c61a9835380623e5da42"
+const approvalWorkflow = "a99c81819d2f5af36815b542e680ac228a54e429"
 const workflowIdentity = "https://github.com/ll2Rawll/MCBE2Friends/.github/workflows/attest-hosting.yml@" + approvalWorkflow
 const hostingPredicate = "https://github.com/ll2Rawll/MCBE2Friends/attestations/hosting/v2"
 
