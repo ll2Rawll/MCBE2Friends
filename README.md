@@ -2,7 +2,7 @@
 
 Put your Bedrock or Geyser server in Minecraft’s **Friends** tab. Mcbe2Friends sets up MCXboxBroadcast and Java for you, then remembers your server for next time.
 
-[Visit the project site](https://ll2rawll.github.io/MCBE2Friends/) · [20-second trailer](https://ll2rawll.github.io/MCBE2Friends/#trailer) · [Full customer walkthrough](https://ll2rawll.github.io/MCBE2Friends/#walkthrough)
+[Visit the project site](https://ll2rawll.github.io/MCBE2Friends/) · [Full customer walkthrough](https://ll2rawll.github.io/MCBE2Friends/#walkthrough)
 
 <p align="center">
   <a href="docs/images/desktop.jpg"><img src="docs/images/desktop.jpg" width="73%" alt="Mcbe2Friends desktop launcher with the server setup panel over a Minecraft cherry grove"></a>
