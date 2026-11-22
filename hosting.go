@@ -261,6 +261,15 @@ func (h *Hosting) launchServer(ctx context.Context) error {
 		writer.Close()
 		return fmt.Errorf("Bedrock could not start. Check the operating system and its runtime libraries: %w", err)
 	}
+	releaseProcess, err := bindBedrockLifetime(cmd.Process)
+	if err != nil {
+		reader.Close()
+		writer.Close()
+		_ = cmd.Process.Kill()
+		_ = cmd.Wait()
+		return fmt.Errorf("Windows could not keep the server attached to the launcher: %w", err)
+	}
+	defer releaseProcess()
 	h.mu.Lock()
 	h.input = in
 	h.mu.Unlock()
