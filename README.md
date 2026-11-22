@@ -1,8 +1,8 @@
 # Mcbe2Friends
 
-Put your Bedrock or Geyser server in Minecraft’s **Friends** tab. Mcbe2Friends sets up MCXboxBroadcast and Java for you, then remembers your server for next time.
+Put your Bedrock or Geyser server in Minecraft’s **Friends** tab for free, or host a Java or Bedrock world on your PC with Premium. Close the launcher after starting your server or broadcast. Friends can keep playing while the host PC stays awake and connected.
 
-[Visit the project site](https://ll2rawll.github.io/MCBE2Friends/) · [Full customer walkthrough](https://ll2rawll.github.io/MCBE2Friends/#walkthrough)
+[Visit the project site](https://ll2rawll.github.io/MCBE2Friends/) · [Player walkthrough](https://ll2rawll.github.io/MCBE2Friends/#walkthrough) · [Java setup](https://ll2rawll.github.io/MCBE2Friends/#watch-java) · [Background hosting](https://ll2rawll.github.io/MCBE2Friends/#watch-background)
 
 <p align="center">
   <a href="docs/images/desktop.jpg"><img src="docs/images/desktop.jpg" width="73%" alt="Mcbe2Friends desktop launcher with the server setup panel over a Minecraft cherry grove"></a>
@@ -15,16 +15,18 @@ Put your Bedrock or Geyser server in Minecraft’s **Friends** tab. Mcbe2Friends
 
 ## Premium self-hosting
 
-One **$15 USD** installation key includes Java and Bedrock hosting. In **Premium → Java Edition**, choose any of the 29 stable releases from **1.19 through 26.3**. Pick **Fabric** to browse Modrinth and install mods with their required dependencies. Vanilla, Paper plugins, and Geyser cross-play are also available. Java runs on all four downloads. Native Bedrock runs on Windows and Linux x64.
+One **$15 USD** installation key includes Java and Bedrock hosting. In **Premium → Java Edition**, choose any of the 29 stable releases from **1.19 through 26.3**. Pick **Fabric** to browse Modrinth and install mods with their required dependencies. Vanilla, Paper plugins, and Geyser cross-play are also available. Java runs on all four downloads. Native Bedrock targets Windows x64 and Ubuntu 22.04+ x64.
 
-[Purchase via Discord](https://discord.gg/X5adbkPq) · [Premium hosting guide](docs/premium-hosting.md)
+<a href="https://ll2rawll.github.io/MCBE2Friends/#watch-fabric"><img src="docs/images/fabric-mods.jpg" width="420" alt="Fabric mods installed from Modrinth in the Mcbe2Friends launcher"></a>
+
+[Purchase via Discord](https://discord.gg/X5adbkPq) · [Fabric and Modrinth walkthrough](https://ll2rawll.github.io/MCBE2Friends/#watch-fabric) · [Premium hosting guide](docs/premium-hosting.md)
 
 ## Play with friends
 
-1. Extract and open **Mcbe2Friends**. Enter your running server’s Bedrock address and port (usually `19132`).
+1. Extract and open **Mcbe2Friends**. Enter your running server’s Bedrock address and port (usually `19132`). The launcher sets up MCXboxBroadcast and its Java runtime for you.
 2. Choose **Connect & start**. Enter the code on Microsoft’s sign-in page using the Xbox account your friends will add.
 3. When you see **Broadcast live**, have your friends add that gamertag. Once their requests are accepted, they can join from **Play → Friends** in Minecraft Bedrock.
 
-Close the launcher while friends play. Keep the PC awake. After a restart, each service you left on resumes at your next sign-in. **Stop broadcast** and **Stop server** turn them off independently. [Set up unattended startup before sign-in](docs/guide.md#unattended-startup)
+After a restart, each service you left on resumes at your next sign-in. **Stop broadcast** and **Stop server** turn them off independently. [Set up unattended startup before sign-in](docs/guide.md#unattended-startup)
 
 [Setup and troubleshooting guide](docs/guide.md) · [MCXboxBroadcast project](https://github.com/MCXboxBroadcast/Broadcaster)
