@@ -22,6 +22,9 @@ const approvalTestNonce = "934de5f0931f1186b73a7febde4fee8a"
 // Use its genuine, archived signature only with an isolated test registry.
 func fixtureRegistry(t *testing.T, h *Hosting) *atomic.Int32 {
 	t.Helper()
+	if err := os.MkdirAll(h.root, 0700); err != nil {
+		t.Fatal(err)
+	}
 	h.device = approvalTestPC
 	s := grantDigest(h.device, approvalTestKey)
 	digest := approvalDigest(s, approvalTestNonce)
