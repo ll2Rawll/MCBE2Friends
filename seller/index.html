@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="robots" content="noindex" />
+    <title>Mcbe2Friends · Issue a Premium key</title>
+    <link rel="icon" href="../assets/app-icon.png" />
+    <link rel="stylesheet" href="../styles.css?v=premium" />
+    <link rel="stylesheet" href="seller.css" />
+    <script defer src="issuer.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap nav-inner">
+        <a class="brand" href="../"
+          ><img
+            src="../assets/ui/grass-block.webp"
+            alt=""
+            width="32"
+            height="34"
+          />Mcbe2Friends</a
+        >
+      </div>
+    </header>
+    <main class="wrap seller-page">
+      <section class="panel">
+        <div class="panel-header">
+          <span class="item chest" aria-hidden="true"></span>
+          <h1>Issue a Premium key</h1>
+        </div>
+        <div class="seller-body">
+          <p>
+            After confirming the buyer’s $15 payment on Discord, enter the PC
+            code from their launcher. Approval requires write access to the
+            project’s GitHub repository.
+          </p>
+          <form id="key-form">
+            <label for="pc">Buyer’s PC code</label
+            ><input
+              id="pc"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="PC-…"
+              required
+            /><button class="game-button primary" type="submit">
+              Generate key
+            </button>
+          </form>
+          <p id="result" role="status"></p>
+          <div id="grant" hidden>
+            <label for="buyer-key">Private key to send the buyer</label
+            ><input id="buyer-key" readonly /><button
+              class="seller-link"
+              id="copy-key"
+              type="button"
+            >
+              Copy buyer key
+            </button>
+            <ol>
+              <li>
+                Open the approval file below while signed in to GitHub. Commit
+                it directly to <strong>premium-keys</strong>. If the editor is
+                empty, paste the file contents shown here.
+              </li>
+              <li>
+                Send the private key to the buyer on Discord. Keep a private
+                copy of the key and approval link with your sale record.
+              </li>
+            </ol>
+            <a
+              class="game-button stone"
+              id="approve"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Open GitHub approval file ↗</a
+            >
+            <details>
+              <summary>Approval file details</summary>
+              <label for="grant-path">File on the premium-keys branch</label
+              ><input id="grant-path" readonly /><label for="marker"
+                >File contents</label
+              ><input id="marker" value="MCBE2FRIENDS-PREMIUM-1" readonly />
+            </details>
+          </div>
+          <p class="seller-note">
+            A grant contains a hash. Only the buyer gets the key. To transfer a
+            purchase, remove the old grant and issue one for the new PC code.
+            Revocation takes effect at the next launcher session.
+          </p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

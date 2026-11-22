@@ -17,7 +17,7 @@
   <link rel="apple-touch-icon" href="assets/app-icon.png">
   <link rel="preload" href="assets/fonts/minecraft-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/minecraft-bold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=world">
+  <link rel="stylesheet" href="styles.css?v=premium">
   <script>
     try {
       if (localStorage.getItem('mcbe2friends-theme') === 'light') {
@@ -45,7 +45,7 @@
     <div class="nav-inner wrap">
       <a class="brand" href="#top"><img src="assets/ui/grass-block.webp" alt="" width="35" height="37"><span>Mcbe2Friends</span></a>
       <nav aria-label="Main navigation" class="desktop-nav">
-        <a href="#setup">Setup</a><a href="#trailer">Trailer</a><a href="#downloads">Downloads</a>
+        <a href="#setup">Setup</a><a href="#trailer">Trailer</a><a href="#premium">Premium</a><a href="#downloads">Downloads</a>
       </nav>
       <div class="header-tools">
         <a href="https://github.com/ll2Rawll/MCBE2Friends" class="icon-control" aria-label="View Mcbe2Friends on GitHub" title="View on GitHub"><img class="github-mark" src="assets/github.png" width="20" height="20" alt=""></a>
@@ -55,7 +55,7 @@
         <details class="mobile-menu">
           <summary class="icon-control" aria-label="Navigation menu"><svg class="icon open-menu" aria-hidden="true"><use href="#i-menu"/></svg><svg class="icon close-menu" aria-hidden="true"><use href="#i-close"/></svg></summary>
           <nav class="menu-panel" aria-label="Mobile navigation">
-            <a href="#setup">Setup</a><a href="#trailer">Watch the trailer</a><a href="#downloads">Downloads</a>
+            <a href="#setup">Setup</a><a href="#trailer">Watch the trailer</a><a href="#premium">Premium</a><a href="#downloads">Downloads</a>
           </nav>
         </details>
       </div>
@@ -117,10 +117,21 @@
       </section>
     </div>
 
+    <section class="panel premium-offer wrap" id="premium" aria-labelledby="premium-title">
+      <div class="panel-header"><span class="item emerald" aria-hidden="true"></span><h2 id="premium-title">Premium self-hosting</h2></div>
+      <div class="offer-body">
+        <a class="offer-preview" href="https://github.com/ll2Rawll/MCBE2Friends/blob/main/docs/premium-hosting.md" aria-label="See the hosting panel and setup guide"><img src="assets/gallery/hosting.webp" width="880" height="619" loading="lazy" decoding="async" alt="The hosting panel with Cherry Grove selected and eight player slots"></a>
+        <div><p>Host a world on your own Windows x64 or Ubuntu x64 PC. The launcher picks settings for your hardware and puts worlds, add-ons, and players in one panel.</p>
+          <p class="offer-note">Open Premium in the launcher to check your PC first. A one-time $15 USD purchase through Discord unlocks hosting for that installation. The Friends broadcaster is free.</p>
+          <a class="game-button primary" href="https://discord.gg/X5adbkPq" target="_blank" rel="noopener noreferrer">Get Premium · $15 <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
+        </div>
+      </div>
+    </section>
+
     <section class="downloads wrap" id="downloads" aria-labelledby="downloads-title">
       <div class="chest-lid">
         <span class="item chest" aria-hidden="true"></span><h2 id="downloads-title">Download chest</h2>
-        <a class="release" href="https://github.com/ll2Rawll/MCBE2Friends/releases/tag/v1.0.0">v1.0.0 <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
+        <a class="release" href="https://github.com/ll2Rawll/MCBE2Friends/releases/tag/v1.1.0">v1.1.0 <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
       </div>
       <div class="inventory">
         <div class="platforms">

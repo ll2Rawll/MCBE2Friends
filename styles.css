@@ -275,3 +275,12 @@ h1 { color: #fff7da; font-size: clamp(1.7rem, 8.3vw, 5.4rem); font-size: clamp(1
   .rail [aria-pressed="true"] { outline: 3px solid Highlight; }
   h1 { text-shadow: none; }
 }
+
+.premium-offer { margin-bottom: 22px; }
+.offer-body { display: grid; grid-template-columns: minmax(200px, .65fr) minmax(0, 1.4fr); align-items: center; gap: 24px; padding: 19px 23px; }
+.offer-preview { display: block; border: 2px solid var(--rim); box-shadow: 2px 2px 0 var(--lip); }
+.offer-preview img { display: block; width: 100%; height: auto; }
+.offer-body p { font-size: .9375rem; line-height: 1.65; }
+.offer-body .offer-note { margin-top: 8px; color: var(--muted); font-size: .84375rem; }
+.offer-body .game-button { margin-top: 13px; }
+@media (max-width: 650px) { .offer-body { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 14px; } }
