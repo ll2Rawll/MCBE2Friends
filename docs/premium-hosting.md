@@ -35,15 +35,4 @@ For internet players, the included NetherNet server uses TCP signaling and UDP g
 - **Server console** displays recent output and accepts Bedrock commands such as `list`, `say Welcome!`, and `op "Xbox Gamertag"`. Use **Players & Friends tab** to add or remove allowlisted players without typing a command.
 - **Open server folder** exposes normal world, allowlist, permissions, pack, and configuration files. The server is stored under `hosting/server` in the launcher's data folder. Backups live in `hosting/backups`. Stop Bedrock before making manual changes or copying its database.
 
-Activation needs internet access once per launcher session. Once verified, the host keeps running if the key registry becomes unavailable. Preserve the private `hosting/installation.txt` and `hosting/premium-key.txt` files across reinstalls, or contact the seller for a transfer. Do not share those files.
-
-## Seller workflow
-
-1. Confirm payment on Discord and get the PC code from the buyer’s launcher.
-2. Open the seller key issuer. Paste the code and choose **Generate key**. Your browser generates a private random key locally.
-3. Choose **Open GitHub approval file**. Commit the proposed file directly to the **premium-keys** branch in **ll2Rawll/MCBE2Friends**. If GitHub leaves the editor empty, paste the single line of file contents shown by the issuer.
-4. Send the private key to the buyer on Discord. Save the approval path and key in your private sales records. A buyer can then activate immediately. A recently updated grant can take a short time to reach GitHub’s cache.
-
-The public grant filename is a SHA-256 hash of the PC code and the key. The launcher checks the project’s registry over HTTPS. A grant in another repository or fork has no effect. To revoke a key, delete its grant. For a transfer, revoke the old grant and issue one for the new PC code. Running sessions recheck the next time the launcher opens.
-
-[Open the seller key issuer](https://ll2rawll.github.io/MCBE2Friends/seller/) · [Approval registry](https://github.com/ll2Rawll/MCBE2Friends/tree/premium-keys/grants)
+Activation needs internet access once per launcher session. Preserve the private `hosting/installation.txt` and `hosting/premium-key.txt` files across reinstalls. For help with a purchase or a transfer, contact the project owner on Discord. [Premium support](https://discord.gg/X5adbkPq)

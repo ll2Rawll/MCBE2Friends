@@ -17,7 +17,7 @@ Put your Bedrock or Geyser server in Minecraft’s **Friends** tab. Mcbe2Friends
 
 Open **Premium** in the launcher to check your PC. A one-time **$15 USD** key unlocks an official Bedrock server with hardware-based presets, world backups, add-ons, player management, and a console on Windows or Linux x64.
 
-[Purchase via Discord](https://discord.gg/X5adbkPq) · [Hosting and seller guide](docs/premium-hosting.md)
+[Purchase via Discord](https://discord.gg/X5adbkPq) · [Premium hosting guide](docs/premium-hosting.md)
 
 ## Play with friends
 
