@@ -2,10 +2,12 @@ package main
 
 import (
 	"context"
+	"encoding/binary"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"time"
+	"unicode/utf16"
 
 	"golang.org/x/sys/windows"
 )
@@ -49,7 +51,7 @@ func windowsStartupEntries(root, startup string, enable bool) error {
 	if err != nil {
 		return err
 	}
-	task := `<?xml version="1.0" encoding="UTF-8"?>
+	task := `<?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo><Description>Restore this player's Mcbe2Friends services at boot.</Description></RegistrationInfo>
   <Triggers><BootTrigger><Enabled>true</Enabled></BootTrigger></Triggers>
@@ -58,5 +60,11 @@ func windowsStartupEntries(root, startup string, enable bool) error {
   <Actions Context="Player"><Exec><Command>` + xmlValue(exe) + `</Command><Arguments>` + xmlValue(args) + `</Arguments><WorkingDirectory>` + xmlValue(root) + `</WorkingDirectory></Exec></Actions>
 </Task>
 `
-	return startupFile(filepath.Join(root, "background", "start-before-sign-in.xml"), task)
+	// Task Scheduler consumes a Unicode BSTR when importing an XML task.
+	// Match the UTF-16LE format used by its own exported tasks.
+	data := []byte{0xff, 0xfe}
+	for _, unit := range utf16.Encode([]rune(task)) {
+		data = binary.LittleEndian.AppendUint16(data, unit)
+	}
+	return startupBytes(filepath.Join(root, "background", "start-before-sign-in.xml"), data)
 }
