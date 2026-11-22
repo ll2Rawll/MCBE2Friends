@@ -42,7 +42,7 @@ jobs:
           path = files[0]["filename"]
           api = "repos/" + os.environ["GITHUB_REPOSITORY"] + "/contents/" + path + "?ref=" + os.environ["GITHUB_SHA"]
           record = subprocess.check_output(["gh", "api", "-H", "Accept: application/vnd.github.raw+json", api])
-          nonce = re.fullmatch(rb"MCBE2FRIENDS-PREMIUM-2 ([0-9a-f]{32})\n", record)
+          nonce = re.fullmatch(rb"MCBE2FRIENDS-PREMIUM-2 ([0-9a-f]{32})(?:\r?\n)?", record)
           if not nonce:
               raise SystemExit("Invalid approval record.")
           data = b"MCBE2FRIENDS-PREMIUM-2\n" + match[1].encode() + b"\n" + nonce[1] + b"\n"
