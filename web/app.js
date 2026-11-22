@@ -38,7 +38,9 @@ let lastEvents = "";
 let toastTimer;
 let confirmedAction = "";
 const nativeWindow = typeof window.runtime?.Quit === "function";
-let token = nativeWindow ? "desktop-window" : location.hash.slice(1);
+let token = nativeWindow ? "" : location.hash.slice(1);
+let apiOrigin = "";
+const apiURL = (path) => apiOrigin + "/api/" + path;
 try {
   if (!nativeWindow && token) sessionStorage.setItem("launcher-key", token);
   else if (!nativeWindow) token = sessionStorage.getItem("launcher-key") || "";
@@ -48,7 +50,7 @@ try {
 if (location.hash && token) history.replaceState(null, "", location.pathname);
 
 async function api(path, method = "GET", body) {
-  const response = await fetch("/api/" + path, {
+  const response = await fetch(apiURL(path), {
     method,
     cache: "no-store",
     headers: {
@@ -681,8 +683,20 @@ back.id = "back-edit";
 back.textContent = "Cancel edit";
 back.hidden = true;
 $("#server-panel .card-actions").prepend(back);
-if (token) poll();
-else
-  disconnect(
-    "Open the Mcbe2Friends desktop launcher on this computer to begin setup.",
-  );
+async function connectControls() {
+  if (nativeWindow) {
+    try {
+      const response = await fetch("/desktop-connection.json", {cache: "no-store"});
+      if (!response.ok) throw Error("Desktop window unavailable");
+      const connection = await response.json();
+      apiOrigin = connection.origin;
+      token = connection.token;
+    } catch {
+      disconnect("Reopen Mcbe2Friends to reconnect the desktop window.");
+      return;
+    }
+  }
+  if (token) poll();
+  else disconnect("Open the Mcbe2Friends desktop launcher on this computer to begin setup.");
+}
+connectControls();

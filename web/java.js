@@ -444,7 +444,7 @@ window.javaPanel = (() => {
     return "Saved for the next start.";
   });
   async function transfer(action, body, type, param = "") {
-    const res = await fetch("/api/" + path(action) + param, {
+    const res = await fetch(apiURL(path(action) + param), {
       method: "POST",
       headers: { Authorization: "Bearer " + token, "Content-Type": type },
       body,

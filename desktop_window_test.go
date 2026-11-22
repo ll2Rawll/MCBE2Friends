@@ -71,10 +71,11 @@ func checkNativeWindow(root string) error {
 	})
 	server.Start()
 	defer server.Close()
-	config, err := launcherWindow(root, instance)
+	config, closeRelay, err := launcherWindow(root, instance)
 	if err != nil {
 		return err
 	}
+	defer closeRelay()
 	index, err := fs.ReadFile(config.Assets, "index.html")
 	if err != nil {
 		return err
@@ -83,8 +84,8 @@ func checkNativeWindow(root string) error {
 	config.Assets = probeAssets{config.Assets, fstest.MapFS{"index.html": &fstest.MapFile{Data: index}, "desktop-probe.js": &fstest.MapFile{Data: []byte(nativeProbe)}}}
 	backend := config.Handler
 	config.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/probe-result" && r.Method == "POST" {
-			data, _ := io.ReadAll(io.LimitReader(r.Body, 4096))
+		if r.URL.Path == "/probe-result" && r.Method == "GET" {
+			data := []byte(r.URL.Query().Get("result"))
 			os.WriteFile(filepath.Join(root, "report"), data, 0600)
 			w.Header().Set("Content-Type", "text/plain")
 			w.Write([]byte("saved"))
@@ -109,15 +110,15 @@ const nativeProbe = `
     const env=await window.runtime.Environment();
     if (!env.platform) throw Error("Desktop platform unavailable");
     const fileData=new Uint8Array(1048613);fileData[fileData.length-1]=231;
-    const reply=await fetch("/api/test-file",{method:"POST",headers:{Authorization:"Bearer desktop-window","Content-Type":"application/octet-stream"},body:new File([fileData],"test-pack.zip")});
+    const reply=await fetch(apiURL("test-file"),{method:"POST",headers:{Authorization:"Bearer "+token,"Content-Type":"application/octet-stream"},body:new File([fileData],"test-pack.zip")});
     if (!reply.ok || (await reply.json()).bytes!==fileData.length) throw Error("Native file upload failed "+reply.status);
-    const signedOut=await fetch("/api/state");if(signedOut.status!==403) throw Error("Unexpected unauthenticated response "+signedOut.status);
+    const signedOut=await fetch(apiURL("state"));if(signedOut.status!==403) throw Error("Unexpected unauthenticated response "+signedOut.status);
     document.querySelector('[data-action="guide"]').click();
     if(!get("guide-dialog").open)throw Error("Guide did not open");
     get("guide-dialog").close();
     report={ok:true,platform:env.platform};
   } catch(e){report={error:String(e)};}
-  await fetch("/probe-result",{method:"POST",body:JSON.stringify(report)});
+  await fetch("/probe-result?result="+encodeURIComponent(JSON.stringify(report)));
   document.querySelector(".quit").click();
   setTimeout(()=>window.runtime.Quit(),700);
 })();

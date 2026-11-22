@@ -21,6 +21,7 @@ type Window struct {
 	Width, Height       int
 	Assets              fs.FS
 	Handler             http.Handler
+	Bind                []interface{}
 	Icon                []byte
 	OnClose             func()
 }
@@ -33,6 +34,7 @@ func Show(window Window) error {
 	return wails.Run(&options.App{
 		Title: window.Title, Width: window.Width, Height: window.Height, MinWidth: 380, MinHeight: 480,
 		BackgroundColour: options.NewRGBA(23, 39, 36, 255),
+		Bind:             window.Bind,
 		AssetServer:      &assetserver.Options{Assets: window.Assets, Handler: window.Handler},
 		SingleInstanceLock: &options.SingleInstanceLock{UniqueId: window.ID, OnSecondInstanceLaunch: func(options.SecondInstanceData) {
 			mu.Lock()

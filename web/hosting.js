@@ -262,7 +262,7 @@ window.premiumPanel = (() => {
     applyStatus(next);
   }
   async function upload(action, file, param = "") {
-    const reply = await fetch("/api/hosting/" + action + param, {
+    const reply = await fetch(apiURL("hosting/" + action + param), {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
@@ -357,7 +357,7 @@ window.premiumPanel = (() => {
   });
   click("host-backup", async () => {
     feedback("Saving the world backup…");
-    const res = await fetch("/api/hosting/backup", {
+    const res = await fetch(apiURL("hosting/backup"), {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
