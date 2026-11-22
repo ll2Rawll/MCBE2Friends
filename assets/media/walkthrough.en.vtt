@@ -214,3 +214,21 @@ Back up a stopped world here, or restore a ZIP into a new folder. Select the wor
 
 00:03:35.480 --> 00:03:40.109
 Start your server and close the launcher. It keeps running while your computer stays awake.
+
+00:03:41.183 --> 00:03:44.981
+In Java Edition, select your Minecraft version and choose Fabric.
+
+00:03:45.251 --> 00:03:48.259
+Choose Create only to add mods before the first start.
+
+00:03:48.892 --> 00:03:52.070
+Open Fabric mods, search Modrinth, and choose a version.
+
+00:03:52.340 --> 00:03:56.287
+Select Install version. Required dependencies download together.
+
+00:03:56.933 --> 00:04:01.392
+Here, Ledger installed with Fabric API and Fabric Language Kotlin.
+
+00:04:01.662 --> 00:04:06.270
+Accept the Minecraft terms and start your world. Stop it when you want to change mods.
