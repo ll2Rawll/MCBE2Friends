@@ -19,11 +19,12 @@ import (
 	javaprops "github.com/magiconair/properties"
 )
 
-const javaVersion = "26.3"
+var javaVersion = catalog.Releases[0].ID
 
 var javaID = regexp.MustCompile("^[a-f0-9]{24}$")
 
 type JavaConfig struct {
+	Version     string `json:"version"`
 	Name        string `json:"name"`
 	Engine      string `json:"engine"`
 	Geyser      bool   `json:"geyser"`
@@ -54,11 +55,24 @@ func (hw Hardware) javaDefaults() JavaConfig {
 	if hw.RAMGiB >= 15.5 {
 		memory = 4096
 	}
-	return JavaConfig{Name: "My Java server", Engine: "vanilla", World: "world", Port: 25565, BedrockPort: 19132, Memory: min(memory, hw.heapBudget()), Players: players, View: min(view, 12), Simulation: min(6, view), Mode: "survival", Difficulty: "normal"}
+	return JavaConfig{Version: javaVersion, Name: "My Java server", Engine: "vanilla", World: "world", Port: 25565, BedrockPort: 19132, Memory: min(memory, hw.heapBudget()), Players: players, View: min(view, 12), Simulation: min(6, view), Mode: "survival", Difficulty: "normal"}
 }
 func (c JavaConfig) validate(hw Hardware) error {
-	if c.Engine != "vanilla" && c.Engine != "paper" || c.Geyser && c.Engine != "paper" {
-		return errors.New("Choose Vanilla, Paper, or Paper with Geyser.")
+	release, err := findJavaRelease(c.Version)
+	if err != nil {
+		return err
+	}
+	switch c.Engine {
+	case "vanilla", "fabric":
+	case "paper":
+		if release.Paper == nil {
+			return fmt.Errorf("Paper has no published build for Minecraft %s.", c.Version)
+		}
+	default:
+		return errors.New("Choose Vanilla, Fabric, or Paper.")
+	}
+	if c.Geyser && (c.Engine != "paper" || !release.supportsGeyser()) {
+		return errors.New("Managed Geyser cross-play needs a published Paper build for 1.20.5 or later.")
 	}
 	if strings.TrimSpace(c.Name) == "" || utf8.RuneCountInString(c.Name) > 64 || strings.IndexFunc(c.Name, unicode.IsControl) >= 0 {
 		return errors.New("Enter a server name of 1–64 characters on one line.")
@@ -110,6 +124,7 @@ func (h *Hosting) javaConfig(dir string) (JavaConfig, error) {
 	if _, ok := p.Get("mcbe2friends-engine"); !ok {
 		return c, errors.New("This profile is missing its Mcbe2Friends settings in server.properties.")
 	}
+	c.Version = p.GetString("mcbe2friends-version", legacyJavaVersion)
 	c.Name = p.GetString("motd", c.Name)
 	c.World = p.GetString("level-name", c.World)
 	c.Engine = p.GetString("mcbe2friends-engine", "")
@@ -131,7 +146,7 @@ func (c JavaConfig) write(dir string) error {
 		return err
 	}
 	values := map[string]string{
-		"mcbe2friends-engine": c.Engine, "mcbe2friends-geyser": strconv.FormatBool(c.Geyser),
+		"mcbe2friends-version": c.Version, "mcbe2friends-engine": c.Engine, "mcbe2friends-geyser": strconv.FormatBool(c.Geyser),
 		"mcbe2friends-memory-mib": strconv.Itoa(c.Memory), "mcbe2friends-bedrock-port": strconv.Itoa(c.BedrockPort),
 		"motd": c.Name, "level-name": c.World, "server-port": strconv.Itoa(c.Port),
 		"gamemode": c.Mode, "difficulty": c.Difficulty, "white-list": strconv.FormatBool(c.Whitelist),
@@ -179,6 +194,8 @@ type javaProfile struct {
 	Terms bool `json:"terms"`
 }
 type javaLibrary struct {
+	Versions    []javaChoice  `json:"versions"`
+	Loader      string        `json:"loader"`
 	Profiles    []javaProfile `json:"profiles"`
 	Recommended JavaConfig    `json:"recommended"`
 	MaxMemory   int           `json:"maxMemory"`
@@ -186,7 +203,7 @@ type javaLibrary struct {
 }
 
 func (h *Hosting) javaLibrary(selected string) (javaLibrary, error) {
-	lib := javaLibrary{Recommended: h.hw.javaDefaults(), MaxMemory: h.hw.heapBudget(), Version: javaVersion}
+	lib := javaLibrary{Versions: javaChoices(), Loader: catalog.Loader, Recommended: h.hw.javaDefaults(), MaxMemory: h.hw.heapBudget(), Version: javaVersion}
 	if err := h.allowed(false); err != nil {
 		return lib, err
 	}
@@ -235,7 +252,7 @@ func javaTerms(dir string) bool {
 	data, _ := os.ReadFile(filepath.Join(dir, "eula.txt"))
 	return properties(data)["eula"] == "true"
 }
-func (h *Hosting) createJava(name, engine string, geyser bool) (string, error) {
+func (h *Hosting) createJava(name, engine string, geyser bool, version string) (string, error) {
 	h.ops.Lock()
 	defer h.ops.Unlock()
 	if !h.hw.JavaSupported {
@@ -246,6 +263,9 @@ func (h *Hosting) createJava(name, engine string, geyser bool) (string, error) {
 		return "", err
 	}
 	c := lib.Recommended
+	if version != "" {
+		c.Version = version
+	}
 	c.Name, c.Engine, c.Geyser = strings.TrimSpace(name), engine, geyser
 	if err = c.validate(h.hw); err != nil {
 		return "", err
@@ -272,6 +292,9 @@ func (h *Hosting) createJava(name, engine string, geyser bool) (string, error) {
 func (h *Hosting) javaEdit(id string, fn func(dir string, c JavaConfig) error) error {
 	h.ops.Lock()
 	defer h.ops.Unlock()
+	if h.modWork[id] {
+		return errors.New("Wait for the mod changes on this server to finish.")
+	}
 	if err := h.allowed(false); err != nil {
 		return err
 	}

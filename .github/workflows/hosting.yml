@@ -5,6 +5,7 @@ on:
     paths:
       - "hosting*.go"
       - "install.go"
+      - "catalog/java.json"
       - "packaging/java-lifetime/**"
       - "background*.go"
       - "startup*.go"
@@ -26,7 +27,7 @@ jobs:
       matrix:
         os: [windows-2022, ubuntu-24.04, ubuntu-24.04-arm, macos-15, macos-15-intel]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 28
+    timeout-minutes: 38
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -65,3 +66,13 @@ jobs:
             echo "::error::Java integration failed. $detail"
             exit 1
           }
+      - name: Host Fabric across the Java 17, 21 and 25 generations and install Modrinth dependencies
+        if: ${{ !cancelled() && steps.unit.conclusion == 'success' }}
+        env:
+          MCBE2FRIENDS_TEST_FABRIC: "1"
+        run: go test -v -count=1 -timeout 15m -run TestOfficialFabric .
+      - name: Restore legacy Paper dimensions and check cross-play through ViaVersion
+        if: runner.os == 'Linux' && runner.arch == 'X64'
+        env:
+          MCBE2FRIENDS_TEST_ARCHIVED_PAPER: "1"
+        run: go test -v -count=1 -timeout 12m -run TestOfficialArchivedPaper .

@@ -38,6 +38,7 @@ type Hosting struct {
 	active                         *hostRun
 	java                           map[string]*javaState
 	javaInstall                    chan struct{}
+	modWork                        map[string]bool // guarded by ops
 	input                          io.Writer
 	logs                           []string
 }
@@ -62,7 +63,7 @@ type HostStatus struct {
 
 func newHosting(root string, bg *background) *Hosting {
 	dir := filepath.Join(root, "hosting")
-	h := &Hosting{javaInstall: make(chan struct{}, 1), java: make(map[string]*javaState), background: bg, root: dir, server: filepath.Join(dir, "server"), grants: grantBase, phase: "offline", percent: -1, hw: hardware()}
+	h := &Hosting{modWork: make(map[string]bool), javaInstall: make(chan struct{}, 1), java: make(map[string]*javaState), background: bg, root: dir, server: filepath.Join(dir, "server"), grants: grantBase, phase: "offline", percent: -1, hw: hardware()}
 	if !h.hw.Supported && !h.hw.JavaSupported {
 		return h
 	}

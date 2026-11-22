@@ -1,0 +1,950 @@
+{
+  "loader": "0.20.1",
+  "releases": [
+    {
+      "id": "26.3",
+      "java": 25,
+      "vanilla": {
+        "name": "Minecraft Java 26.3",
+        "url": "https://piston-data.mojang.com/v1/objects/33680f5f2ac32864d6d7cf5e56a705fdb3e05f4c/server.jar",
+        "size": 62294556,
+        "sha256": "d052f14d7a173734fba553711e5b570162e2f2a313267ee31a21b975a679be64"
+      },
+      "paper": {
+        "name": "Paper 26.3 build 257",
+        "url": "https://fill-data.papermc.io/v1/objects/64a5bd44910cb982b2648e9a35036cc95a6de4d561e15812aecf5411f84f7b01/paper-26.3-257.jar",
+        "size": 55305512,
+        "sha256": "64a5bd44910cb982b2648e9a35036cc95a6de4d561e15812aecf5411f84f7b01"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "26.2",
+      "java": 25,
+      "vanilla": {
+        "name": "Minecraft Java 26.2",
+        "url": "https://piston-data.mojang.com/v1/objects/823e2250d24b3ddac457a60c92a6a941943fcd6a/server.jar",
+        "size": 60894273,
+        "sha256": "cdacdfb25898de5e4b4b0e5ddcc2722f77067e46605709c2d886c000ebb63ec5"
+      },
+      "paper": {
+        "name": "Paper 26.2 build 135",
+        "url": "https://fill-data.papermc.io/v1/objects/ef3dbc68b013deafdbbee3bebf1ba351671ebcda94a8f136809b7532d5ba2fe1/paper-26.2-135.jar",
+        "size": 64525370,
+        "sha256": "ef3dbc68b013deafdbbee3bebf1ba351671ebcda94a8f136809b7532d5ba2fe1"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "26.1.2",
+      "java": 25,
+      "vanilla": {
+        "name": "Minecraft Java 26.1.2",
+        "url": "https://piston-data.mojang.com/v1/objects/97ccd4c0ed3f81bbb7bfacddd1090b0c56f9bc51/server.jar",
+        "size": 60417480,
+        "sha256": "cd47e7c38328f64768fd17af8fcd8b22496b40b63d4ffee81e71ae059fedcb42"
+      },
+      "paper": {
+        "name": "Paper 26.1.2 build 74",
+        "url": "https://fill-data.papermc.io/v1/objects/1d70b1dab9cf4a6de615209a536f3a45a2186240253c428213ce2188ab95e5f7/paper-26.1.2-74.jar",
+        "size": 52893229,
+        "sha256": "1d70b1dab9cf4a6de615209a536f3a45a2186240253c428213ce2188ab95e5f7"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "26.1.1",
+      "java": 25,
+      "vanilla": {
+        "name": "Minecraft Java 26.1.1",
+        "url": "https://piston-data.mojang.com/v1/objects/49c8195703ad0ba4f0a4efbccfd85a4a8ca57431/server.jar",
+        "size": 60417481,
+        "sha256": "d792784979722dc35144acffb953554e707445c62450550044c4281e632cbbcc"
+      },
+      "paper": {
+        "name": "Paper 26.1.1 build 29",
+        "url": "https://fill-data.papermc.io/v1/objects/43d08ed52c7af4e9f72769122501a5c15f99c7ace0c428a3eef040fd3f6fdbc5/paper-26.1.1-29.jar",
+        "size": 52896049,
+        "sha256": "43d08ed52c7af4e9f72769122501a5c15f99c7ace0c428a3eef040fd3f6fdbc5"
+      },
+      "paperChannel": "ALPHA",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "26.1",
+      "java": 25,
+      "vanilla": {
+        "name": "Minecraft Java 26.1",
+        "url": "https://piston-data.mojang.com/v1/objects/3872a7f07a1a595e651aef8b058dfc2bb3772f46/server.jar",
+        "size": 60417588,
+        "sha256": "98ab064389a8b34d48ac3d4c5ed858dd9433d0dfd1a12e1cbbda916448d92994"
+      },
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.21.11",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.21.11",
+        "url": "https://piston-data.mojang.com/v1/objects/64bb6d763bed0a9f1d632ec347938594144943ed/server.jar",
+        "size": 56327581,
+        "sha256": "f83b8e093865806f931c7e34aae41b177d4c076335263dd124c75d6d65dd1726"
+      },
+      "paper": {
+        "name": "Paper 1.21.11 build 132",
+        "url": "https://fill-data.papermc.io/v1/objects/5ffef465eeeb5f2a3c23a24419d97c51afd7dbb4923ff42df9a3f58bba1ccfba/paper-1.21.11-132.jar",
+        "size": 54846016,
+        "sha256": "5ffef465eeeb5f2a3c23a24419d97c51afd7dbb4923ff42df9a3f58bba1ccfba"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.21.11",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.21.10",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.21.10",
+        "url": "https://piston-data.mojang.com/v1/objects/95495a7f485eedd84ce928cef5e223b757d2f764/server.jar",
+        "size": 58642415,
+        "sha256": "5bb64dc47379903e8f288bd6a4b276e889075c5c0f4c0b714e958d835c1874e7"
+      },
+      "paper": {
+        "name": "Paper 1.21.10 build 130",
+        "url": "https://fill-data.papermc.io/v1/objects/158703f75a26f842ea656b3dc6d75bf3d1ec176b97a2c36384d0b80b3871af53/paper-1.21.10-130.jar",
+        "size": 54475623,
+        "sha256": "158703f75a26f842ea656b3dc6d75bf3d1ec176b97a2c36384d0b80b3871af53"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.21.10",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.21.9",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.21.9",
+        "url": "https://piston-data.mojang.com/v1/objects/11e54c2081420a4d49db3007e66c80a22579ff2a/server.jar",
+        "size": 58638725,
+        "sha256": "ebc5161abcd57523c14a04ce108f0b671da0d0d74a28926b19a7d139ebabaf31"
+      },
+      "paper": {
+        "name": "Paper 1.21.9 build 59",
+        "url": "https://fill-data.papermc.io/v1/objects/aec002e77c7566e49494fdf05430b96078ffd1d7430e652d4f338fef951e7a10/paper-1.21.9-59.jar",
+        "size": 53440323,
+        "sha256": "aec002e77c7566e49494fdf05430b96078ffd1d7430e652d4f338fef951e7a10"
+      },
+      "paperChannel": "ALPHA",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.21.9",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.21.8",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.21.8",
+        "url": "https://piston-data.mojang.com/v1/objects/6bce4ef400e4efaa63a13d5e6f6b500be969ef81/server.jar",
+        "size": 57555044,
+        "sha256": "2349d9a8f0d4be2c40e7692890ef46a4b07015e7955b075460d02793be7fbbe7"
+      },
+      "paper": {
+        "name": "Paper 1.21.8 build 60",
+        "url": "https://fill-data.papermc.io/v1/objects/8de7c52c3b02403503d16fac58003f1efef7dd7a0256786843927fa92ee57f1e/paper-1.21.8-60.jar",
+        "size": 52811717,
+        "sha256": "8de7c52c3b02403503d16fac58003f1efef7dd7a0256786843927fa92ee57f1e"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.21.8",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.21.7",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.21.7",
+        "url": "https://piston-data.mojang.com/v1/objects/05e4b48fbc01f0385adb74bcff9751d34552486c/server.jar",
+        "size": 57556704,
+        "sha256": "b955b8f75d811cc326179472174941358eeaf97a68999ee119ccd3873350c4ee"
+      },
+      "paper": {
+        "name": "Paper 1.21.7 build 32",
+        "url": "https://fill-data.papermc.io/v1/objects/83838188699cb2837e55b890fb1a1d39ad0710285ed633fbf9fc14e9f47ce078/paper-1.21.7-32.jar",
+        "size": 52771702,
+        "sha256": "83838188699cb2837e55b890fb1a1d39ad0710285ed633fbf9fc14e9f47ce078"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.21.7",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.21.6",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.21.6",
+        "url": "https://piston-data.mojang.com/v1/objects/6e64dcabba3c01a7271b4fa6bd898483b794c59b/server.jar",
+        "size": 57554576,
+        "sha256": "08abf384c48afb9e822144ad8a99166482857994389269e26c6a04c6c91d9171"
+      },
+      "paper": {
+        "name": "Paper 1.21.6 build 48",
+        "url": "https://fill-data.papermc.io/v1/objects/35e2dfa66b3491b9d2f0bb033679fa5aca1e1fdf097e7a06a80ce8afeda5c214/paper-1.21.6-48.jar",
+        "size": 52639704,
+        "sha256": "35e2dfa66b3491b9d2f0bb033679fa5aca1e1fdf097e7a06a80ce8afeda5c214"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.21.6",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.21.5",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.21.5",
+        "url": "https://piston-data.mojang.com/v1/objects/e6ec2f64e6080b9b5d9b471b291c33cc7f509733/server.jar",
+        "size": 57269758,
+        "sha256": "ae7681dadce21b6b4017d28e7eb567d86b6c100a6969994f540b9e54f812dc29"
+      },
+      "paper": {
+        "name": "Paper 1.21.5 build 114",
+        "url": "https://fill-data.papermc.io/v1/objects/2ae6ae22adf417699746e0f89fc2ef6cb6ee050a5f6608cee58f0535d60b509e/paper-1.21.5-114.jar",
+        "size": 51427274,
+        "sha256": "2ae6ae22adf417699746e0f89fc2ef6cb6ee050a5f6608cee58f0535d60b509e"
+      },
+      "paperChannel": "ALPHA",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.21.5",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.21.4",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.21.4",
+        "url": "https://piston-data.mojang.com/v1/objects/4707d00eb834b446575d89a61a11b5d548d8c001/server.jar",
+        "size": 56880250,
+        "sha256": "1066970b09e9c671844572291c4a871cc1ac2b85838bf7004fa0e778e10f1358"
+      },
+      "paper": {
+        "name": "Paper 1.21.4 build 232",
+        "url": "https://fill-data.papermc.io/v1/objects/5ee4f542f628a14c644410b08c94ea42e772ef4d29fe92973636b6813d4eaffc/paper-1.21.4-232.jar",
+        "size": 51437498,
+        "sha256": "5ee4f542f628a14c644410b08c94ea42e772ef4d29fe92973636b6813d4eaffc"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.21.4",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.21.3",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.21.3",
+        "url": "https://piston-data.mojang.com/v1/objects/45810d238246d90e811d896f87b14695b7fb6839/server.jar",
+        "size": 56122038,
+        "sha256": "e153b89b02c0839cdf5e8c1d57c80dd42a3fffb80c60817632080c041bf8afb5"
+      },
+      "paper": {
+        "name": "Paper 1.21.3 build 83",
+        "url": "https://fill-data.papermc.io/v1/objects/87e973e1d338e869e7fdbc4b8fadc1579d7bb0246a0e0cf6e5700ace6c8bc17e/paper-1.21.3-83.jar",
+        "size": 50931273,
+        "sha256": "87e973e1d338e869e7fdbc4b8fadc1579d7bb0246a0e0cf6e5700ace6c8bc17e"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.21.3",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.21.2",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.21.2",
+        "url": "https://piston-data.mojang.com/v1/objects/7bf95409b0d9b5388bfea3704ec92012d273c14c/server.jar",
+        "size": 56120171,
+        "sha256": "3bcbca82b23b0a13f745e25ca5956e33a6f4ccfb5ed451b961c943c0f790418d"
+      },
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.21.2",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.21.1",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.21.1",
+        "url": "https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar",
+        "size": 51627615,
+        "sha256": "e3bc55693e93cda0188f2e60aea28113fc647c5e85a15fa3d1b347349231b4bb"
+      },
+      "paper": {
+        "name": "Paper 1.21.1 build 133",
+        "url": "https://fill-data.papermc.io/v1/objects/39bd8c00b9e18de91dcabd3cc3dcfa5328685a53b7187a2f63280c22e2d287b9/paper-1.21.1-133.jar",
+        "size": 49394394,
+        "sha256": "39bd8c00b9e18de91dcabd3cc3dcfa5328685a53b7187a2f63280c22e2d287b9"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.21.1",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.21",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.21",
+        "url": "https://piston-data.mojang.com/v1/objects/450698d1863ab5180c25d7c804ef0fe6369dd1ba/server.jar",
+        "size": 51623779,
+        "sha256": "c96394da86f9d9f9ef7ca2d2ee1f2f0980c29b7aa5c94b43c02c50435dbcf53f"
+      },
+      "paper": {
+        "name": "Paper 1.21 build 130",
+        "url": "https://fill-data.papermc.io/v1/objects/ab9bb1afc3cea6978a0c03ce8448aa654fe8a9c4dddf341e7cbda1b0edaa73f5/paper-1.21-130.jar",
+        "size": 49049109,
+        "sha256": "ab9bb1afc3cea6978a0c03ce8448aa654fe8a9c4dddf341e7cbda1b0edaa73f5"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.21",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.20.6",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.20.6",
+        "url": "https://piston-data.mojang.com/v1/objects/145ff0858209bcfc164859ba735d4199aafa1eea/server.jar",
+        "size": 51420480,
+        "sha256": "c6d01d018ca782e506f0ec60652d47fd565078be9122b625c1681bc86c29c7ec"
+      },
+      "paper": {
+        "name": "Paper 1.20.6 build 151",
+        "url": "https://fill-data.papermc.io/v1/objects/4b011f5adb5f6c72007686a223174fce82f31aeb4b34faf4652abc840b47e640/paper-1.20.6-151.jar",
+        "size": 45826876,
+        "sha256": "4b011f5adb5f6c72007686a223174fce82f31aeb4b34faf4652abc840b47e640"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.20.6",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.20.5",
+      "java": 21,
+      "vanilla": {
+        "name": "Minecraft Java 1.20.5",
+        "url": "https://piston-data.mojang.com/v1/objects/79493072f65e17243fd36a699c9a96b4381feb91/server.jar",
+        "size": 51424012,
+        "sha256": "f8f6a38fededc12d6bbac21e5341c168a7c9bf4ef90193fcf0abcc1366c42bac"
+      },
+      "paper": {
+        "name": "Paper 1.20.5 build 22",
+        "url": "https://fill-data.papermc.io/v1/objects/3cd7da2f8df92e082a501a39c674aab3c0343edd179b86f5baccaebfc9974132/paper-1.20.5-22.jar",
+        "size": 45593685,
+        "sha256": "3cd7da2f8df92e082a501a39c674aab3c0343edd179b86f5baccaebfc9974132"
+      },
+      "paperChannel": "ALPHA",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.20.5",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.20.4",
+      "java": 17,
+      "vanilla": {
+        "name": "Minecraft Java 1.20.4",
+        "url": "https://piston-data.mojang.com/v1/objects/8dd1a28015f51b1803213892b50b7b4fc76e594d/server.jar",
+        "size": 49150256,
+        "sha256": "c03fa6f39daa69ddf413c965a3a83084db746a7a138ce535a693293b5472d363"
+      },
+      "paper": {
+        "name": "Paper 1.20.4 build 499",
+        "url": "https://fill-data.papermc.io/v1/objects/cabed3ae77cf55deba7c7d8722bc9cfd5e991201c211665f9265616d9fe5c77b/paper-1.20.4-499.jar",
+        "size": 42781488,
+        "sha256": "cabed3ae77cf55deba7c7d8722bc9cfd5e991201c211665f9265616d9fe5c77b"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.20.4",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.20.3",
+      "java": 17,
+      "vanilla": {
+        "name": "Minecraft Java 1.20.3",
+        "url": "https://piston-data.mojang.com/v1/objects/4fb536bfd4a83d61cdbaf684b8d311e66e7d4c49/server.jar",
+        "size": 49152320,
+        "sha256": "36ed89be93f182034df0678bce957b5442f0c6905f41e94ff6a0521b2e138bae"
+      },
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.20.3",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.20.2",
+      "java": 17,
+      "vanilla": {
+        "name": "Minecraft Java 1.20.2",
+        "url": "https://piston-data.mojang.com/v1/objects/5b868151bd02b41319f54c8d4061b8cae84e665c/server.jar",
+        "size": 48285806,
+        "sha256": "1daee4838569ad46e41f0a6f459684c500c7f2685356a40cfb7e838d6e78eae8"
+      },
+      "paper": {
+        "name": "Paper 1.20.2 build 318",
+        "url": "https://fill-data.papermc.io/v1/objects/ba340a835ac40b8563aa7eda1cd6479a11a7623409c89a2c35cd9d7490ed17a7/paper-1.20.2-318.jar",
+        "size": 41741453,
+        "sha256": "ba340a835ac40b8563aa7eda1cd6479a11a7623409c89a2c35cd9d7490ed17a7"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.20.2",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.20.1",
+      "java": 17,
+      "vanilla": {
+        "name": "Minecraft Java 1.20.1",
+        "url": "https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar",
+        "size": 47791053,
+        "sha256": "3af73a9dc5a102e38147946360dd27d4d70bae7055bf91cf2151cd5d121b79e0"
+      },
+      "paper": {
+        "name": "Paper 1.20.1 build 196",
+        "url": "https://fill-data.papermc.io/v1/objects/234a9b32098100c6fc116664d64e36ccdb58b5b649af0f80bcccb08b0255eaea/paper-1.20.1-196.jar",
+        "size": 43230582,
+        "sha256": "234a9b32098100c6fc116664d64e36ccdb58b5b649af0f80bcccb08b0255eaea"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.20.1",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.20",
+      "java": 17,
+      "vanilla": {
+        "name": "Minecraft Java 1.20",
+        "url": "https://piston-data.mojang.com/v1/objects/15c777e2cfe0556eef19aab534b186c0c6f277e1/server.jar",
+        "size": 47787288,
+        "sha256": "ff41c542cec182ce74508a5e42194e0f4009341de75f0a7bf770d18cf701d56b"
+      },
+      "paper": {
+        "name": "Paper 1.20 build 17",
+        "url": "https://fill-data.papermc.io/v1/objects/1e4ccfc0599f491ee6fee4455d3722332ac5d78584fccd55cbb3b51e11504505/paper-1.20-17.jar",
+        "size": 43328884,
+        "sha256": "1e4ccfc0599f491ee6fee4455d3722332ac5d78584fccd55cbb3b51e11504505"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.20",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.19.4",
+      "java": 17,
+      "vanilla": {
+        "name": "Minecraft Java 1.19.4",
+        "url": "https://piston-data.mojang.com/v1/objects/8f3112a1049751cc472ec13e397eade5336ca7ae/server.jar",
+        "size": 47515675,
+        "sha256": "a524a10da550741785c8c3a0fb39047f106b0c7c2cfa255e8278cb6f1abe3f53"
+      },
+      "paper": {
+        "name": "Paper 1.19.4 build 550",
+        "url": "https://fill-data.papermc.io/v1/objects/e587d78cba3e99ef8c4bc24cf20cc3bdbbe89e33b0b572070446af4eb6be5ccf/paper-1.19.4-550.jar",
+        "size": 42666406,
+        "sha256": "e587d78cba3e99ef8c4bc24cf20cc3bdbbe89e33b0b572070446af4eb6be5ccf"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.19.4",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.19.3",
+      "java": 17,
+      "vanilla": {
+        "name": "Minecraft Java 1.19.3",
+        "url": "https://piston-data.mojang.com/v1/objects/c9df48efed58511cdd0213c56b9013a7b5c9ac1f/server.jar",
+        "size": 47162712,
+        "sha256": "4ebd3ad142512953d0193ae3a1d1a30c896907de7c68780977151f6cc79f1e1b"
+      },
+      "paper": {
+        "name": "Paper 1.19.3 build 448",
+        "url": "https://fill-data.papermc.io/v1/objects/3007f2c638d5f04ed32b6adaa33053fe3634ccfa74345c83d3ea4982d38db5dc/paper-1.19.3-448.jar",
+        "size": 39127595,
+        "sha256": "3007f2c638d5f04ed32b6adaa33053fe3634ccfa74345c83d3ea4982d38db5dc"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.19.3",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.19.2",
+      "java": 17,
+      "vanilla": {
+        "name": "Minecraft Java 1.19.2",
+        "url": "https://piston-data.mojang.com/v1/objects/f69c284232d7c7580bd89a5a4931c3581eae1378/server.jar",
+        "size": 45609512,
+        "sha256": "b26727069ef5f61c704add9a378ac90e3d271fd7876c0bd3dcfbe9fd0bec4d96"
+      },
+      "paper": {
+        "name": "Paper 1.19.2 build 307",
+        "url": "https://fill-data.papermc.io/v1/objects/2eb5c7459ec94bcdc597ed711d549a3ab4b0fda13e412a0792a1a069b5903864/paper-1.19.2-307.jar",
+        "size": 38319498,
+        "sha256": "2eb5c7459ec94bcdc597ed711d549a3ab4b0fda13e412a0792a1a069b5903864"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.19.2",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.19.1",
+      "java": 17,
+      "vanilla": {
+        "name": "Minecraft Java 1.19.1",
+        "url": "https://piston-data.mojang.com/v1/objects/8399e1211e95faa421c1507b322dbeae86d604df/server.jar",
+        "size": 45609936,
+        "sha256": "f15b93c25ac7343ae8db6e7883a97f11777baaee924e7a3c7aeed826b155b233"
+      },
+      "paper": {
+        "name": "Paper 1.19.1 build 111",
+        "url": "https://fill-data.papermc.io/v1/objects/5afe23a1fade92c547124fa874bc7d908fa676f49f09879fa876224b62e9d51b/paper-1.19.1-111.jar",
+        "size": 38038416,
+        "sha256": "5afe23a1fade92c547124fa874bc7d908fa676f49f09879fa876224b62e9d51b"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.19.1",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    },
+    {
+      "id": "1.19",
+      "java": 17,
+      "vanilla": {
+        "name": "Minecraft Java 1.19",
+        "url": "https://piston-data.mojang.com/v1/objects/e00c4052dac1d59a1188b2aa9d5a87113aaf1122/server.jar",
+        "size": 45538778,
+        "sha256": "deefd056f0cf89c3d7fd48d03f56a8a73943586e8c061fdabd0fd92d32ced2b2"
+      },
+      "paper": {
+        "name": "Paper 1.19 build 81",
+        "url": "https://fill-data.papermc.io/v1/objects/0d39cacc51a77b2b071e1ce862fcbf0b4a4bd668cc7e8b313598d84fa09fabac/paper-1.19-81.jar",
+        "size": 38158691,
+        "sha256": "0d39cacc51a77b2b071e1ce862fcbf0b4a4bd668cc7e8b313598d84fa09fabac"
+      },
+      "paperChannel": "STABLE",
+      "fabric": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7",
+        "net.fabricmc:intermediary:1.19",
+        "net.fabricmc:fabric-loader:0.20.1"
+      ]
+    }
+  ],
+  "libraries": {
+    "net.fabricmc:fabric-loader:0.20.1": {
+      "name": "fabric-loader 0.20.1",
+      "size": 1988880,
+      "sha256": "d0c5a082e07410aaff9de7ab196aa6b4236002870f9ba3ad5c1260fcce5110ad",
+      "url": "https://maven.fabricmc.net/net/fabricmc/fabric-loader/0.20.1/fabric-loader-0.20.1.jar"
+    },
+    "net.fabricmc:intermediary:1.19": {
+      "name": "intermediary 1.19",
+      "size": 510312,
+      "sha256": "38a68bc3395ee20e602d8cefdb1900310dead225fde16a95e4d7faf58b15684d",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.19/intermediary-1.19.jar"
+    },
+    "net.fabricmc:intermediary:1.19.1": {
+      "name": "intermediary 1.19.1",
+      "size": 519459,
+      "sha256": "4a50aa4d904d59258581c2907c914dd336a33167af4b10b03aaf73aa51cfc620",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.19.1/intermediary-1.19.1.jar"
+    },
+    "net.fabricmc:intermediary:1.19.2": {
+      "name": "intermediary 1.19.2",
+      "size": 519553,
+      "sha256": "a98525d120f1fca94c224253ebf6f0206a0e401f1797139c40977cc6bdf58e07",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.19.2/intermediary-1.19.2.jar"
+    },
+    "net.fabricmc:intermediary:1.19.3": {
+      "name": "intermediary 1.19.3",
+      "size": 540855,
+      "sha256": "ae08eb459342986c4af0dc664e7224710105c57c19b4d9e693cb436afc30c658",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.19.3/intermediary-1.19.3.jar"
+    },
+    "net.fabricmc:intermediary:1.19.4": {
+      "name": "intermediary 1.19.4",
+      "size": 561002,
+      "sha256": "c18dfa919ef8539a679682be9db2534c7cea95ec841b5dc488625aa03be05b36",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.19.4/intermediary-1.19.4.jar"
+    },
+    "net.fabricmc:intermediary:1.20": {
+      "name": "intermediary 1.20",
+      "size": 573310,
+      "sha256": "297816a8f98570a5f502a530fb6af121a1725835a02c09baeeff8d5ac3fe24cd",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.20/intermediary-1.20.jar"
+    },
+    "net.fabricmc:intermediary:1.20.1": {
+      "name": "intermediary 1.20.1",
+      "size": 573365,
+      "sha256": "caa3fd87dd353fc826a109a2d16f886d6519b47422e3a77cfa0ba8be5829a21e",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.20.1/intermediary-1.20.1.jar"
+    },
+    "net.fabricmc:intermediary:1.20.2": {
+      "name": "intermediary 1.20.2",
+      "size": 586928,
+      "sha256": "eb7292226a6a3c07e3545898ee463f7990eb6c840a5971a8a5e73804c84d7e67",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.20.2/intermediary-1.20.2.jar"
+    },
+    "net.fabricmc:intermediary:1.20.3": {
+      "name": "intermediary 1.20.3",
+      "size": 608319,
+      "sha256": "716a6dee722d5db2f086a6d1640c903499621eb688c389e53f5742d99bc5fcc4",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.20.3/intermediary-1.20.3.jar"
+    },
+    "net.fabricmc:intermediary:1.20.4": {
+      "name": "intermediary 1.20.4",
+      "size": 608319,
+      "sha256": "e02f1f4f81d05de83bb253e2d75d78335c19edee803e34fc6eb4e834baaf8b46",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.20.4/intermediary-1.20.4.jar"
+    },
+    "net.fabricmc:intermediary:1.20.5": {
+      "name": "intermediary 1.20.5",
+      "size": 645922,
+      "sha256": "9601c13ca19c06d4b37729010acc18fb30b0c52658336e5a541be5399b8ad286",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.20.5/intermediary-1.20.5.jar"
+    },
+    "net.fabricmc:intermediary:1.20.6": {
+      "name": "intermediary 1.20.6",
+      "size": 645866,
+      "sha256": "64c949a6c94a7d8559f494e6fa1ad551abe49acc00af4a237b5c1f9cd77124e2",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.20.6/intermediary-1.20.6.jar"
+    },
+    "net.fabricmc:intermediary:1.21": {
+      "name": "intermediary 1.21",
+      "size": 657632,
+      "sha256": "922a24a6ba124abb8e8140647ee855fc643373a930b5e3363aacc0262e748da0",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.21/intermediary-1.21.jar"
+    },
+    "net.fabricmc:intermediary:1.21.1": {
+      "name": "intermediary 1.21.1",
+      "size": 657725,
+      "sha256": "6059157dfb4a536ec151697004f74f6004b7d346b289c2f89849e0e585aa36fa",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.21.1/intermediary-1.21.1.jar"
+    },
+    "net.fabricmc:intermediary:1.21.10": {
+      "name": "intermediary 1.21.10",
+      "size": 778652,
+      "sha256": "d11ecd24a935d06d5d84de6cea0680248f4fdb0af01c6356537f654d30b179d3",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.21.10/intermediary-1.21.10.jar"
+    },
+    "net.fabricmc:intermediary:1.21.11": {
+      "name": "intermediary 1.21.11",
+      "size": 797685,
+      "sha256": "886da9b21bf26b24a18960ec868612630821f161d7e8b23cd64bbaa51298cabc",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.21.11/intermediary-1.21.11.jar"
+    },
+    "net.fabricmc:intermediary:1.21.2": {
+      "name": "intermediary 1.21.2",
+      "size": 693026,
+      "sha256": "d484c72e9b4c010ad5be43122eebb4a90b32aedba64eb460d294f90f7f902f3a",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.21.2/intermediary-1.21.2.jar"
+    },
+    "net.fabricmc:intermediary:1.21.3": {
+      "name": "intermediary 1.21.3",
+      "size": 693060,
+      "sha256": "c595ab903ddac4472aac65bd9883b2fccf9095e1a6a62a52f4d7d0f79eaf730e",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.21.3/intermediary-1.21.3.jar"
+    },
+    "net.fabricmc:intermediary:1.21.4": {
+      "name": "intermediary 1.21.4",
+      "size": 701826,
+      "sha256": "6aea9971d72e14f03f2c167ee2c24edd5eb0a59fc3eaedcbdf5c2ad0f0c36786",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.21.4/intermediary-1.21.4.jar"
+    },
+    "net.fabricmc:intermediary:1.21.5": {
+      "name": "intermediary 1.21.5",
+      "size": 724686,
+      "sha256": "391a92396f2a3f8abbd6e8c67121cec374e5253189228370885939691812ec84",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.21.5/intermediary-1.21.5.jar"
+    },
+    "net.fabricmc:intermediary:1.21.6": {
+      "name": "intermediary 1.21.6",
+      "size": 746244,
+      "sha256": "6a5fe8a17708ea5a0d16e3ed9e91f8a77e8e1d5a4a251d96e6f6f0dd9de4c341",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.21.6/intermediary-1.21.6.jar"
+    },
+    "net.fabricmc:intermediary:1.21.7": {
+      "name": "intermediary 1.21.7",
+      "size": 746329,
+      "sha256": "a6e215edeb3a21fee3fb6e642b096afe6266a70dc51fd47c54ea524b16641376",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.21.7/intermediary-1.21.7.jar"
+    },
+    "net.fabricmc:intermediary:1.21.8": {
+      "name": "intermediary 1.21.8",
+      "size": 746437,
+      "sha256": "6e20d89719a0239ef93e9ee2548f1e45b61b186676d615127015474b06647395",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.21.8/intermediary-1.21.8.jar"
+    },
+    "net.fabricmc:intermediary:1.21.9": {
+      "name": "intermediary 1.21.9",
+      "size": 778632,
+      "sha256": "f967f700e22c700e08d112b1605f3f5974d9a77ad1edbe10880fd930f8e3e047",
+      "url": "https://maven.fabricmc.net/net/fabricmc/intermediary/1.21.9/intermediary-1.21.9.jar"
+    },
+    "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7": {
+      "name": "sponge-mixin 0.17.5+mixin.0.8.7",
+      "size": 1551593,
+      "sha256": "03f0065023bfc3045d71bfb99872451d9ad5a0800a5a0dac34ab8c7d5c134f5d",
+      "url": "https://maven.fabricmc.net/net/fabricmc/sponge-mixin/0.17.5+mixin.0.8.7/sponge-mixin-0.17.5+mixin.0.8.7.jar"
+    },
+    "org.ow2.asm:asm-analysis:9.10.1": {
+      "name": "asm-analysis 9.10.1",
+      "size": 35140,
+      "sha256": "dede75a21306b65974ecd8f87114ff6970f09fb794157a4ca09ab25c888c2bfc",
+      "url": "https://maven.fabricmc.net/org/ow2/asm/asm-analysis/9.10.1/asm-analysis-9.10.1.jar"
+    },
+    "org.ow2.asm:asm-commons:9.10.1": {
+      "name": "asm-commons 9.10.1",
+      "size": 74840,
+      "sha256": "6d0abefb7cbf972ea16edb37ec14835372505063a45f976ab7ea889ed9497895",
+      "url": "https://maven.fabricmc.net/org/ow2/asm/asm-commons/9.10.1/asm-commons-9.10.1.jar"
+    },
+    "org.ow2.asm:asm-tree:9.10.1": {
+      "name": "asm-tree 9.10.1",
+      "size": 51958,
+      "sha256": "3dfb0d5b6a106cd40b5b250e39935fbf2f927f4477546a5369a3ac609cf0506b",
+      "url": "https://maven.fabricmc.net/org/ow2/asm/asm-tree/9.10.1/asm-tree-9.10.1.jar"
+    },
+    "org.ow2.asm:asm-util:9.10.1": {
+      "name": "asm-util 9.10.1",
+      "size": 95628,
+      "sha256": "1bb99d091fba2597dc6d51193e9bbcf0d8447e7ed96bd8f0198b18152f09655c",
+      "url": "https://maven.fabricmc.net/org/ow2/asm/asm-util/9.10.1/asm-util-9.10.1.jar"
+    },
+    "org.ow2.asm:asm:9.10.1": {
+      "name": "asm 9.10.1",
+      "size": 126151,
+      "sha256": "ed825d10ab1399c8c0cb669e688cf0c8c82629b4c8399b58352b68e92ca10fcb",
+      "url": "https://maven.fabricmc.net/org/ow2/asm/asm/9.10.1/asm-9.10.1.jar"
+    }
+  }
+}

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/hosting.css" />
     <script src="/app.js" defer></script>
+    <script src="/modrinth.js" defer></script>
     <script src="/java.js" defer></script>
     <script src="/hosting.js" defer></script>
   </head>
@@ -292,9 +293,7 @@
             <div id="host-locked" hidden>
               <h3>Host on your own PC</h3>
               <p>
-                One $15 USD key includes Java hosting, optional Geyser cross-play,
-                and native Bedrock on supported PCs. Your worlds, plugins, and
-                add-ons stay on your computer.
+                One $15 USD key includes Java hosting with Fabric mods from Modrinth, Paper plugins, and optional Geyser cross-play. Supported PCs also host native Bedrock. Your worlds stay on your computer.
               </p>
               <label for="device-code">Your PC code</label>
               <div class="host-inline">
@@ -373,8 +372,9 @@
                         placeholder="Cherry Grove SMP"
                         required
                     /></label>
+                    <label>Minecraft version<select id="java-new-version" required></select></label>
                     <fieldset class="engine-picker">
-                      <legend>Who will play?</legend>
+                      <legend>Server software</legend>
                       <label
                         ><input
                           type="radio"
@@ -386,6 +386,7 @@
                           ><small>Mojang’s original server</small></span
                         ></label
                       >
+                      <label><input type="radio" name="engine" value="fabric" /><span><strong>Fabric</strong><small>Mods from Modrinth</small></span></label>
                       <label
                         ><input type="radio" name="engine" value="paper" /><span
                           ><strong>Paper</strong
@@ -403,6 +404,7 @@
                         ></label
                       >
                     </fieldset>
+                    <p class="hint" id="java-version-detail"></p>
                     <label class="host-check"
                       ><input type="checkbox" id="java-new-eula" /><span
                         >I agree to the
@@ -490,6 +492,30 @@
                       </div>
                     </div>
                     <p class="hint" id="java-network-help"></p>
+                  </details>
+                  <details class="host-drawer" id="java-mods-box" hidden>
+                    <summary>Fabric mods · Modrinth</summary>
+                    <p id="mod-context"></p>
+                    <h4>Installed mods</h4>
+                    <ul class="host-list mod-cards" id="mod-installed"></ul>
+                    <button class="text-btn" type="button" id="mod-folder">Open mods folder</button>
+                    <h4>Browse Modrinth</h4>
+                    <form class="mod-search" id="mod-search">
+                      <label>Search mods<input type="search" maxlength="100" placeholder="Lithium, Fabric API…" id="mod-query" /></label>
+                      <button class="secondary">Search</button>
+                    </form>
+                    <p class="hint" id="mod-status" role="status"></p>
+                    <ul class="host-list mod-cards" id="mod-results"></ul>
+                    <div class="host-action-row" id="mod-pages" hidden>
+                      <button class="secondary" type="button" id="mod-prev">Previous</button>
+                      <span id="mod-page"></span>
+                      <button class="secondary" type="button" id="mod-next">Next</button>
+                    </div>
+                    <div id="mod-version-box" hidden>
+                      <label><span id="mod-version-title"></span><select id="mod-version"></select></label>
+                      <div class="host-action-row"><button class="primary" type="button" id="mod-install">Install version</button>
+                      <button class="text-btn" type="button" id="mod-cancel">Cancel</button></div>
+                    </div>
                   </details>
                   <details class="host-drawer">
                     <summary>Settings &amp; cross-play</summary>

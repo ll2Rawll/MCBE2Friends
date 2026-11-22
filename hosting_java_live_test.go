@@ -87,7 +87,7 @@ func TestOfficialJavaLifecycle(t *testing.T) {
 			time.Sleep(150 * time.Millisecond)
 		}
 	}
-	vx, err := h.createJava("Vanilla forest", "vanilla", false)
+	vx, err := h.createJava("Vanilla forest", "vanilla", false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -130,7 +130,7 @@ func TestOfficialJavaLifecycle(t *testing.T) {
 		t.Fatal("restored world missing")
 	}
 	t.Log("Vanilla answered a Minecraft ping, stopped, and restored its saved world")
-	px, err := h.createJava("Paper grove", "paper", false)
+	px, err := h.createJava("Paper grove", "paper", false, "")
 	if err != nil {
 		t.Fatal(err)
 	}

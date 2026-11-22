@@ -39,7 +39,7 @@ window.premiumPanel = (() => {
     const rec = host.recommended;
     el("host-capability").textContent =
       window.javaPanel.isSelected()
-        ? "Java 25 and the selected server software are installed on first start."
+        ? "The launcher sets up the Java runtime for your selected Minecraft version on first start."
         : ((!host.licensed && hw.javaSupported ? "Java hosting is available on this computer. " : "") + hw.note) +
       (hw.supported
         ? " " +

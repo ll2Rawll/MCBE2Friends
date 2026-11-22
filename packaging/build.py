@@ -112,8 +112,8 @@ def mac_release(go, stage, out, notices):
         "CFBundleIconFile": NAME + ".icns",
         "CFBundlePackageType": "APPL",
         "CFBundleInfoDictionaryVersion": "6.0",
-        "CFBundleShortVersionString": "1.4.0",
-        "CFBundleVersion": "5",
+        "CFBundleShortVersionString": "1.5.0",
+        "CFBundleVersion": "6",
         "LSUIElement": True,
     }))
     output = out / (NAME + "-macOS.zip")
@@ -150,7 +150,7 @@ def linux_release(go, stage, out, arch, notices):
 def source_release(out):
     output = out / (NAME + "-Source.zip")
     files = [*ROOT.glob("*.go"), ROOT / "go.mod", ROOT / "go.sum", ROOT / "README.md", ROOT / "resource_windows_amd64.syso"]
-    for folder in (ROOT / "web", ROOT / "docs", ROOT / "licensing", ROOT / "testdata", PACKAGE):
+    for folder in (ROOT / "catalog", ROOT / "web", ROOT / "docs", ROOT / "licensing", ROOT / "testdata", PACKAGE):
         files.extend(p for p in folder.rglob("*") if p.is_file() and "__pycache__" not in p.parts)
     with zipfile.ZipFile(output, "w") as archive:
         for file in sorted(files):

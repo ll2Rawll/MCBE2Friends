@@ -36,14 +36,14 @@ func javaHTTP(h *Hosting, w http.ResponseWriter, r *http.Request, path string) {
 			writeJSON(w, 200, lib)
 		case "POST":
 			var p struct {
-				Name, Engine string
-				Geyser       bool
+				Name, Engine, Version string
+				Geyser                bool
 			}
 			if err := hostJSON(w, r, &p); err != nil {
 				reject(400, err)
 				return
 			}
-			id, err := h.createJava(p.Name, p.Engine, p.Geyser)
+			id, err := h.createJava(p.Name, p.Engine, p.Geyser, p.Version)
 			if err != nil {
 				reject(400, err)
 				return
@@ -52,6 +52,10 @@ func javaHTTP(h *Hosting, w http.ResponseWriter, r *http.Request, path string) {
 		default:
 			reject(405, errors.New("Method not allowed."))
 		}
+		return
+	}
+	if action == "mods" || strings.HasPrefix(action, "mods/") {
+		modHTTP(h, w, r, id, action)
 		return
 	}
 	if r.Method == "GET" && action == "files" {
@@ -85,6 +89,12 @@ func javaHTTP(h *Hosting, w http.ResponseWriter, r *http.Request, path string) {
 		var c JavaConfig
 		if err = hostJSON(w, r, &c); err == nil {
 			err = h.javaEdit(id, func(dir string, old JavaConfig) error {
+				if c.Version == "" {
+					c.Version = old.Version
+				}
+				if c.Version != old.Version {
+					return errors.New("Create a new profile to use another Minecraft version and keep this world intact.")
+				}
 				if c.Engine != old.Engine {
 					return errors.New("Create another profile to use a different Java server engine.")
 				}

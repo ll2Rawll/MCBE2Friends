@@ -284,7 +284,7 @@
 }
 .engine-picker {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
 }
 .host-content .engine-picker label {
@@ -346,4 +346,57 @@
   .engine-picker small {
     margin: 0;
   }
+}
+
+.engine-picker label:has(:disabled:not(:checked)) {
+  opacity: 0.58;
+}
+#java-new-version,
+#mod-version {
+  display: block;
+  width: 100%;
+  margin: 5px 0 8px;
+}
+#java-mods-box h4 {
+  margin: 16px 0 6px;
+}
+.mod-search {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.mod-search label {
+  flex: 1;
+  min-width: 0;
+}
+.mod-search .secondary {
+  margin-bottom: 0;
+}
+.mod-cards {
+  max-height: 340px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.mod-cards li {
+  overflow-wrap: anywhere;
+}
+.mod-cards p {
+  margin: 4px 0;
+}
+.mod-cards small {
+  color: var(--muted);
+}
+#mod-version-box {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #92ad94;
+  border-radius: 10px;
+  background: #eff6ed;
+}
+#mod-pages {
+  align-items: center;
+  justify-content: space-between;
+}
+#mod-status:empty {
+  display: none;
 }

@@ -12,7 +12,7 @@ Extract the download for your computer. When upgrading from 1.3, stop any runnin
 
 The app opens its controls in your default browser. These portable builds have no publisher signature or Apple notarization, so your operating system may ask you to approve the app.
 
-From version 1.2, GitHub signs the official release archives. To verify your download with the GitHub CLI, save the release’s signature file in the same folder and run the command below. Substitute your archive’s filename on macOS or Linux. [Download the signature file for 1.4.0](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.4.0/Mcbe2Friends-attestation.json)
+From version 1.2, GitHub signs the official release archives. To verify your download with the GitHub CLI, save the release’s signature file in the same folder and run the command below. Substitute your archive’s filename on macOS or Linux. [Download the signature file for 1.5.0](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.5.0/Mcbe2Friends-attestation.json)
 
 ```sh
 gh attestation verify Mcbe2Friends-Windows-x64.zip --bundle Mcbe2Friends-attestation.json --repo ll2Rawll/MCBE2Friends --signer-workflow ll2Rawll/MCBE2Friends/.github/workflows/release-downloads.yml --deny-self-hosted-runners
@@ -20,7 +20,7 @@ gh attestation verify Mcbe2Friends-Windows-x64.zip --bundle Mcbe2Friends-attesta
 
 ## Host a server on this PC
 
-Open **Premium** to check hardware support, activate a key, and choose **Bedrock Edition** or **Java Edition**. Create Vanilla Java, Paper, or Paper with Geyser and Floodgate. The panel manages regular world folders, Bedrock add-ons, and Paper plugins. [Premium setup and management guide](https://github.com/ll2Rawll/MCBE2Friends/blob/main/docs/premium-hosting.md)
+Open **Premium** to check hardware support, activate a key, and choose **Bedrock Edition** or **Java Edition**. Choose a Java release from 1.19 through 26.3. Create Vanilla, Fabric, Paper, or a compatible Paper + Geyser server. The Fabric panel searches Modrinth, installs dependencies, and manages the JARs in your server’s mods folder. [Premium setup and management guide](https://github.com/ll2Rawll/MCBE2Friends/blob/main/docs/premium-hosting.md)
 
 ## Start your first broadcast
 

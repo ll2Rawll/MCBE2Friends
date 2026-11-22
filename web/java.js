@@ -25,6 +25,7 @@ window.javaPanel = (() => {
     library,
     current,
     files,
+    mods,
     selected = "",
     edition = "bedrock";
   let locked = false,
@@ -62,7 +63,8 @@ window.javaPanel = (() => {
     if (!host.hardware.supported && host.hardware.javaSupported)
       edition = "java";
     if (!host.licensed) {
-      current = library = files = null;
+      current = library = files = mods = null;
+      window.fabricMods.setProfile(null, null, true);
       selected = "";
       el("java-instance").hidden = true;
     }
@@ -88,6 +90,42 @@ window.javaPanel = (() => {
     const busy = Boolean(current?.busy),
       ready = ["running", "unreachable"].includes(current?.phase);
     buttons(el("java-create"), locked);
+    const version = library?.versions.find(
+      (v) => v.id === el("java-new-version").value,
+    );
+    if (version) {
+      const form = el("java-create");
+      for (const [engine, available] of [
+        ["paper", version.paper],
+        ["crossplay", version.geyser],
+      ]) {
+        const radio = form.querySelector('input[value="' + engine + '"]');
+        radio.disabled = locked || !available;
+        if (!available && radio.checked)
+          form.querySelector('input[value="vanilla"]').checked = true;
+      }
+      const detail = ["Java " + version.java + " is set up automatically."];
+      if (!version.paper) detail.push("Paper has no build for this release.");
+      else if (version.paperChannel !== "STABLE")
+        detail.push(
+          "Paper marks its build as " +
+            version.paperChannel.toLowerCase() +
+            ".",
+        );
+      if (!version.geyser)
+        detail.push(
+          "Managed cross-play needs a Paper build for 1.20.5 or newer.",
+        );
+      else if (
+        form.querySelector('input[value="crossplay"]').checked &&
+        version.id !== library.version
+      )
+        detail.push(
+          "ViaVersion connects current Bedrock players to this older Paper world.",
+        );
+      el("java-version-detail").textContent = detail.join(" ");
+    }
+    window.fabricMods.setProfile(current, mods, locked);
     el("java-create-start").disabled = locked || !el("java-new-eula").checked;
     el("java-select").disabled = locked;
     if (!current) return;
@@ -176,7 +214,16 @@ window.javaPanel = (() => {
   }
   function paint(reloadSettings) {
     const c = current?.config;
-    el("java-version").textContent = "Minecraft " + library.version;
+    const versions = el("java-new-version");
+    if (!versions.options.length)
+      options(
+        versions,
+        library.versions.map((v) => [v.id, v.id]),
+        library.version,
+      );
+    el("java-version").textContent = c
+      ? c.engine[0].toUpperCase() + c.engine.slice(1) + " · " + c.version
+      : "Minecraft " + library.versions.at(-1).id + " – " + library.version;
     const rec = library.recommended;
     el("java-recommendation").textContent =
       "Recommended for this computer · " +
@@ -211,7 +258,9 @@ window.javaPanel = (() => {
     el("java-progress").hidden = current.phase !== "installing";
     if (current.percent >= 0) el("java-progress").value = current.percent;
     else el("java-progress").removeAttribute("value");
-    el("java-cross-settings").hidden = c.engine !== "paper";
+    el("java-cross-settings").hidden =
+      c.engine !== "paper" ||
+      !library.versions.find((v) => v.id === c.version)?.geyser;
     el("java-plugins-box").hidden = c.engine !== "paper";
     el("java-friends").hidden = el("java-bedrock-join").hidden = !c.geyser;
     const address = host.lan || "this computer’s LAN IP";
@@ -266,12 +315,16 @@ window.javaPanel = (() => {
     const stopped = current?.busy && !item?.busy;
     const started = current?.phase !== "running" && item?.phase === "running";
     if (item && (force || changed || stopped || started || !files)) {
-      const pending = await api(path("files"));
+      const [pending, pendingMods] = await Promise.all([
+        api(path("files")),
+        item.config.engine === "fabric" ? api(path("mods")) : null,
+      ]);
       if (ticket !== revision || !active()) return;
+      mods = pendingMods;
       files = pending;
       paintFiles();
     }
-    if (!item) files = null;
+    if (!item) files = mods = null;
     if (changed) {
       el("java-eula").checked = false;
       el("java-public").value = "";
@@ -340,6 +393,9 @@ window.javaPanel = (() => {
     selected = el("java-select").value;
     run(async () => "");
   };
+  el("java-new-version").onchange = updateControls;
+  el("java-create").addEventListener("change", updateControls);
+  window.fabricMods.bind({ run, post, transfer });
   el("java-eula").onchange = el("java-new-eula").onchange = updateControls;
   submit("java-create", async (sender) => {
     const engine = new FormData(el("java-create")).get("engine");
@@ -349,6 +405,7 @@ window.javaPanel = (() => {
       name: el("java-new-name").value.trim(),
       engine: engine === "crossplay" ? "paper" : engine,
       geyser: engine === "crossplay",
+      version: el("java-new-version").value,
     });
     selected = res.id;
     el("java-create").reset();
@@ -382,7 +439,7 @@ window.javaPanel = (() => {
       c[k] = field(k).value.trim();
     for (const k of numeric) c[k] = Number(field(k).value);
     c.whitelist = field("whitelist").checked;
-    c.geyser = c.engine === "paper" && field("geyser").checked;
+    c.geyser = !el("java-cross-settings").hidden && field("geyser").checked;
     await post("settings", c);
     return "Saved for the next start.";
   });

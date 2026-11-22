@@ -4,9 +4,11 @@ import (
 	"archive/zip"
 	"context"
 	"crypto/sha256"
+	"crypto/sha512"
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"hash"
 	"io"
 	"net/http"
 	"os"
@@ -41,13 +43,20 @@ var runtimes = map[string]asset{
 
 type reportProgress func(message string, percent int)
 
+func digestHasher(digest string) hash.Hash {
+	if len(digest) == sha512.Size*2 {
+		return sha512.New()
+	}
+	return sha256.New()
+}
+
 func verified(path, digest string) bool {
 	f, err := os.Open(path)
 	if err != nil {
 		return false
 	}
 	defer f.Close()
-	h := sha256.New()
+	h := digestHasher(digest)
 	_, err = io.Copy(h, f)
 	return err == nil && hex.EncodeToString(h.Sum(nil)) == digest
 }
@@ -59,7 +68,7 @@ func download(ctx context.Context, url, dest string, a asset, report func(int)) 
 	if err != nil {
 		return err
 	}
-	agent := "Mcbe2Friends/1.4 (https://github.com/ll2Rawll/MCBE2Friends)"
+	agent := "Mcbe2Friends/1.5 (https://github.com/ll2Rawll/MCBE2Friends)"
 	if req.URL.Hostname() == "www.minecraft.net" {
 		// Keep the established client identifier for the Bedrock download endpoint.
 		agent = "Mcbe2Friends/1.1"
@@ -80,7 +89,7 @@ func download(ctx context.Context, url, dest string, a asset, report func(int)) 
 	}
 	defer os.Remove(f.Name())
 	defer f.Close()
-	h := sha256.New()
+	h := digestHasher(a.digest)
 	writer := io.MultiWriter(f, h)
 	buf := make([]byte, 64*1024)
 	var total int64

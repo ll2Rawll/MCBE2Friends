@@ -71,6 +71,9 @@ func (h *Hosting) activeJavaLocked() []string {
 func (h *Hosting) startJava(id string, consent bool, restore context.Context) error {
 	h.ops.Lock()
 	defer h.ops.Unlock()
+	if h.modWork[id] {
+		return errors.New("Wait for the mod changes on this server to finish.")
+	}
 	if err := h.allowed(false); err != nil {
 		return err
 	}
@@ -87,6 +90,11 @@ func (h *Hosting) startJava(id string, consent bool, restore context.Context) er
 	}
 	if err = c.validate(h.hw); err != nil {
 		return err
+	}
+	if c.Engine == "fabric" {
+		if err = recoverMods(dir); err != nil {
+			return err
+		}
 	}
 	if _, err = worldDirectory(dir, c.World); err != nil {
 		return err
@@ -245,7 +253,13 @@ func (h *Hosting) launchJava(ctx context.Context, j *javaState, dir string, c Ja
 		}
 		args = append(args, guard)
 	}
-	args = append(args, "-XX:ActiveProcessorCount="+strconv.Itoa(max(1, min(8, h.hw.Cores))), "-Xms256M", fmt.Sprintf("-Xmx%dM", c.Memory), "-Dterminal.jline=false", "-Dterminal.ansi=false", "-jar", "server.jar", "--universe", "worlds", "--nogui")
+	args = append(args, "-XX:ActiveProcessorCount="+strconv.Itoa(max(1, min(8, h.hw.Cores))), "-Xms256M", fmt.Sprintf("-Xmx%dM", c.Memory), "-Dterminal.jline=false", "-Dterminal.ansi=false")
+	game, err := findJavaRelease(c.Version)
+	if err != nil {
+		return err
+	}
+	args = append(args, game.launchArgs(".", c.Engine)...)
+	args = append(args, "--universe", "worlds", "--nogui")
 	cmd := exec.CommandContext(ctx, java, args...)
 	cmd.Dir = dir
 	configureChild(cmd)

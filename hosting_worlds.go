@@ -71,7 +71,12 @@ func (h *Hosting) backupWorld(ctx context.Context, name string) error {
 	return backupDirectory(ctx, dir, filepath.Join(h.root, "backups"), name, ".mcworld")
 }
 
+type backupRoot struct{ dir, prefix string }
+
 func backupDirectory(ctx context.Context, dir, out, name, extension string) error {
+	return backupDirectories(ctx, []backupRoot{{dir, ""}}, out, name, extension)
+}
+func backupDirectories(ctx context.Context, roots []backupRoot, out, name, extension string) error {
 	var err error
 	if err = os.MkdirAll(out, 0700); err != nil {
 		return err
@@ -83,35 +88,49 @@ func backupDirectory(ctx context.Context, dir, out, name, extension string) erro
 	defer os.Remove(f.Name())
 	defer f.Close()
 	z := zip.NewWriter(f)
-	err = filepath.WalkDir(dir, func(path string, d fs.DirEntry, e error) error {
-		if e != nil {
+	for _, root := range roots {
+		dir := root.dir
+		err = filepath.WalkDir(dir, func(path string, d fs.DirEntry, e error) error {
+			if e != nil {
+				return e
+			}
+			if err := ctx.Err(); err != nil {
+				return err
+			}
+			if d.IsDir() {
+				if root.prefix != "" && path != dir {
+					rel, e := filepath.Rel(dir, path)
+					if e != nil {
+						return e
+					}
+					_, e = z.Create(root.prefix + filepath.ToSlash(rel) + "/")
+					return e
+				}
+				return nil
+			}
+			if !d.Type().IsRegular() {
+				return errors.New("World backups support regular files only.")
+			}
+			rel, e := filepath.Rel(dir, path)
+			if e != nil {
+				return e
+			}
+			entry, e := z.Create(root.prefix + filepath.ToSlash(rel))
+			if e != nil {
+				return e
+			}
+			src, e := os.Open(path)
+			if e != nil {
+				return e
+			}
+			defer src.Close()
+			_, e = io.Copy(entry, src)
 			return e
+		})
+		if err != nil {
+			break
 		}
-		if err := ctx.Err(); err != nil {
-			return err
-		}
-		if d.IsDir() {
-			return nil
-		}
-		if !d.Type().IsRegular() {
-			return errors.New("World backups support regular files only.")
-		}
-		rel, e := filepath.Rel(dir, path)
-		if e != nil {
-			return e
-		}
-		entry, e := z.Create(filepath.ToSlash(rel))
-		if e != nil {
-			return e
-		}
-		src, e := os.Open(path)
-		if e != nil {
-			return e
-		}
-		defer src.Close()
-		_, e = io.Copy(entry, src)
-		return e
-	})
+	}
 	if closeErr := z.Close(); err == nil {
 		err = closeErr
 	}

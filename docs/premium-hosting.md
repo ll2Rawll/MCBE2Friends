@@ -17,26 +17,39 @@ These are starting settings. The launcher leaves CPU capacity for the operating 
 ## Activate Premium
 
 Copy **Your PC code** and open **Get Premium on Discord**. Send the seller the code, arrange payment, and paste the key they return into **Activation key**. Select the edition you want to host.
+
 ## Host Java Edition
 
-Open **Premium → Java Edition → Create a server**, give it a name, and choose the software.
+Open **Premium → Java Edition → Create a server**, give it a name, choose a Minecraft release, then pick the software. Vanilla and Fabric cover all 29 stable releases from **1.19 through 26.3**. Existing Java profiles keep their original **26.3** world. Create a separate profile when you want to play a different version.
 
 | Choice | Who can join | What the launcher installs |
 | --- | --- | --- |
 | Vanilla Java | Java Edition players | Mojang’s official Java server |
+| Fabric | Java Edition players, with matching client mods when required | Official Fabric Loader 0.20.1 and a standard mods folder |
 | Paper | Java Edition players | Paper with a standard plugins folder |
-| Paper + Geyser | Java and Bedrock players in the same world | Paper, Geyser, and Floodgate |
+| Paper + Geyser | Java and Bedrock players in the same world | Paper, Geyser, Floodgate, and ViaVersion for older supported releases |
 
-Accept the Minecraft EULA and choose **Create & start**. Choose **Create only** to adjust settings first. This release hosts Minecraft Java **26.3** with Java **25**. It verifies downloaded components and installs a private Temurin runtime when needed. Paper and Geyser may fetch additional upstream resources on first start. [Minecraft EULA](https://www.minecraft.net/eula) · [Paper](https://papermc.io/software/paper) · [Geyser and Floodgate](https://geysermc.org/wiki/geyser/)
+Accept the Minecraft EULA and choose **Create & start**. Choose **Create only** to adjust settings first. The launcher verifies downloads and supplies Java 17 through Minecraft 1.20.4, Java 21 from 1.20.5 through 1.21.11, and Java 25 for 26.x. The picker shows Paper where the project published a build, labels experimental builds, and offers managed Geyser on Paper 1.20.5 and newer. Paper and Geyser may fetch additional upstream resources on first start. [Minecraft EULA](https://www.minecraft.net/eula) · [Paper](https://papermc.io/software/paper) · [Geyser and Floodgate](https://geysermc.org/wiki/geyser/)
 
 <a href="images/java-host.jpg"><img src="images/java-host.jpg" width="750" alt="A running Paper and Geyser world under Java Edition in the Premium launcher"></a>
 
 - **Join.** Java players use **Multiplayer → Add Server** and the displayed address with its TCP port, initially 25565. On the host PC, use `localhost`. Bedrock players use the Geyser address and port under **How to join**. They sign in with Xbox. Java players use their Java accounts.
 - **Play over the internet.** Forward the displayed Java TCP port to the host computer. For cross-play, also forward Geyser’s displayed port for **TCP and UDP**. On a PC with native Bedrock support the launcher reserves its configured port and normally suggests 19133 for Geyser. **Friends setup** fills in Geyser’s address and port in the free Xbox broadcaster.
-- **Tune or switch cross-play.** Stop the profile, open **Settings & cross-play**, and change its memory, player slots, distances, game mode, difficulty, or selected world. On Paper, switch Geyser on or off and save. Start the same profile to continue playing its world. Java keeps online account authentication enabled. Cross-play allows Bedrock chat without a Java chat signature. Switching it off restores your previous Java chat-signing setting.
+- **Tune or switch cross-play.** Stop the profile, open **Settings & cross-play**, and change its memory, player slots, distances, game mode, difficulty, or selected world. On a compatible Paper profile, switch Geyser on or off and save. Start the same profile to continue playing its world. Java keeps online account authentication enabled. Cross-play allows Bedrock chat without a Java chat signature. Switching it off restores your previous Java chat-signing setting.
 - **Manage files.** Import trusted Paper plugin JARs, enable or disable them, or remove them while stopped. Back up a world to ZIP, import a Java world ZIP, or restore a backup to a fresh folder. Select that folder in settings and start the server. Players and console commands are available while the game is running.
-- **Run multiple servers.** Each profile owns its ports, memory allowance, startup choice, and files in `hosting/java/servers/<id>`. **Open server folder** opens the real `server.properties`, `worlds`, and `plugins`. Use **Reload from server files** after making manual edits. World backups live in the profile’s `backups` folder. A world ZIP includes dimensions and player data. Copy the profile folder while stopped to migrate plugins and settings as well.
+- **Run multiple servers.** Each profile owns its ports, memory allowance, startup choice, and files in `hosting/java/servers/<id>`. **Open server folder** opens the real `server.properties`, `worlds`, and the engine’s `plugins` or `mods` folder. Use **Reload from server files** after making manual edits. World backups live in the profile’s `backups` folder. A world ZIP includes dimensions and player data. Copy the profile folder while stopped to migrate plugins and settings as well.
 - **Close or restart.** Close the panel while the PC stays awake. The worker verifies Premium and restores each enabled server at your next sign-in. **Stop server** turns off automatic restart for that profile. [Startup before sign-in](guide.md#unattended-startup)
+
+## Install Fabric mods from Modrinth
+
+1. Choose **Fabric → Create only**. For an existing Fabric server, select it and stop it before changing mods.
+2. Open **Fabric mods · Modrinth**. Search by project name, select **Choose version**, then **Install version**. The launcher checks the exact Minecraft release, selects files for dedicated Fabric servers, verifies Modrinth’s SHA-512 checksums, and installs required dependencies.
+3. Check **Installed mods**, accept the Minecraft EULA, and start the server. If a project also requires a client mod, players install its matching release in their own Fabric client.
+4. To change a mod, stop the server and use **Versions**, **Disable**, **Enable**, or **Remove**. Dependencies stay visible. Make changes to a dependent mod before removing a file it needs. **Open mods folder** opens the standard folder for files you manage yourself.
+
+<a href="images/fabric-mods.jpg"><img src="images/fabric-mods.jpg" width="430" alt="The Fabric panel showing a Modrinth search for Ledger on Minecraft 1.19, with the compatible release ready to install"></a>
+
+[Fabric Loader](https://fabricmc.net/) · [Modrinth server mods](https://modrinth.com/mods)
 
 ## Host Bedrock Edition
 

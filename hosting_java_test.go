@@ -21,7 +21,7 @@ func TestJavaPremiumAndIndependentIntent(t *testing.T) {
 	h := l.host
 	h.hw = Hardware{JavaSupported: true, Cores: 4, RAMGiB: 8}
 	registry := fixtureRegistry(t, h)
-	for _, endpoint := range []string{"/java", "/java/" + strings.Repeat("1", 24) + "/settings", "/java/" + strings.Repeat("1", 24) + "/command"} {
+	for _, endpoint := range []string{"/java", "/java/" + strings.Repeat("1", 24) + "/settings", "/java/" + strings.Repeat("1", 24) + "/command", "/java/" + strings.Repeat("1", 24) + "/mods/change"} {
 		w := httptest.NewRecorder()
 		r := httptest.NewRequest("POST", "http://localhost/api/hosting"+endpoint, strings.NewReader("{}"))
 		r.Header.Set("Content-Type", "application/json")
@@ -30,17 +30,17 @@ func TestJavaPremiumAndIndependentIntent(t *testing.T) {
 			t.Fatal("unlicensed action", endpoint, w.Code)
 		}
 	}
-	if _, err = h.createJava("Locked", "paper", true); err == nil {
+	if _, err = h.createJava("Locked", "paper", true, ""); err == nil {
 		t.Fatal("unlicensed profile created")
 	}
 	if err = h.activate(t.Context(), approvalTestKey); err != nil {
 		t.Fatal(err)
 	}
-	id1, err := h.createJava("First", "paper", true)
+	id1, err := h.createJava("First", "paper", true, "")
 	if err != nil {
 		t.Fatal(err)
 	}
-	id2, err := h.createJava("Second", "vanilla", false)
+	id2, err := h.createJava("Second", "vanilla", false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
