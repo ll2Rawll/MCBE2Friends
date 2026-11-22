@@ -102,7 +102,7 @@ func openControls(root string, noBrowser bool, startWorker bool) error {
 		}
 		_ = cmd.Process.Release()
 	}
-	for deadline := time.Now().Add(8 * time.Second); time.Now().Before(deadline); {
+	for deadline := time.Now().Add(18 * time.Second); time.Now().Before(deadline); {
 		if i, ok := liveInstance(client, discovery); ok {
 			return present(i, noBrowser)
 		}
@@ -126,12 +126,29 @@ func profileRoot(dataPath string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return root, os.MkdirAll(root, 0700)
+	if err := os.MkdirAll(root, 0700); err != nil {
+		return "", err
+	}
+	return filepath.EvalSymlinks(root)
 }
 
 func serve(root string, printURL, resumeOnly bool) error {
 	discovery := filepath.Join(root, "launcher.json")
-	lock, err := lockInstance(filepath.Join(root, "launcher.lock"))
+	lockPath := filepath.Join(root, "launcher.lock")
+	lock, err := lockInstance(lockPath)
+	if errors.Is(err, errInUse) && !printURL && !resumeOnly {
+		// A simultaneous idle startup or an exiting worker may briefly own
+		// the lock. Either attach the opener to a healthy peer or take over.
+		client := &http.Client{Timeout: 450 * time.Millisecond, Transport: &http.Transport{}}
+		defer client.CloseIdleConnections()
+		for deadline := time.Now().Add(16 * time.Second); errors.Is(err, errInUse) && time.Now().Before(deadline); {
+			if _, ok := liveInstance(client, discovery); ok {
+				return nil
+			}
+			time.Sleep(100 * time.Millisecond)
+			lock, err = lockInstance(lockPath)
+		}
+	}
 	if errors.Is(err, errInUse) {
 		if printURL {
 			return openControls(root, true, false)
@@ -156,7 +173,7 @@ func serve(root string, printURL, resumeOnly bool) error {
 		return err
 	}
 	l.background.register = func(enable bool) error { return registerStartup(root, enable) }
-	if l.background.want.any() {
+	if !resumeOnly && l.background.want.any() {
 		l.background.retryRegistration()
 	}
 	listener, err := net.Listen("tcp4", "127.0.0.1:0")

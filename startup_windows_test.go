@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -16,11 +17,39 @@ func TestWindowsStartupEntries(t *testing.T) {
 	if err := windowsStartupEntries(root, startup, true); err != nil {
 		t.Fatal(err)
 	}
-	cmd := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", `$ErrorActionPreference='Stop'; $s=(New-Object -ComObject WScript.Shell).CreateShortcut($env:M2F_TEST_LINK); if ($s.TargetPath -ne $env:M2F_TEST_EXE -or $s.Arguments -ne $env:M2F_TEST_ARGS) {throw 'Incorrect shortcut'}; $scheduler=New-Object -ComObject Schedule.Service; $scheduler.Connect(); $task=$scheduler.NewTask(0); $task.XmlText=[IO.File]::ReadAllText($env:M2F_TEST_XML); if ($task.Triggers.Item(1).Type -ne 8 -or $task.Principal.LogonType -ne 2 -or $task.Principal.RunLevel -ne 0 -or $task.Actions.Item(1).Path -ne $env:M2F_TEST_EXE) {throw 'Incorrect boot task'}`)
+	cmd := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", `$ErrorActionPreference='Stop'; $s=(New-Object -ComObject WScript.Shell).CreateShortcut($env:M2F_TEST_LINK); $scheduler=New-Object -ComObject Schedule.Service; $scheduler.Connect(); $task=$scheduler.NewTask(0); $task.XmlText=[IO.File]::ReadAllText($env:M2F_TEST_XML); @{Shortcut=$s.TargetPath;Args=$s.Arguments;TaskExe=$task.Actions.Item(1).Path;TaskArgs=$task.Actions.Item(1).Arguments;Boot=$task.Triggers.Item(1).Type;Logon=$task.Principal.LogonType;Level=$task.Principal.RunLevel} | ConvertTo-Json -Compress`)
 	link := filepath.Join(startup, profileID(root)+".lnk")
-	cmd.Env = append(os.Environ(), "M2F_TEST_LINK="+link, "M2F_TEST_EXE="+filepath.Join(root, "background", "Mcbe2Friends.exe"), "M2F_TEST_ARGS="+windows.ComposeCommandLine([]string{"-resume", "-data-dir", root}), "M2F_TEST_XML="+filepath.Join(root, "background", "start-before-sign-in.xml"))
-	if out, err := cmd.CombinedOutput(); err != nil {
+	cmd.Env = append(os.Environ(), "M2F_TEST_LINK="+link, "M2F_TEST_XML="+filepath.Join(root, "background", "start-before-sign-in.xml"))
+	out, err := cmd.CombinedOutput()
+	if err != nil {
 		t.Fatalf("native startup validation: %s, %v", out, err)
+	}
+	var actual struct {
+		Shortcut, Args, TaskExe, TaskArgs string
+		Boot, Logon, Level                int
+	}
+	if err := json.Unmarshal(out, &actual); err != nil {
+		t.Fatalf("native startup settings: %s, %v", out, err)
+	}
+	if actual.Boot != 8 || actual.Logon != 2 || actual.Level != 0 {
+		t.Fatalf("wrong startup trigger or account permissions: %+v", actual)
+	}
+	samePath := func(want, got string) {
+		t.Helper()
+		a, e1 := os.Stat(want)
+		b, e2 := os.Stat(got)
+		if e1 != nil || e2 != nil || !os.SameFile(a, b) {
+			t.Fatalf("startup path: want %q, got %q (%v, %v)", want, got, e1, e2)
+		}
+	}
+	for _, command := range [][2]string{{actual.Shortcut, actual.Args}, {actual.TaskExe, actual.TaskArgs}} {
+		exe, args := command[0], command[1]
+		samePath(filepath.Join(root, "background", "Mcbe2Friends.exe"), exe)
+		argv, err := windows.DecomposeCommandLine("Mcbe2Friends " + args)
+		if err != nil || len(argv) != 4 || argv[1] != "-resume" || argv[2] != "-data-dir" {
+			t.Fatalf("startup arguments: %q (%v)", args, err)
+		}
+		samePath(root, argv[3])
 	}
 	if err := windowsStartupEntries(root, startup, false); err != nil {
 		t.Fatal(err)

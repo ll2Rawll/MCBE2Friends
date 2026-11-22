@@ -55,6 +55,13 @@ func handler(l *Launcher, i Instance, quit func()) http.Handler {
 			return
 		}
 		if r.Method == "GET" && r.URL.Path == "/api/state" {
+			l.mu.Lock()
+			closing := l.closing
+			l.mu.Unlock()
+			if closing {
+				reject(http.StatusServiceUnavailable, "The background worker is stopping.")
+				return
+			}
 			writeJSON(w, 200, l.snapshot())
 			return
 		}

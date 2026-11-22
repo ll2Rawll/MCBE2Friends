@@ -48,7 +48,9 @@ func sessionMessage(hwnd, message, wParam, lParam uintptr) uintptr {
 func watchSessionEnd(cancel func()) func() {
 	w := &sessionWindow{cancel: cancel, saved: make(chan struct{})}
 	ready := make(chan uintptr, 1)
+	finished := make(chan struct{})
 	go func() {
+		defer close(finished)
 		runtime.LockOSThread()
 		defer runtime.UnlockOSThread()
 		class, _ := windows.UTF16PtrFromString("STATIC")
@@ -90,5 +92,6 @@ func watchSessionEnd(cancel func()) func() {
 		if hwnd != 0 {
 			sessionUI.NewProc("PostMessageW").Call(hwnd, 0x0010, 0, 0)
 		}
+		<-finished
 	}
 }
