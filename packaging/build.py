@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the portable Mcbe2Friends downloads with Go and Python."""
+"""Build a platform's native window or assemble the five native builds into downloads."""
 import argparse
 from collections import defaultdict
 import os
@@ -117,6 +117,7 @@ def mac_release(native, stage, out, notices):
         "CFBundleShortVersionString": "1.6.0",
         "CFBundleVersion": "7",
         "NSHighResolutionCapable": True,
+        "NSAppTransportSecurity": {"NSAllowsLocalNetworking": True},
     }))
     output = out / (NAME + "-macOS.zip")
     contents = NAME + ".app/Contents/"

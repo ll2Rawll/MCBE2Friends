@@ -6,12 +6,14 @@ Put your Bedrock or Geyser server in Minecraft’s **Friends** tab for free, or 
 
 <p align="center">
   <a href="docs/images/desktop.jpg"><img src="docs/images/desktop.jpg" width="73%" alt="Mcbe2Friends desktop launcher with the server setup panel over a Minecraft cherry grove"></a>
-  <a href="docs/images/compact.jpg"><img src="docs/images/compact.jpg" width="21%" alt="The same setup panel and floating navigation dock in a narrow browser window"></a>
+  <a href="docs/images/compact.jpg"><img src="docs/images/compact.jpg" width="21%" alt="The same setup panel and floating navigation dock in a narrow app window"></a>
 </p>
 
 ## Download
 
-[Windows x64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.5.0/Mcbe2Friends-Windows-x64.zip) · [macOS, Intel and Apple silicon](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.5.0/Mcbe2Friends-macOS.zip) · [Linux x64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.5.0/Mcbe2Friends-Linux-x64.tar.gz) · [Linux ARM64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.5.0/Mcbe2Friends-Linux-ARM64.tar.gz)
+Double-click the Windows EXE to open the desktop app. On macOS and Linux, extract the archive first. The desktop app reuses your existing Premium key, servers, and broadcast settings.
+
+[Windows x64 EXE](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.6.0/Mcbe2Friends.exe) · [macOS, Intel and Apple silicon](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.6.0/Mcbe2Friends-macOS.zip) · [Linux x64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.6.0/Mcbe2Friends-Linux-x64.tar.gz) · [Linux ARM64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.6.0/Mcbe2Friends-Linux-ARM64.tar.gz)
 
 ## Premium self-hosting
 
@@ -23,7 +25,7 @@ One **$15 USD** installation key includes Java and Bedrock hosting. In **Premium
 
 ## Play with friends
 
-1. Extract and open **Mcbe2Friends**. Enter your running server’s Bedrock address and port (usually `19132`). The launcher sets up MCXboxBroadcast and its Java runtime for you.
+1. Open **Mcbe2Friends**. Enter your running server’s Bedrock address and port (usually `19132`). The launcher sets up MCXboxBroadcast and its Java runtime for you.
 2. Choose **Connect & start**. Enter the code on Microsoft’s sign-in page using the Xbox account your friends will add.
 3. When you see **Broadcast live**, have your friends add that gamertag. Once their requests are accepted, they can join from **Play → Friends** in Minecraft Bedrock.
 

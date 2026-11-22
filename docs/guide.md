@@ -4,18 +4,18 @@ Mcbe2Friends puts an existing Minecraft Bedrock or Geyser server in the in-game 
 
 ## Open the app
 
-Extract the download for your computer. When upgrading from 1.3, stop any running services in the old panel and choose **Close launcher** before opening the new download. The new launcher reads your existing key, worlds, and broadcast settings.
+Open the download for your computer. Version 1.6 reuses your existing settings, Premium activation and worlds. If version 1.5 is already running, the desktop window attaches to its worker while friends play. When upgrading from 1.3, stop any running services in the old panel and choose **Close launcher** before opening the new download.
 
-- **Windows 10 or 11, 64-bit** — open **Mcbe2Friends.exe**.
-- **macOS, Apple silicon or Intel** — open **Mcbe2Friends.app**. You can move it to Applications.
-- **Linux, x64 or ARM64** — open **Mcbe2Friends** in the extracted folder, or run `./Mcbe2Friends` there.
+- **Windows 10 or 11, 64-bit** — double-click **Mcbe2Friends.exe**. The single EXE opens its own desktop window. If Windows prompts for Microsoft’s WebView2 Runtime on first launch, follow the installation prompt and reopen the app.
+- **macOS, Apple silicon or Intel** — extract the ZIP and open **Mcbe2Friends.app**. You can move it to Applications.
+- **Linux, x64 or ARM64** — extract the whole archive, including **libexec**, and open **Mcbe2Friends** or run `./Mcbe2Friends`. The desktop window uses GTK 3 and WebKitGTK 4.1. On Ubuntu, install `libwebkit2gtk-4.1-0` if the library is missing.
 
-The app opens its controls in your default browser. These portable builds have no publisher signature or Apple notarization, so your operating system may ask you to approve the app.
+The desktop window contains the launcher, Premium hosting, Activity, and the guide. Choosing Microsoft sign-in or a purchase link opens the official site in your browser. These portable builds have no publisher signature or Apple notarization, so your operating system may ask you to approve the app.
 
-From version 1.2, GitHub signs the official release archives. To verify your download with the GitHub CLI, save the release’s signature file in the same folder and run the command below. Substitute your archive’s filename on macOS or Linux. [Download the signature file for 1.5.0](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.5.0/Mcbe2Friends-attestation.json)
+GitHub signs the official downloads, including the Windows EXE. To verify your download with the GitHub CLI, save the release’s signature file in the same folder and run the command below. Substitute the archive’s filename to verify a ZIP or TAR.GZ. [Download the signature file for 1.6.0](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.6.0/Mcbe2Friends-attestation.json)
 
 ```sh
-gh attestation verify Mcbe2Friends-Windows-x64.zip --bundle Mcbe2Friends-attestation.json --repo ll2Rawll/MCBE2Friends --signer-workflow ll2Rawll/MCBE2Friends/.github/workflows/release-downloads.yml --deny-self-hosted-runners
+gh attestation verify Mcbe2Friends.exe --bundle Mcbe2Friends-attestation.json --repo ll2Rawll/MCBE2Friends --signer-workflow ll2Rawll/MCBE2Friends/.github/workflows/release-downloads.yml --deny-self-hosted-runners
 ```
 
 ## Host a server on this PC
@@ -33,7 +33,7 @@ A live status confirms that Xbox created the session. Joining from another Bedro
 
 ## Closing and restarting
 
-Once you turn on the broadcast or your Premium server, choose **Close launcher** or close the browser tab. Keep the PC awake and connected while friends play. Open Mcbe2Friends again to manage the same session.
+Once you turn on the broadcast or your Premium server, choose **Close launcher** or use the app window’s close button. Keep the PC awake and connected while friends play. Open Mcbe2Friends again to manage the same session.
 
 After a reboot or power interruption, Mcbe2Friends resumes each service you left on when you next sign in to the same computer account. The controls stay closed. The worker verifies your Premium key and opens each Bedrock or Java server you left on. If Microsoft needs a fresh sign-in, reopen the launcher for the device code.
 
@@ -61,7 +61,7 @@ These paths assume the default data folder. If you use `-data-dir`, look in that
 - **No joinable session** — check that the launcher shows **Broadcast live**, the friend request has been accepted, and both Xbox profiles allow online multiplayer. Check **Activity** for connection problems.
 - **Sign-in timed out** — cancel or retry setup to request a fresh Microsoft code.
 - **Interrupted download** — check the internet connection, then try again. Completed components are reused. The initial download is about 20 MB with Java 21 installed or about 70 MB when a private Java runtime is needed.
-- **Browser did not open** — run the launcher from a terminal with `-no-browser` and open the local URL it prints. You can close the terminal afterward. Keep that URL on this computer.
+- **Open controls on a headless computer** — run the launcher from a terminal with `-no-browser` and open the local URL it prints. You can close the terminal afterward. Keep that URL on this computer.
 
 ## Local data and components
 
@@ -87,10 +87,12 @@ Use Go 1.27.4 or later. The launcher verifies Premium approvals with Sigstore's 
 
 ```sh
 go test ./...
-go build -trimpath -o Mcbe2Friends .
+go build -tags desktop,production,webkit2_41 -trimpath -o Mcbe2Friends .
 ./Mcbe2Friends
 ```
 
-On Windows, use `go build -trimpath -ldflags="-H windowsgui" -o Mcbe2Friends.exe .`. To build all portable downloads, run `python3 packaging/build.py` with Go on PATH. The script places the packages in `dist/`. The Windows icon and application manifest are included in `resource_windows_amd64.syso`. They can be regenerated with `rsrc -arch amd64 -ico packaging/Mcbe2Friends.ico -manifest packaging/launcher.manifest -o resource_windows_amd64.syso`.
+The example builds a Linux desktop app with the GTK 3 and WebKitGTK 4.1 development packages installed. On macOS, use Xcode Command Line Tools and `go build -tags desktop,production -o Mcbe2Friends .`. On Windows, use `go build -tags desktop,production -trimpath -ldflags="-H windowsgui" -o Mcbe2Friends.exe .`.
 
-The included Go and font license notices are in the licenses folder of each download and under `packaging/licenses` in the source.
+`python3 packaging/build.py --native-output native` produces the window binary for the current platform. The **Desktop windows** workflow builds and exercises all five native targets. Collect those binaries into one folder and run `python3 packaging/build.py --native-binaries native` to assemble the signed-release inputs in `dist/`. The Windows icon and application manifest are included in `resource_windows_amd64.syso`. They can be regenerated with `rsrc -arch amd64 -ico packaging/Mcbe2Friends.ico -manifest packaging/launcher.manifest -o resource_windows_amd64.syso`.
+
+The ZIP and TAR.GZ archives include Go and font license notices in their `licenses` folders. The source includes these notices under `packaging/licenses`.

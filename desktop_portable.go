@@ -3,11 +3,16 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
+	"time"
+
+	"github.com/godbus/dbus/v5"
 )
 
 // The portable Linux worker can start at boot on a machine without graphics
@@ -28,7 +33,26 @@ func showDesktop(root string, instance Instance) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
+		var exit *exec.ExitError
+		if errors.As(err, &exit) && exit.ExitCode() == 1 && desktopWindowIsOpen(root) {
+			// Wails on Linux returns 1 after focusing the existing window.
+			return nil
+		}
 		return errors.New("The desktop window could not open. Use a graphical session with GTK 3 and WebKitGTK 4.1 installed.")
 	}
 	return nil
+}
+
+func desktopWindowIsOpen(root string) bool {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	conn, err := dbus.ConnectSessionBus(dbus.WithContext(ctx))
+	if err != nil {
+		return false
+	}
+	defer conn.Close()
+	id := strings.ReplaceAll("mcbe2friends-"+profileID(root), "-", "_")
+	var open bool
+	err = conn.BusObject().CallWithContext(ctx, "org.freedesktop.DBus.NameHasOwner", 0, "org.wails_app_"+id+".SingleInstance").Store(&open)
+	return err == nil && open
 }
