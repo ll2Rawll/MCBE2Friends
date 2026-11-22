@@ -27,6 +27,8 @@ For internet players, the included NetherNet server uses TCP signaling and UDP g
 
 ## Manage the server
 
+<a href="images/premium-host.jpg"><img src="images/premium-host.jpg" width="750" alt="The Premium hosting panel with the Cherry Grove world, standard Bedrock port, and an eight-player hardware preset"></a>
+
 - **Server settings & worlds** edits standard server.properties. Change the port, slots, mode, difficulty, allowlist, cheats, view distance, tick distance, or threads. Select an existing world or enter a new name, save, and start. Unknown properties and comments are preserved. **Reload from server files** picks up manual edits.
 - **Add-ons** imports behavior and resource packs from .mcpack, .mcaddon, or ZIP files up to 128 MiB. Enable each required pack for the selected world. Stop the server before editing. Disable a pack in every world before removing it. To replace an imported pack, remove the old version and import the new one. Manually installed packs and packs bundled inside the selected world also appear in the library.
 - **World imports & backups** creates a .mcworld backup of a stopped world. Import a .mcworld or ZIP up to 512 MiB into a new world folder, then select it in settings. A backup includes the world and its pack references. Copy the separate behavior_packs and resource_packs folders when migrating add-ons.
