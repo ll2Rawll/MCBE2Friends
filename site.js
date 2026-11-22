@@ -79,59 +79,80 @@ for (const [index, button] of scenes.entries()) {
 
 const walkthrough = document.getElementById('walkthrough');
 const guideFilm = document.getElementById('guide-film');
-const chapterLinks = Array.from(walkthrough.querySelectorAll('.film-chapters a'));
-const chapterTimes = chapterLinks.map(link => Number(link.hash.slice(3)));
-let pendingChapter;
+const chapters = Array.from(walkthrough.querySelectorAll('.film-chapters a'), link => ({
+  link,
+  hash: '#' + link.id,
+  time: Number(link.hash.slice(3))
+}));
+let pendingTime;
 
-function openLinkedWalkthrough() {
-  if (location.hash === '#walkthrough') walkthrough.open = true;
-}
-openLinkedWalkthrough();
-window.addEventListener('hashchange', openLinkedWalkthrough);
-
-function playGuide(time) {
-  walkthrough.open = true;
-  if (time !== undefined) {
-    if (guideFilm.readyState >= HTMLMediaElement.HAVE_METADATA) guideFilm.currentTime = time;
-    else pendingChapter = time;
-  } else if (guideFilm.ended) {
-    guideFilm.currentTime = 0;
+function markChapter(time) {
+  const active = chapters.reduce((last, chapter) => time + 0.001 >= chapter.time ? chapter : last, chapters[0]);
+  for (const chapter of chapters) {
+    if (chapter === active) chapter.link.setAttribute('aria-current', 'time');
+    else chapter.link.removeAttribute('aria-current');
   }
-  guideFilm.play().catch(() => {
-    // Browsers that require another gesture keep their native play control.
-  });
 }
+
+function seekChapter(chapter) {
+  pendingTime = chapter.time;
+  if (guideFilm.readyState >= HTMLMediaElement.HAVE_METADATA) {
+    guideFilm.currentTime = pendingTime;
+    pendingTime = undefined;
+  } else if (guideFilm.preload !== 'metadata') {
+    guideFilm.preload = 'metadata';
+    if (guideFilm.networkState !== HTMLMediaElement.NETWORK_LOADING) guideFilm.load();
+  }
+  markChapter(chapter.time);
+}
+
+function revealWalkthrough(chapter, play = false) {
+  walkthrough.open = true;
+  if (chapter) seekChapter(chapter);
+  else if (play && guideFilm.ended) guideFilm.currentTime = 0;
+
+  if (play) {
+    guideFilm.focus({ preventScroll: true });
+    guideFilm.play().catch(() => {
+      // Native controls remain available when the browser requires another gesture.
+    });
+  }
+  requestAnimationFrame(() => walkthrough.scrollIntoView({ block: 'start' }));
+}
+
+function followFragment() {
+  const chapter = chapters.find(item => item.hash === location.hash);
+  if (chapter || location.hash === '#walkthrough') revealWalkthrough(chapter);
+}
+
 guideFilm.addEventListener('loadedmetadata', () => {
-  if (pendingChapter !== undefined) {
-    guideFilm.currentTime = pendingChapter;
-    pendingChapter = undefined;
+  if (pendingTime !== undefined) {
+    guideFilm.currentTime = pendingTime;
+    markChapter(pendingTime);
+    pendingTime = undefined;
   }
 });
 guideFilm.addEventListener('timeupdate', () => {
-  let current = 0;
-  for (let index = 1; index < chapterTimes.length; index++) {
-    if (guideFilm.currentTime >= chapterTimes[index]) current = index;
-  }
-  chapterLinks.forEach((link, index) => {
-    if (index === current) link.setAttribute('aria-current', 'time');
-    else link.removeAttribute('aria-current');
-  });
+  if (pendingTime === undefined) markChapter(guideFilm.currentTime);
 });
-function normalClick(event) {
-  return event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey;
-}
-for (const link of document.querySelectorAll('a[href="#walkthrough"]')) {
-  link.addEventListener('click', event => {
-    if (!normalClick(event)) return;
-    if (link.id === 'watch-walkthrough') playGuide();
-    else walkthrough.open = true;
-  });
-}
-chapterLinks.forEach((link, index) => link.addEventListener('click', event => {
-  if (!normalClick(event)) return;
-  event.preventDefault();
-  playGuide(chapterTimes[index]);
-}));
 walkthrough.addEventListener('toggle', () => {
   if (!walkthrough.open) guideFilm.pause();
 });
+
+document.addEventListener('click', event => {
+  if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+  const link = event.target.closest('a');
+  if (!link) return;
+  const href = link.getAttribute('href');
+  const chapter = chapters.find(item => item.link === link || item.hash === href);
+  if (!chapter && href !== '#walkthrough') return;
+
+  event.preventDefault();
+  const hash = chapter ? chapter.hash : '#walkthrough';
+  if (location.hash !== hash) history.pushState(null, '', hash);
+  revealWalkthrough(chapter, Boolean(chapter) || link.id === 'watch-walkthrough');
+});
+
+window.addEventListener('hashchange', followFragment);
+window.addEventListener('pageshow', followFragment);
+markChapter(0);

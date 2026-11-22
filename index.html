@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#161c1d" id="theme-color">
-  <meta name="description" content="Bring your Bedrock server to Minecraft’s Friends tab. Follow the customer walkthrough for broadcasting, Premium Java and Bedrock hosting, Fabric mods from Modrinth, cross-play, and world backups.">
+  <meta name="description" content="Bring your Bedrock server to the Friends tab, or host Minecraft Java with Fabric mods from Modrinth. Keep playing after closing the launcher while your host PC stays awake.">
   <link rel="canonical" href="https://ll2rawll.github.io/MCBE2Friends/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Mcbe2Friends">
-  <meta property="og:description" content="Broadcast to the Friends tab or host your own Java or Bedrock world. See how to set up Vanilla, Fabric mods, Paper, and Geyser with Mcbe2Friends Premium.">
+  <meta property="og:description" content="Host Java or Bedrock on your own PC and keep your world online with the launcher closed. Watch the Java, Modrinth, and background hosting chapters.">
   <meta property="og:url" content="https://ll2rawll.github.io/MCBE2Friends/">
   <meta property="og:image" content="https://ll2rawll.github.io/MCBE2Friends/assets/gallery/grove-landscape.webp">
   <meta property="og:image:alt" content="A lantern-lit cottage beside a mountain lake in a Minecraft cherry grove.">
@@ -17,7 +17,7 @@
   <link rel="apple-touch-icon" href="assets/app-icon.png">
   <link rel="preload" href="assets/fonts/minecraft-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/minecraft-bold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=walkthrough">
+  <link rel="stylesheet" href="styles.css?v=player-guide-2">
   <script>
     try {
       if (localStorage.getItem('mcbe2friends-theme') === 'light') {
@@ -26,7 +26,7 @@
       }
     } catch {}
   </script>
-  <script src="site.js?v=walkthrough" defer></script>
+  <script src="site.js?v=player-guide-2" defer></script>
 </head>
 <body>
   <svg xmlns="http://www.w3.org/2000/svg" class="symbols" aria-hidden="true">
@@ -45,7 +45,7 @@
     <div class="nav-inner wrap">
       <a class="brand" href="#top"><img src="assets/ui/grass-block.webp" alt="" width="35" height="37"><span>Mcbe2Friends</span></a>
       <nav aria-label="Main navigation" class="desktop-nav">
-        <a href="#setup">Setup</a><a href="#walkthrough">Walkthrough</a><a href="#premium">Premium</a><a href="#downloads">Downloads</a>
+        <a href="#premium">Hosting</a><a href="#setup">Setup</a><a href="#walkthrough">Walkthrough</a><a href="#downloads">Downloads</a>
       </nav>
       <div class="header-tools">
         <a href="https://github.com/ll2Rawll/MCBE2Friends" class="icon-control" aria-label="View Mcbe2Friends on GitHub" title="View on GitHub"><img class="github-mark" src="assets/github.png" width="20" height="20" alt=""></a>
@@ -55,7 +55,7 @@
         <details class="mobile-menu">
           <summary class="icon-control" aria-label="Navigation menu"><svg class="icon open-menu" aria-hidden="true"><use href="#i-menu"/></svg><svg class="icon close-menu" aria-hidden="true"><use href="#i-close"/></svg></summary>
           <nav class="menu-panel" aria-label="Mobile navigation">
-            <a href="#setup">Setup</a><a href="#walkthrough">Customer walkthrough</a><a href="#premium">Premium</a><a href="#downloads">Downloads</a>
+            <a href="#premium">Hosting</a><a href="#setup">Setup</a><a href="#walkthrough">Player walkthrough</a><a href="#downloads">Downloads</a>
           </nav>
         </details>
       </div>
@@ -69,7 +69,7 @@
         <div class="world-shade" aria-hidden="true"></div>
         <div class="hero-copy wrap">
           <h1 id="page-title">Mcbe2Friends</h1>
-          <p class="lede">Bring your Bedrock server to Minecraft’s <strong>Friends</strong> tab with MCXboxBroadcast.</p>
+          <p class="lede">Broadcast to the Bedrock <strong>Friends</strong> tab for free, or host a Java or Bedrock world with <strong>Premium</strong>. Close the launcher and keep playing.</p>
           <div class="hero-actions">
             <a class="game-button primary" href="https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.5.0/Mcbe2Friends-Windows-x64.zip"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Download for Windows</a>
             <a class="game-button stone" href="#walkthrough" id="watch-walkthrough"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg>Watch walkthrough</a>
@@ -91,6 +91,36 @@
       <div class="ground" aria-hidden="true"></div>
     </section>
 
+    <div class="hosting-features wrap">
+      <section class="hosting-feature panel" id="premium" aria-labelledby="premium-title">
+        <a class="feature-art java-art" href="https://github.com/ll2Rawll/MCBE2Friends/blob/main/docs/premium-hosting.md#host-java-edition" aria-label="Read the Java hosting guide">
+          <img class="feature-landscape" src="assets/gallery/lantern-panorama.webp" width="1600" height="720" alt="" loading="lazy" decoding="async">
+          <img class="feature-picker" src="assets/gallery/fabric-picker.webp" width="760" height="331" alt="Fabric selected for Minecraft Java 1.19 in the launcher" loading="lazy" decoding="async">
+        </a>
+        <div class="feature-copy">
+          <h2 id="premium-title">Host your own Java world</h2>
+          <p>Choose from <strong>29 stable releases, 1.19 to 26.3</strong>. Play Vanilla, or pick Fabric and install mods with their required dependencies from Modrinth. Paper supports plugins and optional Geyser cross-play on compatible releases.</p>
+          <p class="feature-detail">One Premium key includes Java hosting on Windows, macOS, and Linux. Native Bedrock hosting targets Windows x64 and Ubuntu 22.04+ x64.</p>
+          <div class="feature-actions">
+            <a class="game-button primary" href="https://discord.gg/X5adbkPq" target="_blank" rel="noopener noreferrer">Get Premium · $15 <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
+            <a class="chapter-jump" href="#watch-java"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg>Watch Java setup</a>
+          </div>
+        </div>
+      </section>
+      <section class="hosting-feature panel" id="background" aria-labelledby="background-title">
+        <div class="feature-art night-art"><img class="feature-landscape" src="assets/gallery/friends-panorama.webp" width="1600" height="720" alt="Two players beside a lantern-lit dock under the moon" loading="lazy" decoding="async"></div>
+        <div class="feature-copy">
+          <h2 id="background-title">Your world stays online with the launcher closed</h2>
+          <p>Once your Java or Bedrock server is running, close Mcbe2Friends. Friends can keep playing while the host PC stays <strong>awake and connected</strong>. The free Friends broadcast runs in the background, too.</p>
+          <p class="feature-detail">After a PC restart, services you left on resume at your next sign-in. Reopen Mcbe2Friends to manage them.</p>
+          <div class="feature-actions">
+            <a class="chapter-jump" href="#watch-background"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg>Watch background hosting</a>
+            <a class="feature-guide" href="https://github.com/ll2Rawll/MCBE2Friends/blob/main/docs/guide.md#unattended-startup">Start before sign-in <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
+          </div>
+        </div>
+      </section>
+    </div>
+
     <section class="panel recipe-panel wrap" id="setup" aria-labelledby="setup-title">
       <div class="panel-header"><span class="item table" aria-hidden="true"></span><h2 id="setup-title">Craft your broadcast</h2></div>
       <ol class="recipe" aria-label="Set up Mcbe2Friends">
@@ -103,39 +133,30 @@
 
     <details class="panel wrap walkthrough" id="walkthrough" open>
       <summary class="panel-header">
-        <span class="item chest" aria-hidden="true"></span><strong>Customer walkthrough</strong><span class="time">4:07</span>
+        <span class="item chest" aria-hidden="true"></span><strong>Player walkthrough</strong><span class="time">4:59</span>
         <svg class="icon disclosure-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
       </summary>
       <div class="walkthrough-body">
-        <video id="guide-film" width="1600" height="900" controls playsinline preload="none" poster="assets/media/walkthrough-poster.webp" tabindex="0" aria-label="Narrated Mcbe2Friends customer walkthrough">
-          <source src="assets/media/mcbe2friends-walkthrough.mp4?v=1.5.0" type="video/mp4">
-          <track kind="captions" src="assets/media/walkthrough.en.vtt?v=1.5.0" srclang="en" label="English">
-          <track kind="chapters" src="assets/media/walkthrough.chapters.vtt?v=1.5.0" srclang="en" label="Chapters">
-          <a href="assets/media/mcbe2friends-walkthrough.mp4?v=1.5.0">Open the customer walkthrough</a>
+        <video id="guide-film" width="1600" height="900" controls playsinline preload="none" poster="assets/media/walkthrough-poster.webp?v=player-guide-2" tabindex="0" aria-label="Narrated Mcbe2Friends player walkthrough">
+          <source src="assets/media/mcbe2friends-walkthrough.mp4?v=player-guide-2" type="video/mp4">
+          <track kind="captions" src="assets/media/walkthrough.en.vtt?v=player-guide-2" srclang="en" label="English">
+          <track kind="chapters" src="assets/media/walkthrough.chapters.vtt?v=player-guide-2" srclang="en" label="Chapters">
+          <a href="assets/media/mcbe2friends-walkthrough.mp4?v=player-guide-2">Open the player walkthrough</a>
         </video>
         <nav class="film-chapters" aria-label="Walkthrough chapters">
-          <a href="assets/media/mcbe2friends-walkthrough.mp4?v=1.5.0#t=0"><span>0:00</span> Download</a>
-          <a href="assets/media/mcbe2friends-walkthrough.mp4?v=1.5.0#t=13.083"><span>0:13</span> Broadcast &amp; join</a>
-          <a href="assets/media/mcbe2friends-walkthrough.mp4?v=1.5.0#t=63.292"><span>1:03</span> Bedrock hosting</a>
-          <a href="assets/media/mcbe2friends-walkthrough.mp4?v=1.5.0#t=95.917"><span>1:36</span> Friends &amp; console</a>
-          <a href="assets/media/mcbe2friends-walkthrough.mp4?v=1.5.0#t=125.833"><span>2:06</span> Worlds &amp; add-ons</a>
-          <a href="assets/media/mcbe2friends-walkthrough.mp4?v=1.5.0#t=146.500"><span>2:27</span> Backups &amp; restore</a>
-          <a href="assets/media/mcbe2friends-walkthrough.mp4?v=1.5.0#t=176.833"><span>2:57</span> Java hosting &amp; Geyser</a>
-          <a href="assets/media/mcbe2friends-walkthrough.mp4?v=1.5.0#t=220.833"><span>3:41</span> Fabric &amp; Modrinth</a>
+          <a id="watch-download" href="assets/media/mcbe2friends-walkthrough.mp4?v=player-guide-2#t=0"><span>0:00</span> Download</a>
+          <a id="watch-broadcast" href="assets/media/mcbe2friends-walkthrough.mp4?v=player-guide-2#t=12.875"><span>0:12</span> Broadcast &amp; join</a>
+          <a id="watch-premium" href="assets/media/mcbe2friends-walkthrough.mp4?v=player-guide-2#t=62.667"><span>1:02</span> Activate Premium</a>
+          <a id="watch-java" href="assets/media/mcbe2friends-walkthrough.mp4?v=player-guide-2#t=85.583"><span>1:25</span> Java hosting &amp; Geyser</a>
+          <a id="watch-fabric" href="assets/media/mcbe2friends-walkthrough.mp4?v=player-guide-2#t=142.75"><span>2:22</span> Fabric &amp; Modrinth</a>
+          <a id="watch-background" href="assets/media/mcbe2friends-walkthrough.mp4?v=player-guide-2#t=169.583"><span>2:49</span> Background hosting</a>
+          <a id="watch-bedrock" href="assets/media/mcbe2friends-walkthrough.mp4?v=player-guide-2#t=208.75"><span>3:28</span> Bedrock hosting</a>
+          <a id="watch-friends" href="assets/media/mcbe2friends-walkthrough.mp4?v=player-guide-2#t=219.667"><span>3:39</span> Friends &amp; console</a>
+          <a id="watch-worlds" href="assets/media/mcbe2friends-walkthrough.mp4?v=player-guide-2#t=249.333"><span>4:09</span> Worlds &amp; add-ons</a>
+          <a id="watch-backups" href="assets/media/mcbe2friends-walkthrough.mp4?v=player-guide-2#t=269.833"><span>4:29</span> Backups &amp; restore</a>
         </nav>
       </div>
     </details>
-
-    <section class="panel premium-offer wrap" id="premium" aria-labelledby="premium-title">
-      <div class="panel-header"><span class="item emerald" aria-hidden="true"></span><h2 id="premium-title">Premium self-hosting</h2></div>
-      <div class="offer-body">
-        <a class="offer-preview" href="https://github.com/ll2Rawll/MCBE2Friends/blob/main/docs/premium-hosting.md#host-java-edition" aria-label="Read the Java hosting setup guide"><img src="assets/gallery/java-hosting.webp" width="880" height="619" loading="lazy" decoding="async" alt="The Premium Java panel showing a Paper and Geyser world running on the host computer"></a>
-        <div><p>Choose any stable Minecraft Java release from 1.19 through 26.3. Play Vanilla or build a Fabric world with mods from Modrinth. Find a mod in the launcher, pick a compatible version, and install it with its dependencies. Paper supports plugins and optional Geyser cross-play on compatible releases.</p>
-          <p class="offer-note">One $15 USD key unlocks Java hosting on Windows, macOS, and Linux, plus native Bedrock on Windows and Linux x64. The Friends broadcaster is free.</p>
-          <a class="game-button primary" href="https://discord.gg/X5adbkPq" target="_blank" rel="noopener noreferrer">Get Premium · $15 <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
-        </div>
-      </div>
-    </section>
 
     <section class="downloads wrap" id="downloads" aria-labelledby="downloads-title">
       <div class="chest-lid">
@@ -149,7 +170,6 @@
           <a class="platform" href="https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.5.0/Mcbe2Friends-Linux-x64.tar.gz" aria-label="Download Mcbe2Friends for Linux x64"><span class="package-slot" aria-hidden="true"><span class="item penguin"></span></span><span class="package-name"><b>Linux x64</b><small>Intel + AMD · TAR.GZ</small></span><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></a>
           <a class="platform" href="https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.5.0/Mcbe2Friends-Linux-ARM64.tar.gz" aria-label="Download Mcbe2Friends for Linux ARM64"><span class="package-slot" aria-hidden="true"><span class="item chip"></span></span><span class="package-name"><b>Linux ARM64</b><small>64-bit ARM · TAR.GZ</small></span><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></a>
         </div>
-        <p class="host-note">Keep your host computer awake while friends play. You can close the launcher and reopen it to manage your servers.</p>
       </div>
     </section>
   </main>

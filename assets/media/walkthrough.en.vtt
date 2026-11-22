@@ -1,234 +1,333 @@
 WEBVTT
 
-00:00:00.650 --> 00:00:05.450
+00:00:00.480 --> 00:00:05.280
 On the Mcbe2Friends project page, choose
 the download for your computer.
 
-00:00:05.620 --> 00:00:09.020
+00:00:05.480 --> 00:00:08.879
 Extract the archive and open the
 launcher. On Windows,
 
-00:00:09.020 --> 00:00:12.596
+00:00:08.879 --> 00:00:12.456
 open Mcbe2Friends.exe. The controls open
 in your browser.
 
-00:00:13.443 --> 00:00:16.921
+00:00:13.195 --> 00:00:16.672
 Already have a running server? Enter its
 Bedrock address and port.
 
-00:00:17.091 --> 00:00:20.675
+00:00:16.872 --> 00:00:20.456
 The usual port is 19132. Choose
 Continue.
 
-00:00:21.527 --> 00:00:25.431
+00:00:21.195 --> 00:00:25.099
 Use a dedicated Microsoft account with
 an Xbox gamertag.
 
-00:00:25.601 --> 00:00:28.657
+00:00:25.299 --> 00:00:28.371
 Choose whether to accept friend requests
 automatically,
 
-00:00:28.657 --> 00:00:30.315
+00:00:28.371 --> 00:00:30.014
 then select Connect & start.
 
-00:00:31.152 --> 00:00:34.658
+00:00:30.737 --> 00:00:34.260
 The launcher sets up Java if needed.
 When a code appears,
 
-00:00:34.658 --> 00:00:36.613
+00:00:34.260 --> 00:00:36.198
 choose Open Microsoft sign-in.
 
-00:00:36.783 --> 00:00:40.260
+00:00:36.398 --> 00:00:39.875
 Enter your own code on Microsoft’s page
 and finish signing in.
 
-00:00:41.110 --> 00:00:45.931
+00:00:40.612 --> 00:00:44.710
 Wait for Broadcast live, then give
-friends the broadcaster’s Xbox gamertag.
+friends the broadcaster’s Xbox
 
-00:00:46.101 --> 00:00:50.180
+00:00:44.710 --> 00:00:45.433
+gamertag.
+
+00:00:45.633 --> 00:00:49.046
 Once their requests are accepted, they
-open Minecraft Bedrock, choose Play,
+open Minecraft Bedrock,
 
-00:00:50.180 --> 00:00:52.349
-then Friends, and select your session.
+00:00:49.046 --> 00:00:51.881
+choose Play, then Friends, and select
+your session.
 
-00:00:53.193 --> 00:00:57.673
+00:00:52.612 --> 00:00:57.092
 Keep the PC awake. Closing the browser
 tab leaves the broadcast running.
 
-00:00:57.843 --> 00:01:00.416
+00:00:57.292 --> 00:00:59.867
 Use Stop broadcast to end it. Next time,
 
-00:01:00.416 --> 00:01:02.814
+00:00:59.867 --> 00:01:02.262
 Start broadcast reuses your settings.
 
-00:01:03.652 --> 00:01:06.809
+00:01:02.987 --> 00:01:06.144
 To host a new world on your own PC, open
 Premium.
 
-00:01:06.979 --> 00:01:11.053
-Check your hardware and recommended
-settings.
+00:01:06.344 --> 00:01:10.992
+Java runs on Windows, macOS, and Linux.
+For native Bedrock,
 
-00:01:11.053 --> 00:01:15.043
-Hosting supports Windows x64 and Ubuntu
-x64.
+00:01:10.992 --> 00:01:14.216
+use a supported Windows or Linux x64 PC.
 
-00:01:15.902 --> 00:01:18.811
+00:01:14.945 --> 00:01:17.865
 Copy your PC code, choose Get Premium on
 Discord,
 
-00:01:18.811 --> 00:01:20.787
+00:01:17.865 --> 00:01:19.830
 and send the code to the seller.
 
-00:01:20.957 --> 00:01:25.339
+00:01:20.030 --> 00:01:24.455
 After the one-time $15 purchase, paste
 the key you receive and choose
 
-00:01:25.339 --> 00:01:26.120
+00:01:24.455 --> 00:01:25.193
 Activate.
 
-00:01:26.943 --> 00:01:29.495
+00:01:25.903 --> 00:01:30.673
+In Premium, open Java Edition. Name your
+server and pick your friends’
+
+00:01:30.673 --> 00:01:33.221
+Minecraft version, from 1.19 onward.
+
+00:01:33.421 --> 00:01:37.879
+Pick Vanilla for a classic world, Fabric
+for mods, or Paper for plugins.
+
+00:01:38.612 --> 00:01:42.438
+For cross-play, select Paper + Geyser on
+a compatible release.
+
+00:01:42.438 --> 00:01:46.676
 Review the Minecraft terms, check the
-box,
+box, and choose Create & start.
 
-00:01:29.495 --> 00:01:31.658
-then select Install & start server.
+00:01:46.876 --> 00:01:49.308
+When it says Running, open How to join.
 
-00:01:31.828 --> 00:01:35.433
-The launcher applies the PC preset. Wait
-for Server running.
+00:01:49.308 --> 00:01:52.029
+Java players use Multiplayer and Add
+Server.
 
-00:01:36.277 --> 00:01:40.589
+00:01:52.029 --> 00:01:54.982
+Bedrock friends use the Geyser address
+and port.
+
+00:01:55.182 --> 00:01:58.263
+The local address works at home. For
+internet play,
+
+00:01:58.263 --> 00:02:02.372
+forward the displayed ports to this PC
+and share your public address.
+
+00:02:03.112 --> 00:02:06.358
+Stop Paper before importing a plugin.
+Enable the plugin,
+
+00:02:06.358 --> 00:02:08.338
+then start the server to load it.
+
+00:02:08.538 --> 00:02:12.812
+In Settings & cross-play, you can turn
+Geyser on or off while keeping the
+
+00:02:12.812 --> 00:02:15.792
+same world. Save the change before
+starting again.
+
+00:02:15.992 --> 00:02:18.763
+Under Worlds & backups, back up a
+stopped world.
+
+00:02:18.763 --> 00:02:22.349
+Restore into a new folder and select it
+in Settings to play it.
+
+00:02:23.070 --> 00:02:27.699
+For a modded server, pick Fabric and
+choose Create only. This world,
+
+00:02:27.699 --> 00:02:30.046
+Moss Hollow, uses Minecraft 1.19.
+
+00:02:30.246 --> 00:02:34.408
+Open Fabric mods and search Modrinth.
+Choose a version of Ledger that
+
+00:02:34.408 --> 00:02:37.414
+matches your server, then select Install
+version.
+
+00:02:38.153 --> 00:02:42.704
+Ledger is installed, along with Fabric
+API and Fabric Language Kotlin.
+
+00:02:42.704 --> 00:02:44.575
+All three are enabled here.
+
+00:02:44.775 --> 00:02:48.619
+Review and accept the Minecraft terms.
+Choose Start server and wait for
+
+00:02:48.619 --> 00:02:49.191
+Running.
+
+00:02:49.903 --> 00:02:52.495
+With Moss Hollow running, choose Close
+launcher.
+
+00:02:52.495 --> 00:02:54.426
+You can close the browser tab, too.
+
+00:02:54.626 --> 00:02:56.755
+The server keeps running on this PC.
+
+00:02:56.755 --> 00:03:00.522
+Your Bedrock server or Friends broadcast
+can also stay on with the
+
+00:03:00.522 --> 00:03:01.559
+launcher closed.
+
+00:03:02.278 --> 00:03:06.630
+Here is the server’s reply to Minecraft
+with the launcher closed.
+
+00:03:06.630 --> 00:03:10.278
+Reopen Mcbe2Friends to manage that same
+running world.
+
+00:03:10.478 --> 00:03:12.997
+If the host PC restarts, sign back in.
+
+00:03:12.997 --> 00:03:16.622
+Servers and broadcasts you left on
+resume automatically.
+
+00:03:17.362 --> 00:03:20.067
+To take your world offline, choose Stop
+server.
+
+00:03:20.067 --> 00:03:23.314
+Use Stop broadcast separately to end the
+Friends listing.
+
+00:03:23.514 --> 00:03:27.388
+Each Stop also turns off automatic
+restart for that service until you
+
+00:03:27.388 --> 00:03:28.356
+start it again.
+
+00:03:29.070 --> 00:03:32.822
+For a native Bedrock world, select
+Bedrock Edition in Premium.
+
+00:03:32.822 --> 00:03:36.515
+Review the Minecraft terms and choose
+Install & start server.
+
+00:03:36.715 --> 00:03:39.272
+Wait for Server running before inviting
+friends.
+
+00:03:39.987 --> 00:03:44.321
 Under Players & Friends tab, enter a
 friend’s Xbox gamertag and choose
 
-00:01:40.589 --> 00:01:42.570
+00:03:44.321 --> 00:03:46.280
 Allow. Repeat for each player.
 
-00:01:42.740 --> 00:01:46.707
+00:03:46.480 --> 00:03:50.490
 Players on your network can also join
 using the local address and server
 
-00:01:46.707 --> 00:01:47.177
+00:03:50.490 --> 00:03:50.917
 port.
 
-00:01:48.027 --> 00:01:53.494
+00:03:51.653 --> 00:03:56.826
 For internet play, forward the server
-port for both TCP and UDP to the host
+port for both TCP and UDP to the
 
-00:01:53.494 --> 00:01:53.979
-PC.
+00:03:56.826 --> 00:03:57.605
+host PC.
 
-00:01:54.149 --> 00:01:56.420
+00:03:57.805 --> 00:04:00.071
 Enter an address your friends can reach,
 
-00:01:56.420 --> 00:01:59.311
+00:04:00.071 --> 00:04:02.968
 then choose Friends setup and follow the
 Xbox steps.
 
-00:02:00.152 --> 00:02:02.840
+00:04:03.695 --> 00:04:06.383
 While the server is running, open Server
 console.
 
-00:02:03.010 --> 00:02:05.356
+00:04:06.583 --> 00:04:08.930
 Send the list command to see who is
 online.
 
-00:02:06.193 --> 00:02:09.073
+00:04:09.653 --> 00:04:12.533
 Choose Stop server to save the world
 before editing.
 
-00:02:09.243 --> 00:02:12.360
+00:04:12.733 --> 00:04:15.842
 Open Server settings & worlds. Choose a
 world,
 
-00:02:12.360 --> 00:02:16.411
+00:04:15.842 --> 00:04:19.901
 adjust the player slots or use PC
 recommendations, then save.
 
-00:02:17.235 --> 00:02:21.084
+00:04:20.612 --> 00:04:24.501
 Under Add-ons, choose your .mcaddon or
 .mcpack file and click Import
 
-00:02:21.084 --> 00:02:21.672
+00:04:24.501 --> 00:04:25.049
 add-on.
 
-00:02:21.842 --> 00:02:26.024
+00:04:25.249 --> 00:04:29.430
 Enable each required resource and
 behavior pack for the selected world.
 
-00:02:26.860 --> 00:02:30.519
+00:04:30.153 --> 00:04:33.824
 Under World imports & backups, choose
 Back up selected world.
 
-00:02:30.519 --> 00:02:32.940
+00:04:33.824 --> 00:04:36.233
 Open backups to find the .mcworld file.
 
-00:02:33.110 --> 00:02:37.663
+00:04:36.433 --> 00:04:41.003
 If the old world folder still exists,
 use Open server folder. In worlds,
 
-00:02:37.663 --> 00:02:40.299
+00:04:41.003 --> 00:04:43.623
 rename the old folder to keep your copy.
 
-00:02:40.759 --> 00:02:44.495
+00:04:43.823 --> 00:04:47.582
 Choose the .mcworld, enter the original
 world name for the new folder,
 
-00:02:44.495 --> 00:02:45.858
+00:04:47.582 --> 00:04:48.921
 and click Import world.
 
-00:02:46.693 --> 00:02:50.853
+00:04:49.653 --> 00:04:53.813
 Select the restored world in settings,
 save, and start the server again.
 
-00:02:51.023 --> 00:02:53.567
+00:04:54.013 --> 00:04:56.562
 With the host PC awake and the broadcast
 live,
 
-00:02:53.567 --> 00:02:55.653
+00:04:56.562 --> 00:04:58.643
 your friends can get back to playing.
-
-00:02:57.183 --> 00:03:00.597
-Open Premium and choose Java Edition. Name your server.
-
-00:03:00.867 --> 00:03:05.709
-Choose Vanilla for Java, Paper for plugins, or Paper + Geyser for cross-play.
-
-00:03:06.350 --> 00:03:10.574
-Accept the Minecraft EULA and choose Create & start.
-
-00:03:10.844 --> 00:03:17.306
-Once it’s running, Java players use Multiplayer. Bedrock players use the Geyser port or the Friends setup.
-
-00:03:17.933 --> 00:03:23.907
-Stop the Paper server to import a trusted plugin JAR. Enable it, then start the server to load it.
-
-00:03:24.177 --> 00:03:29.019
-You can also switch Geyser on or off under Settings & cross-play and keep the same world.
-
-00:03:29.642 --> 00:03:35.210
-Back up a stopped world here, or restore a ZIP into a new folder. Select the world in Settings.
-
-00:03:35.480 --> 00:03:40.109
-Start your server and close the launcher. It keeps running while your computer stays awake.
-
-00:03:41.183 --> 00:03:44.981
-In Java Edition, select your Minecraft version and choose Fabric.
-
-00:03:45.251 --> 00:03:48.259
-Choose Create only to add mods before the first start.
-
-00:03:48.892 --> 00:03:52.070
-Open Fabric mods, search Modrinth, and choose a version.
-
-00:03:52.340 --> 00:03:56.287
-Select Install version. Required dependencies download together.
-
-00:03:56.933 --> 00:04:01.392
-Here, Ledger installed with Fabric API and Fabric Language Kotlin.
-
-00:04:01.662 --> 00:04:06.270
-Accept the Minecraft terms and start your world. Stop it when you want to change mods.
