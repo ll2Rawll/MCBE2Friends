@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -77,4 +78,86 @@ func TestWindowsSessionEnd(t *testing.T) {
 	case <-time.After(4 * time.Second):
 		t.Fatal("session-end notification did not reach the worker")
 	}
+}
+
+// Opt-in on an isolated Windows runner: launch the shipped command through the
+// real noninteractive boot task and verify it can fetch the pinned broadcaster.
+func TestWindowsScheduledResume(t *testing.T) {
+	if os.Getenv("MCBE2FRIENDS_TEST_BOOT_TASK") != "1" {
+		t.Skip("requires permission to register a temporary Task Scheduler boot task")
+	}
+	root := t.TempDir()
+	l, err := newLauncher(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = l.save(Settings{Host: "127.0.0.1", Port: 19132, Name: "Startup test"}); err != nil {
+		t.Fatal(err)
+	}
+	if err = l.background.set(broadcastService, true); err != nil {
+		t.Fatal(err)
+	}
+	if err = windowsStartupEntries(root, t.TempDir(), true); err != nil {
+		t.Fatal(err)
+	}
+	exe := filepath.Join(root, "background", "Mcbe2Friends.exe")
+	if out, err := exec.Command("go", "build", "-ldflags", "-H windowsgui", "-o", exe, ".").CombinedOutput(); err != nil {
+		t.Fatalf("build worker: %s %v", out, err)
+	}
+	task := "Mcbe2Friends-QA-" + profileID(root)
+	run := func(args ...string) {
+		t.Helper()
+		if out, err := exec.Command("schtasks.exe", args...).CombinedOutput(); err != nil {
+			t.Fatalf("Task Scheduler: %s %v", out, err)
+		}
+	}
+	run("/Create", "/TN", task, "/XML", filepath.Join(root, "background", "start-before-sign-in.xml"))
+	defer func() { _ = exec.Command("schtasks.exe", "/End", "/TN", task).Run(); run("/Delete", "/TN", task, "/F") }()
+	run("/Run", "/TN", task)
+	client := &http.Client{Timeout: 2 * time.Second, Transport: &http.Transport{}}
+	defer client.CloseIdleConnections()
+	discovery := filepath.Join(root, "launcher.json")
+	var instance Instance
+	for until := time.Now().Add(45 * time.Second); time.Now().Before(until); {
+		if i, up := liveInstance(client, discovery); up {
+			instance = i
+			break
+		}
+		time.Sleep(250 * time.Millisecond)
+	}
+	if instance.Port == 0 {
+		t.Fatal("scheduled worker did not open the expected profile")
+	}
+	post := func(path string) {
+		t.Helper()
+		req, _ := http.NewRequest("POST", instance.origin()+path, nil)
+		req.Header.Set("Authorization", "Bearer "+instance.Token)
+		res, err := client.Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		res.Body.Close()
+		if res.StatusCode != 200 {
+			t.Fatal(path, res.StatusCode)
+		}
+	}
+	defer func() {
+		post("/api/stop")
+		for until := time.Now().Add(15 * time.Second); time.Now().Before(until); {
+			post("/api/quit")
+			time.Sleep(200 * time.Millisecond)
+			if _, err := os.Stat(discovery); os.IsNotExist(err) {
+				return
+			}
+		}
+		t.Error("idle scheduled worker did not exit")
+	}()
+	jar := filepath.Join(root, "components", "MCXboxBroadcastStandalone-"+buildNumber+".jar")
+	for until := time.Now().Add(2 * time.Minute); time.Now().Before(until); {
+		if _, err := os.Stat(jar); err == nil && verified(jar, jarDigest) {
+			return
+		}
+		time.Sleep(350 * time.Millisecond)
+	}
+	t.Fatal("the scheduled worker did not download the verified broadcaster over HTTPS")
 }
