@@ -104,7 +104,7 @@ func TestClosingControlsPreservesWorkAndStopCancelsRecovery(t *testing.T) {
 	if !strings.Contains(request("/api/quit"), "true") || !exited {
 		t.Fatal("idle worker did not exit")
 	}
-	if err := serve(root, false, true); err != nil {
+	if err := serve(root, true); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := os.Stat(filepath.Join(root, "launcher.json")); !errors.Is(err, os.ErrNotExist) {

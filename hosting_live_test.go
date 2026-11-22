@@ -99,7 +99,7 @@ func TestOfficialBedrockLifecycle(t *testing.T) {
 			t.Fatal(e)
 		}
 	}
-	if err := serve(root, false, true); err != nil {
+	if err := serve(root, true); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := os.Stat(filepath.Join(root, "launcher.json")); !os.IsNotExist(err) {

@@ -82,33 +82,31 @@ func liveInstance(client *http.Client, discovery string) (Instance, bool) {
 	return i, resp.StatusCode == http.StatusOK
 }
 
-func openControls(root string, noBrowser bool, startWorker bool) error {
+func openControls(root string, noBrowser bool) error {
 	client := &http.Client{Timeout: 450 * time.Millisecond, Transport: &http.Transport{}}
 	defer client.CloseIdleConnections()
 	discovery := filepath.Join(root, "launcher.json")
 	if i, ok := liveInstance(client, discovery); ok {
 		return present(i, noBrowser)
 	}
-	if startWorker {
-		binary, err := os.Executable()
-		if err != nil {
-			return err
-		}
-		cmd := exec.Command(binary, "-background", "-data-dir", root)
-		cmd.Dir = root
-		detachWorker(cmd)
-		if err = cmd.Start(); err != nil {
-			return err
-		}
-		_ = cmd.Process.Release()
+	binary, err := os.Executable()
+	if err != nil {
+		return err
 	}
+	cmd := exec.Command(binary, "-background", "-data-dir", root)
+	cmd.Dir = root
+	detachWorker(cmd)
+	if err = cmd.Start(); err != nil {
+		return err
+	}
+	_ = cmd.Process.Release()
 	for deadline := time.Now().Add(18 * time.Second); time.Now().Before(deadline); {
 		if i, ok := liveInstance(client, discovery); ok {
 			return present(i, noBrowser)
 		}
 		time.Sleep(100 * time.Millisecond)
 	}
-	return errors.New("The background launcher did not respond. Run Mcbe2Friends with -no-browser to see the startup error.")
+	return errors.New("The background launcher did not respond. Run Mcbe2Friends with -background in a terminal to see the startup error.")
 }
 
 func profileRoot(dataPath string) (string, error) {
@@ -132,11 +130,11 @@ func profileRoot(dataPath string) (string, error) {
 	return filepath.EvalSymlinks(root)
 }
 
-func serve(root string, printURL, resumeOnly bool) error {
+func serve(root string, resumeOnly bool) error {
 	discovery := filepath.Join(root, "launcher.json")
 	lockPath := filepath.Join(root, "launcher.lock")
 	lock, err := lockInstance(lockPath)
-	if errors.Is(err, errInUse) && !printURL && !resumeOnly {
+	if errors.Is(err, errInUse) && !resumeOnly {
 		// A simultaneous idle startup or an exiting worker may briefly own
 		// the lock. Either attach the opener to a healthy peer or take over.
 		client := &http.Client{Timeout: 450 * time.Millisecond, Transport: &http.Transport{}}
@@ -150,9 +148,6 @@ func serve(root string, printURL, resumeOnly bool) error {
 		}
 	}
 	if errors.Is(err, errInUse) {
-		if printURL {
-			return openControls(root, true, false)
-		}
 		return nil
 	}
 	if err != nil {
@@ -196,9 +191,6 @@ func serve(root string, printURL, resumeOnly bool) error {
 	served := make(chan error, 1)
 	l.recoverServices(ctx)
 	go func() { served <- server.Serve(listener) }()
-	if printURL {
-		fmt.Println(i.launchURL())
-	}
 	var result error
 	select {
 	case <-ctx.Done():
@@ -220,7 +212,7 @@ func serve(root string, printURL, resumeOnly bool) error {
 }
 
 func main() {
-	noBrowser := flag.Bool("no-browser", false, "serve in the foreground and print the local controls URL")
+	noBrowser := flag.Bool("no-browser", false, "print the local controls URL instead of opening a browser")
 	worker := flag.Bool("background", false, "run the background worker without opening the controls")
 	resume := flag.Bool("resume", false, "restore previously enabled services without opening the controls")
 	dir := flag.String("data-dir", "", "use a separate settings and runtime directory")
@@ -228,10 +220,10 @@ func main() {
 	privateFiles()
 	root, err := profileRoot(*dir)
 	if err == nil {
-		if *worker || *resume || *noBrowser {
-			err = serve(root, *noBrowser && !*worker && !*resume, *resume)
+		if *worker || *resume {
+			err = serve(root, *resume)
 		} else {
-			err = openControls(root, false, true)
+			err = openControls(root, *noBrowser)
 		}
 	}
 	if err != nil {

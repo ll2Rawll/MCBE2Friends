@@ -61,7 +61,7 @@ These paths assume the default data folder. If you use `-data-dir`, look in that
 - **No joinable session** — check that the launcher shows **Broadcast live**, the friend request has been accepted, and both Xbox profiles allow online multiplayer. Check **Activity** for connection problems.
 - **Sign-in timed out** — cancel or retry setup to request a fresh Microsoft code.
 - **Interrupted download** — check the internet connection, then try again. Completed components are reused. The initial download is about 20 MB with Java 21 installed or about 70 MB when a private Java runtime is needed.
-- **Browser did not open** — run the launcher from a terminal with `-no-browser` and open the local URL it prints. Keep that URL on this computer.
+- **Browser did not open** — run the launcher from a terminal with `-no-browser` and open the local URL it prints. You can close the terminal afterward. Keep that URL on this computer.
 
 ## Local data and components
 
