@@ -1,6 +1,7 @@
 package main
 
 import (
+	"archive/zip"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -187,11 +188,6 @@ func ensureRuntime(ctx context.Context, root string, version javaRuntime, report
 		return "", fmt.Errorf("Install %s on this computer and try again.", label)
 	}
 
-	// tar is included in supported Windows 10/11, macOS and Linux systems.
-	tar, err := exec.LookPath("tar")
-	if err != nil {
-		return "", fmt.Errorf("Install the system tar utility or %s and try again.", label)
-	}
 	work, err := os.MkdirTemp(root, ".java-*")
 	if err != nil {
 		return "", err
@@ -207,11 +203,32 @@ func ensureRuntime(ctx context.Context, root string, version javaRuntime, report
 	if err := os.Mkdir(unpacked, 0700); err != nil {
 		return "", err
 	}
-	cmd := exec.CommandContext(ctx, tar, "-xf", a.name, "-C", "unpacked")
-	cmd.Dir = work
-	configureChild(cmd)
-	if err := cmd.Run(); err != nil {
-		return "", errors.New("Java could not be unpacked. Check free disk space and try again.")
+	if strings.HasSuffix(a.name, ".zip") {
+		// A Windows PC can have GNU tar first on PATH, which cannot read ZIPs.
+		z, e := zip.OpenReader(archive)
+		if e != nil {
+			return "", fmt.Errorf("Open the Java runtime ZIP: %w", e)
+		}
+		limit := int64(1 << 30)
+		e = unpack(ctx, &z.Reader, unpacked, &limit, 20000)
+		closeErr := z.Close()
+		if e != nil {
+			return "", fmt.Errorf("Unpack the Java runtime ZIP: %w", e)
+		}
+		if closeErr != nil {
+			return "", closeErr
+		}
+	} else {
+		tar, e := exec.LookPath("tar")
+		if e != nil {
+			return "", fmt.Errorf("Install the system tar utility or %s and try again.", label)
+		}
+		cmd := exec.CommandContext(ctx, tar, "-xf", a.name, "-C", "unpacked")
+		cmd.Dir = work
+		configureChild(cmd)
+		if e = cmd.Run(); e != nil {
+			return "", fmt.Errorf("Java could not be unpacked. Check free disk space and the system tar utility: %w", e)
+		}
 	}
 
 	entries, err := os.ReadDir(unpacked)
