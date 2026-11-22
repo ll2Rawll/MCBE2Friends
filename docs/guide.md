@@ -4,7 +4,7 @@ Mcbe2Friends puts an existing Minecraft Bedrock or Geyser server in the in-game 
 
 ## Open the app
 
-Extract the download for your computer.
+Extract the download for your computer. When upgrading from 1.3, stop any running services in the old panel and choose **Close launcher** before opening the new download. The new launcher reads your existing key, worlds, and broadcast settings.
 
 - **Windows 10 or 11, 64-bit** — open **Mcbe2Friends.exe**.
 - **macOS, Apple silicon or Intel** — open **Mcbe2Friends.app**. You can move it to Applications.
@@ -12,7 +12,7 @@ Extract the download for your computer.
 
 The app opens its controls in your default browser. These portable builds have no publisher signature or Apple notarization, so your operating system may ask you to approve the app.
 
-From version 1.2, GitHub signs the official release archives. To verify your download with the GitHub CLI, save the release’s signature file in the same folder and run the command below. Substitute your archive’s filename on macOS or Linux. [Download the signature file for 1.3.0](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.3.0/Mcbe2Friends-attestation.json)
+From version 1.2, GitHub signs the official release archives. To verify your download with the GitHub CLI, save the release’s signature file in the same folder and run the command below. Substitute your archive’s filename on macOS or Linux. [Download the signature file for 1.4.0](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.4.0/Mcbe2Friends-attestation.json)
 
 ```sh
 gh attestation verify Mcbe2Friends-Windows-x64.zip --bundle Mcbe2Friends-attestation.json --repo ll2Rawll/MCBE2Friends --signer-workflow ll2Rawll/MCBE2Friends/.github/workflows/release-downloads.yml --deny-self-hosted-runners
@@ -20,7 +20,7 @@ gh attestation verify Mcbe2Friends-Windows-x64.zip --bundle Mcbe2Friends-attesta
 
 ## Host a server on this PC
 
-Open **Premium** to check hardware support, activate a key, and install the official Bedrock server. The built-in panel manages normal worlds and add-ons. [Premium setup and management guide](https://github.com/ll2Rawll/MCBE2Friends/blob/main/docs/premium-hosting.md)
+Open **Premium** to check hardware support, activate a key, and choose **Bedrock Edition** or **Java Edition**. Create Vanilla Java, Paper, or Paper with Geyser and Floodgate. The panel manages regular world folders, Bedrock add-ons, and Paper plugins. [Premium setup and management guide](https://github.com/ll2Rawll/MCBE2Friends/blob/main/docs/premium-hosting.md)
 
 ## Start your first broadcast
 
@@ -35,7 +35,7 @@ A live status confirms that Xbox created the session. Joining from another Bedro
 
 Once you turn on the broadcast or your Premium server, choose **Close launcher** or close the browser tab. Keep the PC awake and connected while friends play. Open Mcbe2Friends again to manage the same session.
 
-After a reboot or power interruption, Mcbe2Friends resumes each service you left on when you next sign in to the same computer account. The controls stay closed. Bedrock opens the saved world after checking your Premium key. If Microsoft needs a fresh sign-in, reopen the launcher for the device code.
+After a reboot or power interruption, Mcbe2Friends resumes each service you left on when you next sign in to the same computer account. The controls stay closed. The worker verifies your Premium key and opens each Bedrock or Java server you left on. If Microsoft needs a fresh sign-in, reopen the launcher for the device code.
 
 **Stop broadcast** and **Stop server** turn off that service and its automatic restart. The server console’s `stop` command does the same for Bedrock. To cancel a pending restart while offline, use **Cancel broadcast restart** or **Cancel server restart**. To switch Xbox accounts, stop the broadcast and choose **Disconnect account**.
 
@@ -47,13 +47,13 @@ To bring a host back **before anyone signs in**, start the service in Mcbe2Frien
 
 - **Windows 10 or 11** — open **Task Scheduler** as an administrator and choose **Import Task**. Open `%LOCALAPPDATA%\Mcbe2Friends\background\start-before-sign-in.xml`, name the task **Mcbe2Friends**, and save it. It runs at system startup with your account’s normal permissions. You can remove it from Task Scheduler.
 - **Linux with systemd** — run `loginctl enable-linger "$USER"` from your hosting account. Allow the system permission prompt if shown. This allows that account’s user services to run at boot and after logout. Mcbe2Friends has already installed its user service. To reverse the account-level change, use `loginctl disable-linger "$USER"`.
-- **macOS** — for unattended broadcasting, run the command below in Terminal after starting the broadcast once. It installs the generated launch daemon for your account. Remove `/Library/LaunchDaemons/app.mcbe2friends.boot.plist` to disable it at the next boot. A Mac with FileVault requires its startup disk to be unlocked before macOS can run the daemon.
+- **macOS** — for unattended hosting or broadcasting, run the command below in Terminal after starting a service once. It installs the generated launch daemon for your account. Remove `/Library/LaunchDaemons/app.mcbe2friends.boot.plist` to disable it at the next boot. A Mac with FileVault requires its startup disk to be unlocked before macOS can run the daemon.
 
 ```sh
 sudo install -o root -g wheel -m 644 "$HOME/Library/Application Support/Mcbe2Friends/background/start-before-sign-in.plist" /Library/LaunchDaemons/app.mcbe2friends.boot.plist
 ```
 
-These paths assume the default data folder. If you use `-data-dir`, look in that folder’s `background` directory. Other Linux service managers can invoke `Mcbe2Friends -resume -data-dir "/path/to/profile"` at boot as the hosting user. When both services are off, a startup invocation exits immediately.
+These paths assume the default data folder. If you use `-data-dir`, look in that folder’s `background` directory. Other Linux service managers can invoke `Mcbe2Friends -resume -data-dir "/path/to/profile"` at boot as the hosting user. When all services are off, a startup invocation exits immediately.
 
 ## If setup gets stuck
 

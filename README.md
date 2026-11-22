@@ -11,11 +11,11 @@ Put your Bedrock or Geyser server in Minecraft’s **Friends** tab. Mcbe2Friends
 
 ## Download
 
-[Windows x64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.3.0/Mcbe2Friends-Windows-x64.zip) · [macOS, Intel and Apple silicon](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.3.0/Mcbe2Friends-macOS.zip) · [Linux x64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.3.0/Mcbe2Friends-Linux-x64.tar.gz) · [Linux ARM64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.3.0/Mcbe2Friends-Linux-ARM64.tar.gz)
+[Windows x64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.4.0/Mcbe2Friends-Windows-x64.zip) · [macOS, Intel and Apple silicon](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.4.0/Mcbe2Friends-macOS.zip) · [Linux x64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.4.0/Mcbe2Friends-Linux-x64.tar.gz) · [Linux ARM64](https://github.com/ll2Rawll/MCBE2Friends/releases/download/v1.4.0/Mcbe2Friends-Linux-ARM64.tar.gz)
 
 ## Premium self-hosting
 
-Open **Premium** in the launcher to check your PC. A one-time **$15 USD** key unlocks an official Bedrock server with hardware-based presets, world backups, add-ons, player management, and a console on Windows or Linux x64.
+Open **Premium** in the launcher to check your PC. One **$15 USD** installation key includes Java and Bedrock hosting. Choose **Java Edition → Create a server** for Vanilla, Paper with plugins, or Paper with Geyser so Bedrock friends can join. The launcher picks settings for your hardware and manages worlds, backups, players, and the console. Java runs on all four desktop downloads. Native Bedrock runs on Windows and Linux x64.
 
 [Purchase via Discord](https://discord.gg/X5adbkPq) · [Premium hosting guide](docs/premium-hosting.md)
 

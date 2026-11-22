@@ -292,8 +292,9 @@
             <div id="host-locked" hidden>
               <h3>Host on your own PC</h3>
               <p>
-                Premium is a one-time $15 USD unlock for this installation. It
-                unlocks Java servers, optional Geyser cross-play, and native Bedrock on supported PCs. Your worlds, plugins, and add-ons stay on your computer.
+                One $15 USD key includes Java hosting, optional Geyser cross-play,
+                and native Bedrock on supported PCs. Your worlds, plugins, and
+                add-ons stay on your computer.
               </p>
               <label for="device-code">Your PC code</label>
               <div class="host-inline">
@@ -336,74 +337,367 @@
               </button>
             </div>
             <div id="host-unlocked" hidden>
-              <div class="edition-switch" role="group" aria-label="Server edition">
-                <button type="button" id="edition-bedrock" aria-pressed="true">Bedrock Edition</button>
-                <button type="button" id="edition-java" aria-pressed="false">Java Edition</button>
+              <div
+                class="edition-switch"
+                role="group"
+                aria-label="Server edition"
+              >
+                <button type="button" id="edition-bedrock" aria-pressed="true">
+                  Bedrock Edition
+                </button>
+                <button type="button" id="edition-java" aria-pressed="false">
+                  Java Edition
+                </button>
               </div>
               <div id="java-controls" hidden>
-                <div class="host-heading"><h3>Java servers</h3><span id="java-version" class="version-label"></span></div>
+                <div class="host-heading">
+                  <h3>Java servers</h3>
+                  <span id="java-version" class="version-label"></span>
+                </div>
                 <p class="hint" id="java-recommendation"></p>
-                <label id="java-select-row">Your servers<select id="java-select"></select></label>
-                <details class="host-drawer java-create" id="java-create-box" open>
+                <label id="java-select-row"
+                  >Your servers<select id="java-select"></select
+                ></label>
+                <details
+                  class="host-drawer java-create"
+                  id="java-create-box"
+                  open
+                >
                   <summary>Create a server</summary>
                   <form id="java-create">
-                    <label>Server name<input id="java-new-name" maxlength="64" placeholder="Cherry Grove SMP" required></label>
+                    <label
+                      >Server name<input
+                        type="text"
+                        id="java-new-name"
+                        maxlength="64"
+                        placeholder="Cherry Grove SMP"
+                        required
+                    /></label>
                     <fieldset class="engine-picker">
                       <legend>Who will play?</legend>
-                      <label><input type="radio" name="engine" value="vanilla" checked><span><strong>Vanilla Java</strong><small>Mojang’s original server</small></span></label>
-                      <label><input type="radio" name="engine" value="paper"><span><strong>Paper</strong><small>Java with server plugins</small></span></label>
-                      <label><input type="radio" name="engine" value="crossplay"><span><strong>Paper + Geyser</strong><small>Java and Bedrock together</small></span></label>
+                      <label
+                        ><input
+                          type="radio"
+                          name="engine"
+                          value="vanilla"
+                          checked
+                        /><span
+                          ><strong>Vanilla Java</strong
+                          ><small>Mojang’s original server</small></span
+                        ></label
+                      >
+                      <label
+                        ><input type="radio" name="engine" value="paper" /><span
+                          ><strong>Paper</strong
+                          ><small>Java with server plugins</small></span
+                        ></label
+                      >
+                      <label
+                        ><input
+                          type="radio"
+                          name="engine"
+                          value="crossplay"
+                        /><span
+                          ><strong>Paper + Geyser</strong
+                          ><small>Java and Bedrock together</small></span
+                        ></label
+                      >
                     </fieldset>
-                    <label class="host-check"><input type="checkbox" id="java-new-eula"><span>I agree to the <a href="https://www.minecraft.net/eula" target="_blank" rel="noopener noreferrer">Minecraft EULA</a> for this server.</span></label>
-                    <div class="host-action-row"><button class="primary" value="start" id="java-create-start" disabled>Create &amp; start</button><button class="text-btn" value="create">Create only</button></div>
+                    <label class="host-check"
+                      ><input type="checkbox" id="java-new-eula" /><span
+                        >I agree to the
+                        <a
+                          href="https://www.minecraft.net/eula"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          >Minecraft EULA</a
+                        >
+                        for this server.</span
+                      ></label
+                    >
+                    <div class="host-action-row">
+                      <button
+                        class="primary"
+                        value="start"
+                        id="java-create-start"
+                        disabled
+                      >
+                        Create &amp; start</button
+                      ><button class="text-btn" value="create">
+                        Create only
+                      </button>
+                    </div>
                   </form>
                 </details>
                 <div id="java-instance" hidden>
-                  <div class="host-heading"><h3 id="java-name"></h3><span id="java-phase" class="version-label"></span></div>
-                  <p id="java-message" class="lead" role="status"></p><progress id="java-progress" max="100" hidden></progress>
-                  <label class="host-check" id="java-eula-row"><input type="checkbox" id="java-eula"><span>I agree to the <a href="https://www.minecraft.net/eula" target="_blank" rel="noopener noreferrer">Minecraft EULA</a>.</span></label>
-                  <div class="host-action-row"><button type="button" class="primary" id="java-start">Start server</button><button type="button" class="secondary" id="java-stop" hidden>Stop server</button><button type="button" class="text-btn" id="java-folder">Open server folder</button></div>
-                  <p class="hint">You can close the launcher while friends play. Keep this computer awake. Stop this server to turn off its automatic restart.</p>
+                  <div class="host-heading">
+                    <h3 id="java-name"></h3>
+                    <span id="java-phase" class="version-label"></span>
+                  </div>
+                  <p id="java-message" class="lead" role="status"></p>
+                  <progress id="java-progress" max="100" hidden></progress>
+                  <label class="host-check" id="java-eula-row"
+                    ><input type="checkbox" id="java-eula" /><span
+                      >I agree to the
+                      <a
+                        href="https://www.minecraft.net/eula"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >Minecraft EULA</a
+                      >.</span
+                    ></label
+                  >
+                  <div class="host-action-row">
+                    <button type="button" class="primary" id="java-start">
+                      Start server</button
+                    ><button
+                      type="button"
+                      class="secondary"
+                      id="java-stop"
+                      hidden
+                    >
+                      Stop server</button
+                    ><button type="button" class="text-btn" id="java-folder">
+                      Open server folder
+                    </button>
+                  </div>
+                  <p class="hint">
+                    You can close the launcher while friends play. Keep this
+                    computer awake. Stop this server to turn off its automatic
+                    restart.
+                  </p>
                   <details class="host-drawer" open>
                     <summary>How to join</summary>
-                    <p id="java-join"></p><p id="java-bedrock-join" hidden></p>
-                    <div id="java-friends" hidden><label for="java-public">Address your Bedrock friends can reach</label><div class="host-inline"><input id="java-public" placeholder="play.example.net" spellcheck="false"><button type="button" class="secondary" id="java-broadcast">Friends setup</button></div></div>
+                    <p id="java-join"></p>
+                    <p id="java-bedrock-join" hidden></p>
+                    <div id="java-friends" hidden>
+                      <label for="java-public"
+                        >Address your Bedrock friends can reach</label
+                      >
+                      <div class="host-inline">
+                        <input
+                          type="text"
+                          id="java-public"
+                          placeholder="play.example.net"
+                          spellcheck="false"
+                        /><button
+                          type="button"
+                          class="secondary"
+                          id="java-broadcast"
+                        >
+                          Friends setup
+                        </button>
+                      </div>
+                    </div>
                     <p class="hint" id="java-network-help"></p>
                   </details>
-                  <details class="host-drawer"><summary>Settings &amp; cross-play</summary>
-                    <form id="java-settings"><fieldset id="java-fields"><div class="host-grid">
-                      <label>Server name<input name="name" maxlength="64" required></label>
-                      <label>World folder<input name="world" list="java-worlds" maxlength="60" required><datalist id="java-worlds"></datalist></label>
-                      <label>Java TCP port<input name="port" type="number" min="1" max="65535" required></label>
-                      <label>Memory limit (MiB)<input name="memory" type="number" min="1024" required></label>
-                      <label>Player slots<input name="players" type="number" min="1" max="1000" required></label>
-                      <label>View distance<input name="view" type="number" min="2" max="32" required></label>
-                      <label>Simulation distance<input name="simulation" type="number" min="2" max="32" required></label>
-                      <label>Game mode<select name="mode"><option value="survival">Survival</option><option value="creative">Creative</option><option value="adventure">Adventure</option><option value="spectator">Spectator</option></select></label>
-                      <label>Difficulty<select name="difficulty"><option value="peaceful">Peaceful</option><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option></select></label>
-                    </div>
-                    <label class="host-check"><input name="whitelist" type="checkbox">Require the player whitelist</label>
-                    <div id="java-cross-settings"><label class="host-check"><input name="geyser" type="checkbox">Let Bedrock players join with Geyser and Floodgate</label>
-                    <label>Geyser port (TCP and UDP)<input name="bedrockPort" type="number" min="1" max="65535" required></label></div>
-                    <div class="host-action-row"><button class="secondary">Save settings</button><button type="button" id="java-preset" class="text-btn">Use PC recommendations</button></div></fieldset></form>
-                    <button type="button" class="text-btn" id="java-reload">Reload from server files</button>
+                  <details class="host-drawer">
+                    <summary>Settings &amp; cross-play</summary>
+                    <form id="java-settings">
+                      <fieldset id="java-fields">
+                        <div class="host-grid">
+                          <label
+                            >Server name<input
+                              type="text"
+                              name="name"
+                              maxlength="64"
+                              required
+                          /></label>
+                          <label
+                            >World folder<input
+                              type="text"
+                              name="world"
+                              list="java-worlds"
+                              maxlength="60"
+                              required /><datalist id="java-worlds"></datalist
+                          ></label>
+                          <label
+                            >Java TCP port<input
+                              name="port"
+                              type="number"
+                              min="1"
+                              max="65535"
+                              required
+                          /></label>
+                          <label
+                            >Memory limit (MiB)<input
+                              name="memory"
+                              type="number"
+                              min="1024"
+                              required
+                          /></label>
+                          <label
+                            >Player slots<input
+                              name="players"
+                              type="number"
+                              min="1"
+                              max="1000"
+                              required
+                          /></label>
+                          <label
+                            >View distance<input
+                              name="view"
+                              type="number"
+                              min="2"
+                              max="32"
+                              required
+                          /></label>
+                          <label
+                            >Simulation distance<input
+                              name="simulation"
+                              type="number"
+                              min="2"
+                              max="32"
+                              required
+                          /></label>
+                          <label
+                            >Game mode<select name="mode">
+                              <option value="survival">Survival</option>
+                              <option value="creative">Creative</option>
+                              <option value="adventure">Adventure</option>
+                              <option value="spectator">Spectator</option>
+                            </select></label
+                          >
+                          <label
+                            >Difficulty<select name="difficulty">
+                              <option value="peaceful">Peaceful</option>
+                              <option value="easy">Easy</option>
+                              <option value="normal">Normal</option>
+                              <option value="hard">Hard</option>
+                            </select></label
+                          >
+                        </div>
+                        <label class="host-check"
+                          ><input name="whitelist" type="checkbox" />Require the
+                          player whitelist</label
+                        >
+                        <div id="java-cross-settings">
+                          <label class="host-check"
+                            ><input name="geyser" type="checkbox" />Let Bedrock
+                            players join with Geyser and Floodgate</label
+                          >
+                          <label
+                            >Geyser port (TCP and UDP)<input
+                              name="bedrockPort"
+                              type="number"
+                              min="1"
+                              max="65535"
+                              required
+                          /></label>
+                        </div>
+                        <div class="host-action-row">
+                          <button class="secondary">Save settings</button
+                          ><button
+                            type="button"
+                            id="java-preset"
+                            class="text-btn"
+                          >
+                            Use PC recommendations
+                          </button>
+                        </div>
+                      </fieldset>
+                    </form>
+                    <button type="button" class="text-btn" id="java-reload">
+                      Reload from server files
+                    </button>
                   </details>
-                  <details class="host-drawer" id="java-plugins-box"><summary>Paper plugins</summary>
-                    <p>Install plugins from authors you trust. Their code runs on your computer.</p>
-                    <form id="java-import-plugin"><label>Plugin JAR<input type="file" id="java-plugin-file" accept=".jar" required></label><button class="secondary">Import plugin</button></form>
+                  <details class="host-drawer" id="java-plugins-box">
+                    <summary>Paper plugins</summary>
+                    <p>
+                      Install plugins from authors you trust. Their code runs on
+                      your computer.
+                    </p>
+                    <form id="java-import-plugin">
+                      <label
+                        >Plugin JAR<input
+                          type="file"
+                          id="java-plugin-file"
+                          accept=".jar"
+                          required /></label
+                      ><button class="secondary">Import plugin</button>
+                    </form>
                     <ul class="host-list" id="java-plugins"></ul>
                   </details>
-                  <details class="host-drawer"><summary>Worlds &amp; backups</summary>
-                    <p>Stop the server to back up or import a world. Select its folder in Settings to play it.</p>
-                    <div class="host-action-row"><button type="button" class="secondary" id="java-backup">Back up current world</button><button type="button" class="text-btn" id="java-backups-folder">Open backups</button></div>
-                    <form id="java-world-import"><label>Java world ZIP<input type="file" id="java-world-file" accept=".zip" required></label><label>New world folder<input id="java-import-name" maxlength="60" required></label><button class="secondary">Import world</button></form>
-                    <form id="java-restore"><label>Saved backup<select id="java-backups"></select></label><label>Restore into a new folder<input id="java-restore-name" maxlength="60" required></label><button class="secondary">Restore backup</button></form>
+                  <details class="host-drawer">
+                    <summary>Worlds &amp; backups</summary>
+                    <p>
+                      Stop the server to back up or import a world. Select its
+                      folder in Settings to play it.
+                    </p>
+                    <div class="host-action-row">
+                      <button type="button" class="secondary" id="java-backup">
+                        Back up current world</button
+                      ><button
+                        type="button"
+                        class="text-btn"
+                        id="java-backups-folder"
+                      >
+                        Open backups
+                      </button>
+                    </div>
+                    <form id="java-world-import">
+                      <label
+                        >Java world ZIP<input
+                          type="file"
+                          id="java-world-file"
+                          accept=".zip"
+                          required /></label
+                      ><label
+                        >New world folder<input
+                          type="text"
+                          id="java-import-name"
+                          maxlength="60"
+                          required /></label
+                      ><button class="secondary">Import world</button>
+                    </form>
+                    <form id="java-restore">
+                      <label
+                        >Saved backup<select id="java-backups"></select></label
+                      ><label
+                        >Restore into a new folder<input
+                          type="text"
+                          id="java-restore-name"
+                          maxlength="60"
+                          required /></label
+                      ><button class="secondary">Restore backup</button>
+                    </form>
                   </details>
-                  <details class="host-drawer"><summary>Players &amp; console</summary>
+                  <details class="host-drawer">
+                    <summary>Players &amp; console</summary>
                     <p id="java-whitelisted"></p>
-                    <form id="java-player"><label>Player edition<select id="java-player-edition"><option value="java">Java username</option><option value="bedrock">Bedrock gamertag</option></select></label>
-                      <label>Player name<input id="java-player-name" maxlength="32" required></label><div class="host-action-row"><button value="add" class="secondary">Allow player</button><button class="text-btn" value="remove">Remove player</button></div></form>
-                    <pre id="java-log" aria-label="Java server output"></pre><form id="java-command"><label>Console command<input id="java-command-text" maxlength="500" placeholder="list" required></label><button class="secondary">Send command</button></form>
+                    <form id="java-player">
+                      <label
+                        >Player edition<select id="java-player-edition">
+                          <option value="java">Java username</option>
+                          <option value="bedrock">Bedrock gamertag</option>
+                        </select></label
+                      >
+                      <label
+                        >Player name<input
+                          type="text"
+                          id="java-player-name"
+                          maxlength="32"
+                          required
+                      /></label>
+                      <div class="host-action-row">
+                        <button value="add" class="secondary">
+                          Allow player</button
+                        ><button class="text-btn" value="remove">
+                          Remove player
+                        </button>
+                      </div>
+                    </form>
+                    <pre id="java-log" aria-label="Java server output"></pre>
+                    <form id="java-command">
+                      <label
+                        >Console command<input
+                          type="text"
+                          id="java-command-text"
+                          maxlength="500"
+                          placeholder="list"
+                          required /></label
+                      ><button class="secondary">Send command</button>
+                    </form>
                   </details>
                 </div>
               </div>
