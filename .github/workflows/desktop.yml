@@ -10,6 +10,7 @@ on:
       - "go.mod"
       - "go.sum"
       - "packaging/build.py"
+      - "packaging/check-desktop.ps1"
       - "packaging/launcher.manifest"
       - "resource_windows_amd64.syso"
       - ".github/workflows/desktop.yml"
@@ -62,6 +63,10 @@ jobs:
           fi
       - name: Build the shipping desktop executable
         run: python packaging/build.py --native-output native
+      - name: Double-click, close and reopen the shipping Windows EXE
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./packaging/check-desktop.ps1 -Binary native/windows-amd64
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: desktop-${{ matrix.name }}
