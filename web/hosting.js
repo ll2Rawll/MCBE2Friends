@@ -38,7 +38,9 @@ window.premiumPanel = (() => {
       hw.platform + " · " + hw.cores + " logical CPUs" + ram;
     const rec = host.recommended;
     el("host-capability").textContent =
-      hw.note +
+      window.javaPanel.isSelected()
+        ? "Java 25 and the selected server software are installed on first start."
+        : ((!host.licensed && hw.javaSupported ? "Java hosting is available on this computer. " : "") + hw.note) +
       (hw.supported
         ? " " +
           hw.tier +

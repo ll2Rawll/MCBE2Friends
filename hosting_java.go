@@ -183,7 +183,7 @@ func javaListenHost(dir string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if !p.GetBool("online-mode", true) || !p.GetBool("enable-status", true) {
+	if !strings.EqualFold(p.GetString("online-mode", "true"), "true") || !strings.EqualFold(p.GetString("enable-status", "true"), "true") {
 		return "", errors.New("Set online-mode and enable-status to true in server.properties before starting.")
 	}
 	host := p.GetString("server-ip", "")

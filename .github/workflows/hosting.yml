@@ -36,6 +36,7 @@ jobs:
           go-version: "1.27.4"
           cache: false
       - name: Test the launcher and file management
+        id: unit
         run: go test ./...
       - name: Restore from an unattended Windows scheduled task
         if: runner.os == 'Windows'
@@ -46,8 +47,21 @@ jobs:
         if: runner.os != 'macOS' && runner.arch == 'X64'
         env:
           MCBE2FRIENDS_TEST_BEDROCK: "1"
-        run: go test -v -count=1 -timeout 7m -run TestOfficialBedrockLifecycle .
+        shell: bash
+        run: |
+          go test -v -count=1 -timeout 7m -run TestOfficialBedrockLifecycle . 2>&1 | tee "$RUNNER_TEMP/bedrock-test.log" || {
+            detail=$(grep -m 1 -E 'hosting_live_test.go:[0-9]+:' "$RUNNER_TEMP/bedrock-test.log" || true)
+            echo "::error::Bedrock integration failed. $detail"
+            exit 1
+          }
       - name: Start Vanilla and Paper, switch Geyser on and off, and restore a world
+        if: ${{ !cancelled() && steps.unit.conclusion == 'success' }}
         env:
           MCBE2FRIENDS_TEST_JAVA: "1"
-        run: go test -v -count=1 -timeout 18m -run TestOfficialJavaLifecycle .
+        shell: bash
+        run: |
+          go test -v -count=1 -timeout 18m -run TestOfficialJavaLifecycle . 2>&1 | tee "$RUNNER_TEMP/java-test.log" || {
+            detail=$(grep -m 1 -E 'hosting_java_live_test.go:[0-9]+:.*(error|unreachable|failed|could not)' "$RUNNER_TEMP/java-test.log" || true)
+            echo "::error::Java integration failed. $detail"
+            exit 1
+          }

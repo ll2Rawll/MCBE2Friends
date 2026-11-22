@@ -58,7 +58,12 @@ func download(ctx context.Context, url, dest string, a asset, report func(int)) 
 	if err != nil {
 		return err
 	}
-	req.Header.Set("User-Agent", "Mcbe2Friends/1.4 (https://github.com/ll2Rawll/MCBE2Friends)")
+	agent := "Mcbe2Friends/1.4 (https://github.com/ll2Rawll/MCBE2Friends)"
+	if req.URL.Hostname() == "www.minecraft.net" {
+		// Keep the established client identifier for the Bedrock download endpoint.
+		agent = "Mcbe2Friends/1.1"
+	}
+	req.Header.Set("User-Agent", agent)
 	client := &http.Client{Timeout: 10 * time.Minute}
 	resp, err := client.Do(req)
 	if err != nil {
