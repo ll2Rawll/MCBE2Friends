@@ -1211,6 +1211,27 @@ dialog::backdrop {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+/* Keep a visible slice of the world around the controls on desktop. */
+@media (min-width: 880px) {
+  .desktop-app .shell { width: min(1250px, calc(100% - clamp(62px, 8vw, 132px))); }
+  .desktop-app .masthead { padding-top: 23px; }
+  .desktop-app .main { column-gap: clamp(32px, 5.5vw, 82px); }
+  .desktop-app .hero { position: sticky; top: 28px; }
+  .desktop-app .panel::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    box-shadow: inset 0 1px rgb(255 255 255 / 78%), inset 0 -1px rgb(71 108 94 / 17%);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .desktop-app .workspace > .panel:not([hidden]) { animation: window-panel-in 220ms cubic-bezier(.2,.7,.3,1) both; }
+  .desktop-app .dock button { transition: color 140ms, background-color 140ms, transform 140ms; }
+  .desktop-app .dock button:active { transform: translateY(1px); }
+}
+@keyframes window-panel-in {
+  from { opacity: .48; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

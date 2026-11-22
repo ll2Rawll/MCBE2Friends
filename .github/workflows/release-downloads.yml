@@ -33,6 +33,7 @@ jobs:
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: |
+            downloads/Mcbe2Friends.exe
             downloads/Mcbe2Friends-Windows-x64.zip
             downloads/Mcbe2Friends-macOS.zip
             downloads/Mcbe2Friends-Linux-x64.tar.gz
@@ -49,7 +50,9 @@ jobs:
           else
             cp "$BUNDLE" "$RUNNER_TEMP/$proof"
           fi
-          for name in Mcbe2Friends-Windows-x64.zip Mcbe2Friends-macOS.zip Mcbe2Friends-Linux-x64.tar.gz Mcbe2Friends-Linux-ARM64.tar.gz
+          files=(Mcbe2Friends-Windows-x64.zip Mcbe2Friends-macOS.zip Mcbe2Friends-Linux-x64.tar.gz Mcbe2Friends-Linux-ARM64.tar.gz)
+          if [[ -f downloads/Mcbe2Friends.exe ]]; then files+=(Mcbe2Friends.exe); fi
+          for name in "${files[@]}"
           do
             file="downloads/$name"
             gh attestation verify "$file" --bundle "$RUNNER_TEMP/$proof" --repo "$GITHUB_REPOSITORY" --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/release-downloads.yml" --deny-self-hosted-runners

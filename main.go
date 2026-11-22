@@ -30,39 +30,12 @@ type Instance struct {
 func (i Instance) origin() string    { return "http://127.0.0.1:" + strconv.Itoa(i.Port) }
 func (i Instance) launchURL() string { return i.origin() + "/#" + i.Token }
 
-func openBrowser(address string) error {
-	var cmd *exec.Cmd
-	switch runtime.GOOS {
-	case "windows":
-		cmd = exec.Command("rundll32.exe", "url.dll,FileProtocolHandler", address)
-	case "darwin":
-		cmd = exec.Command("open", address)
-	default:
-		cmd = exec.Command("xdg-open", address)
-	}
-	// Desktop openers can stay alive until the browser closes.
-	if err := cmd.Start(); err != nil {
-		return err
-	}
-	opened := make(chan error, 1)
-	go func() { opened <- cmd.Wait() }()
-	select {
-	case err := <-opened:
-		return err
-	case <-time.After(300 * time.Millisecond):
-		return nil
-	}
-}
-
-func present(i Instance, noBrowser bool) error {
+func present(root string, i Instance, noBrowser bool) error {
 	if noBrowser {
 		fmt.Println(i.launchURL())
 		return nil
 	}
-	if err := openBrowser(i.launchURL()); err != nil {
-		return fmt.Errorf("open this address in your browser to use Mcbe2Friends:\n%s", i.launchURL())
-	}
-	return nil
+	return showDesktop(root, i)
 }
 
 func liveInstance(client *http.Client, discovery string) (Instance, bool) {
@@ -87,7 +60,7 @@ func openControls(root string, noBrowser bool) error {
 	defer client.CloseIdleConnections()
 	discovery := filepath.Join(root, "launcher.json")
 	if i, ok := liveInstance(client, discovery); ok {
-		return present(i, noBrowser)
+		return present(root, i, noBrowser)
 	}
 	binary, err := os.Executable()
 	if err != nil {
@@ -102,7 +75,7 @@ func openControls(root string, noBrowser bool) error {
 	_ = cmd.Process.Release()
 	for deadline := time.Now().Add(18 * time.Second); time.Now().Before(deadline); {
 		if i, ok := liveInstance(client, discovery); ok {
-			return present(i, noBrowser)
+			return present(root, i, noBrowser)
 		}
 		time.Sleep(100 * time.Millisecond)
 	}
@@ -212,7 +185,8 @@ func serve(root string, resumeOnly bool) error {
 }
 
 func main() {
-	noBrowser := flag.Bool("no-browser", false, "print the local controls URL instead of opening a browser")
+	noBrowser := flag.Bool("no-browser", false, "print the local controls URL for headless use")
+	windowOnly := flag.Bool("desktop-window", false, "attach the desktop window to an existing worker")
 	worker := flag.Bool("background", false, "run the background worker without opening the controls")
 	resume := flag.Bool("resume", false, "restore previously enabled services without opening the controls")
 	dir := flag.String("data-dir", "", "use a separate settings and runtime directory")
@@ -222,6 +196,13 @@ func main() {
 	if err == nil {
 		if *worker || *resume {
 			err = serve(root, *resume)
+		} else if *windowOnly {
+			client := &http.Client{Timeout: 2 * time.Second, Transport: &http.Transport{DisableKeepAlives: true}}
+			if i, ok := liveInstance(client, filepath.Join(root, "launcher.json")); ok {
+				err = showDesktop(root, i)
+			} else {
+				err = errors.New("The background service is unavailable. Reopen Mcbe2Friends to reconnect.")
+			}
 		} else {
 			err = openControls(root, *noBrowser)
 		}

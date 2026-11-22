@@ -37,10 +37,11 @@ let lastCard = "";
 let lastEvents = "";
 let toastTimer;
 let confirmedAction = "";
-let token = location.hash.slice(1);
+const nativeWindow = typeof window.runtime?.Quit === "function";
+let token = nativeWindow ? "desktop-window" : location.hash.slice(1);
 try {
-  if (token) sessionStorage.setItem("launcher-key", token);
-  else token = sessionStorage.getItem("launcher-key") || "";
+  if (!nativeWindow && token) sessionStorage.setItem("launcher-key", token);
+  else if (!nativeWindow) token = sessionStorage.getItem("launcher-key") || "";
 } catch {
   /* The current tab can still use the launch URL in private mode. */
 }
@@ -63,6 +64,16 @@ async function api(path, method = "GET", body) {
       data.error || "The launcher could not complete this action.",
     );
   return data;
+}
+
+if (nativeWindow) {
+  document.documentElement.classList.add("desktop-app");
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest?.('a[target="_blank"]');
+    if (!link) return;
+    event.preventDefault();
+    if (link.protocol === "https:") window.runtime.BrowserOpenURL(link.href);
+  });
 }
 
 function toast(message) {
@@ -506,6 +517,10 @@ function openConfirm(title, body, label, action) {
 }
 
 async function quit() {
+  if (nativeWindow) {
+    window.runtime.Quit();
+    return;
+  }
   const result = await api("quit", "POST");
   closed = true;
   connected = false;
@@ -520,10 +535,11 @@ async function quit() {
 
 async function copy(text) {
   try {
-    await navigator.clipboard.writeText(text);
+    if (nativeWindow) await window.runtime.ClipboardSetText(text);
+    else await navigator.clipboard.writeText(text);
     toast("Copied to clipboard.");
   } catch {
-    toast("Select the text and copy it with your browser’s Copy command.");
+    toast("Select the text and use the Copy command.");
   }
 }
 

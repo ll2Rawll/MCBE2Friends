@@ -21,12 +21,13 @@ GUIDE = ROOT / "docs" / "guide.md"
 NAME = "Mcbe2Friends"
 
 
-def build(go, stage, system, arch):
+def build(go, stage, system, arch, desktop=False):
     path = stage / (system + "-" + arch)
     flags = "-s -w" + (" -H windowsgui" if system == "windows" else "")
-    env = dict(os.environ, CGO_ENABLED="0", GOOS=system, GOARCH=arch)
+    env = dict(os.environ, CGO_ENABLED="1" if desktop and system != "windows" else "0", GOOS=system, GOARCH=arch)
+    tags = ["-tags", "desktop,production" + (",webkit2_41" if system == "linux" else "")] if desktop else []
     subprocess.run(
-        [go, "build", "-trimpath", "-buildvcs=false", "-ldflags", flags, "-o", str(path), "."],
+        [go, "build", *tags, "-trimpath", "-buildvcs=false", "-ldflags", flags, "-o", str(path), "."],
         cwd=ROOT, env=env, check=True,
     )
     return path
@@ -69,8 +70,8 @@ def collect_notices(go, stage):
     targets = (("windows", "amd64"), ("darwin", "amd64"), ("darwin", "arm64"),
                ("linux", "amd64"), ("linux", "arm64"))
     for system, arch in targets:
-        env = dict(os.environ, CGO_ENABLED="0", GOOS=system, GOARCH=arch)
-        result = subprocess.check_output([go, "list", "-deps", "-f", template, "."],
+        env = dict(os.environ, CGO_ENABLED="0" if system == "windows" else "1", GOOS=system, GOARCH=arch)
+        result = subprocess.check_output([go, "list", "-tags", "desktop,production,webkit2_41", "-deps", "-f", template, "."],
                                          cwd=ROOT, env=env, text=True)
         modules.update(line for line in result.splitlines() if line)
     texts = defaultdict(list)
@@ -88,8 +89,9 @@ def collect_notices(go, stage):
     return [*sorted((PACKAGE / "licenses").glob("*.txt")), output]
 
 
-def windows_release(go, stage, out, notices):
-    binary = build(go, stage, "windows", "amd64")
+def windows_release(native, out, notices):
+    binary = native / "windows-amd64"
+    shutil.copyfile(binary, out / (NAME + ".exe"))
     output = out / (NAME + "-Windows-x64.zip")
     with zipfile.ZipFile(output, "w") as archive:
         put_zip(archive, binary, NAME + ".exe", True)
@@ -99,8 +101,8 @@ def windows_release(go, stage, out, notices):
     print(output.name, flush=True)
 
 
-def mac_release(go, stage, out, notices):
-    slices = [build(go, stage, "darwin", arch) for arch in ("amd64", "arm64")]
+def mac_release(native, stage, out, notices):
+    slices = [native / ("darwin-" + arch) for arch in ("amd64", "arm64")]
     binary = stage / "mac-universal"
     mac_universal(slices, binary)
     plist = stage / "Info.plist"
@@ -112,9 +114,9 @@ def mac_release(go, stage, out, notices):
         "CFBundleIconFile": NAME + ".icns",
         "CFBundlePackageType": "APPL",
         "CFBundleInfoDictionaryVersion": "6.0",
-        "CFBundleShortVersionString": "1.5.0",
-        "CFBundleVersion": "6",
-        "LSUIElement": True,
+        "CFBundleShortVersionString": "1.6.0",
+        "CFBundleVersion": "7",
+        "NSHighResolutionCapable": True,
     }))
     output = out / (NAME + "-macOS.zip")
     contents = NAME + ".app/Contents/"
@@ -128,7 +130,7 @@ def mac_release(go, stage, out, notices):
     print(output.name, flush=True)
 
 
-def linux_release(go, stage, out, arch, notices):
+def linux_release(go, stage, native, out, arch, notices):
     binary = build(go, stage, "linux", arch)
     label = "x64" if arch == "amd64" else "ARM64"
     output = out / (NAME + "-Linux-" + label + ".tar.gz")
@@ -141,6 +143,7 @@ def linux_release(go, stage, out, arch, notices):
             with source.open("rb") as file:
                 archive.addfile(info, file)
         add(binary, NAME, 0o755)
+        add(native / ("linux-" + arch), "libexec/" + NAME + "-desktop", 0o755)
         add(GUIDE, "README.md", 0o644)
         for notice in notices:
             add(notice, "licenses/" + notice.name, 0o644)
@@ -150,7 +153,7 @@ def linux_release(go, stage, out, arch, notices):
 def source_release(out):
     output = out / (NAME + "-Source.zip")
     files = [*ROOT.glob("*.go"), ROOT / "go.mod", ROOT / "go.sum", ROOT / "README.md", ROOT / "resource_windows_amd64.syso"]
-    for folder in (ROOT / "catalog", ROOT / "web", ROOT / "docs", ROOT / "licensing", ROOT / "testdata", PACKAGE):
+    for folder in (ROOT / "catalog", ROOT / "web", ROOT / "desktopwindow", ROOT / "docs", ROOT / "licensing", ROOT / "testdata", PACKAGE):
         files.extend(p for p in folder.rglob("*") if p.is_file() and "__pycache__" not in p.parts)
     with zipfile.ZipFile(output, "w") as archive:
         for file in sorted(files):
@@ -162,16 +165,27 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--go", default=shutil.which("go") or "go")
     parser.add_argument("--output", type=Path, default=ROOT / "dist")
+    parser.add_argument("--native-output", type=Path, help="Build the desktop window for this runner's OS and architecture")
+    parser.add_argument("--native-binaries", type=Path, help="Assemble the five builds from the Desktop windows workflow")
     args = parser.parse_args()
+    if args.native_output:
+        output = args.native_output.resolve()
+        output.mkdir(parents=True, exist_ok=True)
+        system, arch = subprocess.check_output([args.go, "env", "GOOS", "GOARCH"], text=True).split()
+        build(args.go, output, system, arch, desktop=True)
+        return
+    if not args.native_binaries:
+        parser.error("Use --native-output to build a desktop window or --native-binaries to package all platforms.")
+    native = args.native_binaries.resolve()
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as temporary:
         stage = Path(temporary)
         notices = collect_notices(args.go, stage)
-        windows_release(args.go, stage, out, notices)
-        mac_release(args.go, stage, out, notices)
+        windows_release(native, out, notices)
+        mac_release(native, stage, out, notices)
         for arch in ("amd64", "arm64"):
-            linux_release(args.go, stage, out, arch, notices)
+            linux_release(args.go, stage, native, out, arch, notices)
         source_release(out)
 
 
