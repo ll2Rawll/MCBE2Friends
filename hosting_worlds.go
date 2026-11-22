@@ -68,7 +68,11 @@ func (h *Hosting) backupWorld(ctx context.Context, name string) error {
 	if _, err = os.Stat(filepath.Join(dir, "level.dat")); err != nil {
 		return errors.New("Start this world once before backing it up.")
 	}
-	out := filepath.Join(h.root, "backups")
+	return backupDirectory(ctx, dir, filepath.Join(h.root, "backups"), name, ".mcworld")
+}
+
+func backupDirectory(ctx context.Context, dir, out, name, extension string) error {
+	var err error
 	if err = os.MkdirAll(out, 0700); err != nil {
 		return err
 	}
@@ -121,5 +125,5 @@ func (h *Hosting) backupWorld(ctx context.Context, name string) error {
 		return err
 	}
 	unique := strings.TrimPrefix(filepath.Base(f.Name()), ".backup-")
-	return os.Rename(f.Name(), filepath.Join(out, name+"-"+time.Now().UTC().Format("20060102-150405")+"-"+unique+".mcworld"))
+	return os.Rename(f.Name(), filepath.Join(out, name+"-"+time.Now().UTC().Format("20060102-150405")+"-"+unique+extension))
 }

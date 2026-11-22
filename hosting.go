@@ -36,6 +36,8 @@ type Hosting struct {
 	licenseMessage, phase, message string
 	percent                        int
 	active                         *hostRun
+	java                           map[string]*javaState
+	javaInstall                    chan struct{}
 	input                          io.Writer
 	logs                           []string
 }
@@ -60,8 +62,8 @@ type HostStatus struct {
 
 func newHosting(root string, bg *background) *Hosting {
 	dir := filepath.Join(root, "hosting")
-	h := &Hosting{background: bg, root: dir, server: filepath.Join(dir, "server"), grants: grantBase, phase: "offline", percent: -1, hw: hardware()}
-	if !h.hw.Supported {
+	h := &Hosting{javaInstall: make(chan struct{}, 1), java: make(map[string]*javaState), background: bg, root: dir, server: filepath.Join(dir, "server"), grants: grantBase, phase: "offline", percent: -1, hw: hardware()}
+	if !h.hw.Supported && !h.hw.JavaSupported {
 		return h
 	}
 	err := os.MkdirAll(dir, 0700)
@@ -144,7 +146,7 @@ func (h *Hosting) beginServer(consent bool, restore context.Context) error {
 		}
 	}
 	h.mu.Lock()
-	if h.closing || (restore != nil && restore.Err() != nil) {
+	if h.closing || (restore != nil && (restore.Err() != nil || !h.background.status().Server)) {
 		h.mu.Unlock()
 		return errors.New("Server startup was cancelled.")
 	}
@@ -156,7 +158,7 @@ func (h *Hosting) beginServer(consent bool, restore context.Context) error {
 		h.mu.Unlock()
 		return err
 	}
-	if restore == nil && h.cancelRestore != nil {
+	if restore == nil && h.cancelRestore != nil && len(h.background.status().Java) == 0 {
 		h.cancelRestore()
 	}
 	ctx, cancel := context.WithCancel(context.Background())
@@ -186,18 +188,31 @@ func (h *Hosting) stop(closing bool) (<-chan struct{}, error) {
 	} else if err := h.background.set(bedrockService, false); err != nil {
 		return nil, err
 	}
-	if h.cancelRestore != nil {
+	if h.cancelRestore != nil && (closing || len(h.background.status().Java) == 0) {
 		h.cancelRestore()
 	}
-	if h.active == nil {
-		done := make(chan struct{})
-		close(done)
-		return done, nil
+	var waits []<-chan struct{}
+	if h.active != nil {
+		h.phase, h.message = "stopping", "Saving the world and stopping"
+		h.active.cancel()
+		waits = append(waits, h.active.done)
 	}
-	h.phase = "stopping"
-	h.message = "Saving the world and stopping"
-	h.active.cancel()
-	return h.active.done, nil
+	if closing {
+		for _, j := range h.java {
+			if j.active != nil {
+				j.cancelLocked()
+				waits = append(waits, j.active.done)
+			}
+		}
+	}
+	done := make(chan struct{})
+	go func() {
+		for _, ch := range waits {
+			<-ch
+		}
+		close(done)
+	}()
+	return done, nil
 }
 func (h *Hosting) run(ctx context.Context, run *hostRun) {
 	err := h.install(ctx)
@@ -407,6 +422,9 @@ func (h *Hosting) openFolder(backups bool) error {
 			return err
 		}
 	}
+	return openHostFolder(dir)
+}
+func openHostFolder(dir string) error {
 	var cmd *exec.Cmd
 	switch runtime.GOOS {
 	case "windows":

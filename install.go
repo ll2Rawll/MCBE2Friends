@@ -11,8 +11,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"runtime"
+	"strings"
 	"time"
 )
 
@@ -58,7 +58,7 @@ func download(ctx context.Context, url, dest string, a asset, report func(int)) 
 	if err != nil {
 		return err
 	}
-	req.Header.Set("User-Agent", "Mcbe2Friends/1.1")
+	req.Header.Set("User-Agent", "Mcbe2Friends/1.4 (https://github.com/ll2Rawll/MCBE2Friends)")
 	client := &http.Client{Timeout: 10 * time.Minute}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -110,9 +110,14 @@ func download(ctx context.Context, url, dest string, a asset, report func(int)) 
 	return os.Rename(f.Name(), dest)
 }
 
-var java21 = regexp.MustCompile(`(?m)^\s*java\.specification\.version\s*=\s*21\s*$`)
+type javaRuntime struct {
+	major, tag, base string
+	assets           map[string]asset
+}
 
-func usableJava(ctx context.Context, path string) bool {
+var broadcastRuntime = javaRuntime{"21", runtimeTag, runtimeBase, runtimes}
+
+func usableJavaVersion(ctx context.Context, path, major string) bool {
 	if path == "" {
 		return false
 	}
@@ -124,7 +129,16 @@ func usableJava(ctx context.Context, path string) bool {
 	cmd := exec.CommandContext(probe, path, "-XshowSettings:properties", "-version")
 	configureChild(cmd)
 	out, err := cmd.CombinedOutput()
-	return err == nil && java21.Match(out)
+	if err != nil {
+		return false
+	}
+	for _, line := range strings.Split(string(out), "\n") {
+		key, value, ok := strings.Cut(line, "=")
+		if ok && strings.TrimSpace(key) == "java.specification.version" {
+			return strings.TrimSpace(value) == major
+		}
+	}
+	return false
 }
 
 func javaName() string {
@@ -135,13 +149,17 @@ func javaName() string {
 }
 
 func ensureJava(ctx context.Context, root string, report reportProgress) (string, error) {
-	report("Checking for Java 21", -1)
+	return ensureRuntime(ctx, root, broadcastRuntime, report)
+}
+func ensureRuntime(ctx context.Context, root string, version javaRuntime, report reportProgress) (string, error) {
+	label := "Java " + version.major
+	report("Checking for "+label, -1)
 	relJava := filepath.Join("bin", javaName())
 	managedRel := relJava
 	if runtime.GOOS == "darwin" {
 		managedRel = filepath.Join("Contents", "Home", relJava)
 	}
-	dest := filepath.Join(root, "java-"+runtimeTag+"-"+runtime.GOARCH)
+	dest := filepath.Join(root, "java-"+version.tag+"-"+runtime.GOARCH)
 	managedJava := filepath.Join(dest, managedRel)
 
 	candidates := []string{managedJava}
@@ -152,22 +170,22 @@ func ensureJava(ctx context.Context, root string, report reportProgress) (string
 		candidates = append(candidates, path)
 	}
 	for _, path := range candidates {
-		if usableJava(ctx, path) {
+		if usableJavaVersion(ctx, path, version.major) {
 			return path, nil
 		}
 	}
 	if ctx.Err() != nil {
 		return "", ctx.Err()
 	}
-	a, ok := runtimes[runtime.GOOS+"/"+runtime.GOARCH]
+	a, ok := version.assets[runtime.GOOS+"/"+runtime.GOARCH]
 	if !ok {
-		return "", errors.New("Install Java 21 for this computer, then start the broadcast again.")
+		return "", fmt.Errorf("Install %s on this computer and try again.", label)
 	}
 
 	// tar is included in supported Windows 10/11, macOS and Linux systems.
 	tar, err := exec.LookPath("tar")
 	if err != nil {
-		return "", errors.New("Install the system tar utility or Java 21, then try again.")
+		return "", fmt.Errorf("Install the system tar utility or %s and try again.", label)
 	}
 	work, err := os.MkdirTemp(root, ".java-*")
 	if err != nil {
@@ -175,11 +193,11 @@ func ensureJava(ctx context.Context, root string, report reportProgress) (string
 	}
 	defer os.RemoveAll(work)
 	archive := filepath.Join(work, a.name)
-	report("Downloading Java 21", 0)
-	if err := download(ctx, runtimeBase+a.name, archive, a, func(p int) { report("Downloading Java 21", p) }); err != nil {
+	report("Downloading "+label, 0)
+	if err := download(ctx, version.base+a.name, archive, a, func(p int) { report("Downloading "+label, p) }); err != nil {
 		return "", fmt.Errorf("Java setup: %w", err)
 	}
-	report("Installing Java 21", -1)
+	report("Installing "+label, -1)
 	unpacked := filepath.Join(work, "unpacked")
 	if err := os.Mkdir(unpacked, 0700); err != nil {
 		return "", err
@@ -197,7 +215,7 @@ func ensureJava(ctx context.Context, root string, report reportProgress) (string
 	}
 	for _, entry := range entries {
 		from := filepath.Join(unpacked, entry.Name())
-		if entry.IsDir() && usableJava(ctx, filepath.Join(from, managedRel)) {
+		if entry.IsDir() && usableJavaVersion(ctx, filepath.Join(from, managedRel), version.major) {
 			// Move a damaged previous installation aside only after the replacement works.
 			if _, err := os.Stat(dest); err == nil {
 				if err := os.Rename(dest, filepath.Join(work, "previous")); err != nil {
@@ -210,7 +228,7 @@ func ensureJava(ctx context.Context, root string, report reportProgress) (string
 			return managedJava, nil
 		}
 	}
-	return "", errors.New("The downloaded Java runtime could not start on this computer. Install Java 21 and try again.")
+	return "", fmt.Errorf("The downloaded runtime could not start on this computer. Install %s and try again.", label)
 }
 
 func prepare(ctx context.Context, root string, report reportProgress) (java, jar string, err error) {

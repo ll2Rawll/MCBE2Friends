@@ -10,12 +10,13 @@ import (
 )
 
 type Hardware struct {
-	Platform  string  `json:"platform"`
-	Cores     int     `json:"cores"`
-	RAMGiB    float64 `json:"ramGiB"`
-	Supported bool    `json:"supported"`
-	Note      string  `json:"note"`
-	Tier      string  `json:"tier"`
+	Platform      string  `json:"platform"`
+	Cores         int     `json:"cores"`
+	RAMGiB        float64 `json:"ramGiB"`
+	JavaSupported bool    `json:"javaSupported"`
+	Supported     bool    `json:"supported"`
+	Note          string  `json:"note"`
+	Tier          string  `json:"tier"`
 }
 
 func recommended(cores int, gib float64) (tier string, players, view, tick, threads int) {
@@ -35,7 +36,11 @@ func hardware() Hardware {
 	label := map[string]string{"windows": "Windows", "linux": "Linux", "darwin": "macOS"}[runtime.GOOS]
 	arch := map[string]string{"amd64": "x64", "arm64": "ARM64"}[runtime.GOARCH]
 	h := Hardware{Platform: strings.TrimSpace(label + " " + arch), Cores: cores, RAMGiB: gib, Supported: runtime.GOARCH == "amd64" && (runtime.GOOS == "windows" || runtime.GOOS == "linux"), Tier: tier}
+	_, hasRuntime := serverRuntime.assets[runtime.GOOS+"/"+runtime.GOARCH]
+	h.JavaSupported = hasRuntime && (mem == 0 || gib >= 3.5)
 	switch {
+	case !h.Supported && h.JavaSupported:
+		h.Note = "This computer supports Java servers, including Geyser cross-play. Native Bedrock requires Windows or Linux x64."
 	case !h.Supported:
 		h.Note = "Native Bedrock hosting requires a Windows or Linux x64 PC. This computer can still broadcast an existing server for free."
 	case mem > 0 && gib < 3.5:
@@ -44,7 +49,7 @@ func hardware() Hardware {
 	case runtime.GOOS == "linux":
 		h.Note = "Mojang supports Ubuntu 22.04 LTS or later. Other x64 Linux distributions depend on their installed system libraries."
 	default:
-		h.Note = "For 64-bit Windows 10 or later, or Windows Server 2016 or later."
+		h.Note = "Native Bedrock and Java hosting are available on this PC."
 	}
 	if h.Supported {
 		if reason := unsupportedOS(); reason != "" {

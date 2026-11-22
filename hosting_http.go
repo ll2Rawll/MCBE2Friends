@@ -56,6 +56,10 @@ func (h *Hosting) upload(w http.ResponseWriter, r *http.Request, world bool) err
 func hostingHTTP(h *Hosting, w http.ResponseWriter, r *http.Request) {
 	reject := func(code int, e error) { writeJSON(w, code, map[string]string{"error": e.Error()}) }
 	action := strings.TrimPrefix(r.URL.Path, "/api/hosting")
+	if action == "/java" || strings.HasPrefix(action, "/java/") {
+		javaHTTP(h, w, r, strings.TrimPrefix(action, "/java"))
+		return
+	}
 	if r.Method == "GET" && action == "" {
 		writeJSON(w, 200, h.status())
 		return

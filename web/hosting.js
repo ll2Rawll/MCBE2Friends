@@ -29,6 +29,8 @@ window.premiumPanel = (() => {
   function applyStatus(next) {
     host = next;
     const hw = host.hardware;
+    const canHost = hw.supported || hw.javaSupported;
+    window.javaPanel.setHost(host);
     const ram = hw.ramGiB
       ? " · " + Number(hw.ramGiB.toFixed(1)) + " GiB RAM"
       : "";
@@ -47,16 +49,16 @@ window.premiumPanel = (() => {
           " chunks of view distance."
         : "");
     el("device-code").value = host.device;
-    el("host-locked").hidden = host.licensed || !hw.supported;
+    el("host-locked").hidden = host.licensed || !canHost;
     el("host-unlocked").hidden = !host.licensed;
-    el("host-buy").hidden = !hw.supported || !host.device;
-    el("activate-premium").hidden = !hw.supported || !host.device;
+    el("host-buy").hidden = !canHost || !host.device;
+    el("activate-premium").hidden = !canHost || !host.device;
     const verifying = working || host.checking;
     el("confirm-premium").disabled = verifying;
     el("confirm-premium").textContent = verifying ? "Verifying…" : "Activate";
     el("retry-license").disabled = verifying;
     el("retry-license").hidden =
-      !hw.supported || !host.savedKey || !host.licenseMessage;
+      !canHost || !host.savedKey || !host.licenseMessage;
     el("host-phase").textContent = labels[host.phase] || "Server offline";
     el("host-message").textContent =
       host.message ||
@@ -117,10 +119,10 @@ window.premiumPanel = (() => {
     }
     if (view === "hosting" && connected) {
       el("status-label").textContent = host.licensed
-        ? labels[host.phase]
+        ? window.javaPanel.label() || labels[host.phase]
         : "Local hosting";
       el("hero-status").className =
-        "status-chip" + (host.phase === "running" ? " live" : "");
+        "status-chip" + ((window.javaPanel.isSelected() ? window.javaPanel.live() : host.phase === "running") ? " live" : "");
     }
   }
   function fillSettings(config) {
@@ -141,6 +143,7 @@ window.premiumPanel = (() => {
     list.replaceChildren(...nodes);
   }
   async function readFiles() {
+    if (!host?.hardware.supported) return;
     library = await api("hosting/files");
     fillSettings(library.config);
     el("host-world-names").replaceChildren(
@@ -227,7 +230,8 @@ window.premiumPanel = (() => {
       if (next.checking) feedback("Checking the saved key…");
       if (next.licensed && !next.licenseMessage && (previous || wasChecking)) feedback("");
       if (!next.licensed) library = null;
-      if (reload) await readFiles();
+      if (reload && next.hardware.supported) await readFiles();
+      if (next.licensed && window.javaPanel.isSelected()) await window.javaPanel.tick();
     } catch (e) {
       feedback(e.message, true);
     } finally {
@@ -403,8 +407,8 @@ window.premiumPanel = (() => {
   });
   return {
     tick,
-    label: () => (host?.licensed ? labels[host.phase] : "Local hosting"),
-    live: () => host?.phase === "running",
+    label: () => (host?.licensed ? window.javaPanel.label() || labels[host.phase] : "Local hosting"),
+    live: () => window.javaPanel.isSelected() ? window.javaPanel.live() : host?.phase === "running",
     busy: () => Boolean(host?.busy),
   };
 })();

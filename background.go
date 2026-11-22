@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -18,11 +19,12 @@ import (
 // Persist player intent separately from process status. OS shutdown can kill a
 // child before it signals the worker, so a child's exit must never clear it.
 type services struct {
-	Broadcast bool `json:"broadcast"`
-	Server    bool `json:"server"`
+	Broadcast bool     `json:"broadcast"`
+	Server    bool     `json:"server"`
+	Java      []string `json:"java,omitempty"`
 }
 
-func (s services) any() bool { return s.Broadcast || s.Server }
+func (s services) any() bool { return s.Broadcast || s.Server || len(s.Java) != 0 }
 
 type serviceName int
 
@@ -62,7 +64,9 @@ type backgroundStatus struct {
 func (b *background) status() backgroundStatus {
 	b.mu.Lock()
 	defer b.mu.Unlock()
-	return backgroundStatus{b.want, b.warning}
+	s := b.want
+	s.Java = slices.Clone(s.Java)
+	return backgroundStatus{s, b.warning}
 }
 
 // Called under the relevant service lock before launching or cancelling it.
@@ -76,7 +80,30 @@ func (b *background) set(service serviceName, on bool) error {
 	} else {
 		next.Broadcast = on
 	}
-	if next != b.want {
+	return b.saveLocked(next)
+}
+
+func (b *background) setJava(id string, on bool) error {
+	if !javaID.MatchString(id) {
+		return errors.New("Choose a Java server.")
+	}
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	next := b.want
+	next.Java = slices.Clone(next.Java)
+	i := slices.Index(next.Java, id)
+	if on && i < 0 {
+		next.Java = append(next.Java, id)
+		slices.Sort(next.Java)
+	}
+	if !on && i >= 0 {
+		next.Java = slices.Delete(next.Java, i, i+1)
+	}
+	return b.saveLocked(next)
+}
+
+func (b *background) saveLocked(next services) error {
+	if next.Server != b.want.Server || next.Broadcast != b.want.Broadcast || !slices.Equal(next.Java, b.want.Java) {
 		data, err := json.Marshal(next)
 		if err == nil {
 			err = atomicWrite(filepath.Join(b.root, "resume.json"), data)
@@ -170,17 +197,17 @@ func (l *Launcher) recoverServices(ctx context.Context) {
 		go l.restoreBroadcast(restore)
 	}
 	h := l.host
-	if !h.hw.Supported {
+	if !h.hw.Supported && !h.hw.JavaSupported {
 		return
 	}
 	_, err := os.Stat(filepath.Join(h.root, "premium-key.txt"))
-	if err != nil && !want.Server {
+	if err != nil && !want.Server && len(want.Java) == 0 {
 		return
 	}
 	restore, cancel := context.WithCancel(ctx)
 	h.cancelRestore = cancel
 	h.checking = true
-	go h.restoreHosting(restore, want.Server)
+	go h.restoreHosting(restore)
 }
 
 func (l *Launcher) restoreBroadcast(ctx context.Context) {
@@ -207,12 +234,13 @@ func (l *Launcher) restoreBroadcast(ctx context.Context) {
 	}
 }
 
-func (h *Hosting) restoreHosting(ctx context.Context, wanted bool) {
+func (h *Hosting) restoreHosting(ctx context.Context) {
 	defer func() { h.mu.Lock(); h.checking = false; h.mu.Unlock() }()
 	for delay := 5 * time.Second; ctx.Err() == nil; delay = min(2*delay, 2*time.Minute) {
 		err := h.activate(ctx, "")
+		want := h.background.status()
 		if err == nil {
-			if wanted {
+			if want.Server && h.hw.Supported {
 				if e := h.beginServer(false, ctx); e != nil && ctx.Err() == nil {
 					h.mu.Lock()
 					if h.active == nil && !h.closing {
@@ -221,9 +249,18 @@ func (h *Hosting) restoreHosting(ctx context.Context, wanted bool) {
 					h.mu.Unlock()
 				}
 			}
+			for _, id := range want.Java {
+				if e := h.startJava(id, false, ctx); e != nil && ctx.Err() == nil {
+					h.mu.Lock()
+					if j := h.javaStateLocked(id); j.active == nil && slices.Contains(h.background.status().Java, id) {
+						j.Phase, j.Message = "error", e.Error()
+					}
+					h.mu.Unlock()
+				}
+			}
 			return
 		}
-		if !wanted || !errors.Is(err, registryUnavailable) || !retryAfter(ctx, delay) {
+		if (!want.Server && len(want.Java) == 0) || !errors.Is(err, registryUnavailable) || !retryAfter(ctx, delay) {
 			return
 		}
 	}
@@ -234,7 +271,7 @@ func (l *Launcher) closeControls() bool {
 	defer l.mu.Unlock()
 	l.host.mu.Lock()
 	defer l.host.mu.Unlock()
-	if l.active != nil || l.host.active != nil || l.background.status().any() {
+	if l.active != nil || l.host.active != nil || len(l.host.activeJavaLocked()) > 0 || l.background.status().any() {
 		return false
 	}
 	l.closing, l.host.closing = true, true

@@ -39,6 +39,7 @@ type State struct {
 	Events        []Event          `json:"events"`
 	Build         string           `json:"build"`
 	Background    backgroundStatus `json:"background"`
+	JavaBusy      []string         `json:"javaBusy,omitempty"`
 	HostBusy      bool             `json:"hostBusy"`
 }
 
@@ -92,7 +93,10 @@ func (l *Launcher) snapshot() State {
 	s.Events = append([]Event{}, s.Events...)
 	s.Running = l.active != nil
 	s.AccountSaved = l.accountSaved()
-	s.HostBusy = l.host.isBusy()
+	l.host.mu.Lock()
+	s.HostBusy = l.host.active != nil
+	s.JavaBusy = l.host.activeJavaLocked()
+	l.host.mu.Unlock()
 	return s
 }
 

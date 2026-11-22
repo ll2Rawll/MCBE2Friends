@@ -130,6 +130,9 @@ func (h *Hosting) withdrawLocked(message string) {
 		h.expiry.Stop()
 		h.expiry = nil
 	}
+	for _, j := range h.java {
+		j.cancelLocked()
+	}
 	if h.active != nil {
 		h.phase, h.message = "stopping", "Saving the world and stopping"
 		h.active.cancel()

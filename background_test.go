@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"reflect"
 	"slices"
 	"strings"
 	"sync"
@@ -37,10 +38,10 @@ func TestRememberServicesIndependently(t *testing.T) {
 		}
 		return saved.want
 	}
-	if cold() != (services{true, true}) {
+	if !reflect.DeepEqual(cold(), services{Broadcast: true, Server: true}) {
 		t.Fatal(cold())
 	}
-	if err := b.set(broadcastService, false); err != nil || cold() != (services{Server: true}) {
+	if err := b.set(broadcastService, false); err != nil || !reflect.DeepEqual(cold(), services{Server: true}) {
 		t.Fatal(cold(), err)
 	}
 	if err := b.set(bedrockService, false); err != nil || cold().any() {
@@ -94,7 +95,7 @@ func TestClosingControlsPreservesWorkAndStopCancelsRecovery(t *testing.T) {
 		t.Fatal("closed worker with pending services")
 	}
 	request("/api/hosting/stop")
-	if hctx.Err() == nil || bctx.Err() != nil || l.background.status().services != (services{Broadcast: true}) {
+	if hctx.Err() == nil || bctx.Err() != nil || !reflect.DeepEqual(l.background.status().services, services{Broadcast: true}) {
 		t.Fatal("stop affected the wrong service")
 	}
 	request("/api/stop")

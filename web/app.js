@@ -154,7 +154,7 @@ function renderHeader() {
   $("#activity-page").hidden = view !== "activity" || closed || !state;
   $("#hosting-page").hidden = view !== "hosting" || closed || !state;
   if (view === "hosting") {
-    $("#page-title").textContent = "Your Bedrock server";
+    $("#page-title").textContent = "Your game servers";
     $("#hero-description").textContent =
       "Host a world on your PC and manage it from your launcher.";
     if (connected && !closed) {
@@ -171,7 +171,9 @@ function renderHeader() {
   $("#startup-warning-text").textContent = warning;
   const broadcastPending = background?.broadcast && !state.running;
   const serverPending = background?.server && !state.hostBusy;
-  $("#pending-restart").hidden = !broadcastPending && !serverPending;
+  const pendingJava = (background?.java || []).filter(id => !(state?.javaBusy || []).includes(id));
+  $("#cancel-java-restart").hidden = !pendingJava.length;
+  $("#pending-restart").hidden = !broadcastPending && !serverPending && !pendingJava.length;
   $("#cancel-broadcast-restart").hidden = !broadcastPending;
   $("#cancel-server-restart").hidden = !serverPending;
 }
@@ -429,7 +431,7 @@ async function poll() {
   if (!closed && token)
     setTimeout(
       poll,
-      document.hidden || (!state?.running && !state?.hostBusy) ? 2000 : 750,
+      document.hidden || (!state?.running && !state?.hostBusy && !state?.javaBusy?.length) ? 2000 : 750,
     );
 }
 
@@ -591,6 +593,15 @@ document.addEventListener("click", async (event) => {
       break;
     case "retry-startup":
       await perform(async () => accept(await api("startup/retry", "POST")));
+      break;
+    case "cancel-java-restart":
+      await perform(async () => {
+        const current = await api("state");
+        for (const id of current.background.java || []) {
+          if (!(current.javaBusy || []).includes(id)) await api("hosting/java/"+id+"/stop", "POST");
+        }
+        accept(await api("state"));
+      });
       break;
     case "cancel-server-restart":
       await perform(async () => {

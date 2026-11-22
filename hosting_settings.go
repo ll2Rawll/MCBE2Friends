@@ -161,11 +161,14 @@ func (h *Hosting) saveConfig(c HostConfig) error {
 	return atomicWrite(filepath.Join(h.root, "preferences.json"), b)
 }
 func (h *Hosting) worldPath(name string) (string, error) {
+	return worldDirectory(h.server, name)
+}
+func worldDirectory(server, name string) (string, error) {
 	if !worldNameOK(name) {
 		return "", errors.New("Choose a valid world folder.")
 	}
-	dir := filepath.Join(h.server, "worlds", name)
-	for _, p := range []string{filepath.Join(h.server, "worlds"), dir} {
+	dir := filepath.Join(server, "worlds", name)
+	for _, p := range []string{filepath.Join(server, "worlds"), dir} {
 		info, err := os.Lstat(p)
 		if errors.Is(err, os.ErrNotExist) {
 			continue
